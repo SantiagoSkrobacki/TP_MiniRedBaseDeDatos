@@ -158,8 +158,11 @@ CREATE TABLE Fact_Stock (
     CantidadVendida    INT         NOT NULL,   -- ADITIVA      (flujo de salida)
     StockDisponible    INT         NOT NULL,   -- SEMI-ADITIVA (foto al cierre del dia)
     StockMinimo        INT         NOT NULL,   -- NO ADITIVA   (umbral de reposicion)
-    EsQuiebre          BIT         NOT NULL,   -- 1 = stock en cero al cierre
-    EsBajoMinimo       BIT         NOT NULL,   -- 1 = por debajo del punto de pedido
+    -- TINYINT y no BIT: son banderas que se SUMAN (contar dias en quiebre), o sea
+    -- medidas aditivas. Ademas SSAS no ofrece columnas BIT como medida del cubo,
+    -- porque no las considera un tipo numerico agregable.
+    EsQuiebre          TINYINT     NOT NULL,   -- 1 = stock en cero al cierre
+    EsBajoMinimo       TINYINT     NOT NULL,   -- 1 = por debajo del punto de pedido
     CONSTRAINT FK_FS_Tiempo   FOREIGN KEY (IdTiempo)   REFERENCES Dim_Tiempo(IdTiempo),
     CONSTRAINT FK_FS_Sucursal FOREIGN KEY (IdSucursal) REFERENCES Dim_Sucursal(IdSucursal),
     CONSTRAINT FK_FS_Producto FOREIGN KEY (IdProducto) REFERENCES Dim_Producto(IdProducto)
@@ -537,6 +540,30 @@ JOIN (
     FROM Fact_Stock WHERE IdSucursal <> 7
     GROUP BY IdProducto
 ) ss ON ss.IdProducto = p.IdProducto;
+GO
+
+/* ==========================================================================
+   8C. VALOR DE INVENTARIO (capital inmovilizado)
+
+   El costo unitario vive en Dim_Producto, pero el analisis necesita valuar el
+   stock en pesos. En un modelo dimensional el valor calculado se materializa
+   en la tabla de hechos, y asi queda disponible como MEDIDA del cubo: en MDX
+   no se puede multiplicar una medida por un atributo de dimension.
+
+   Hereda la semi-aditividad de StockDisponible, asi que en SSAS tambien se
+   configura con AggregateFunction = LastNonEmpty.
+   ========================================================================== */
+
+ALTER TABLE Fact_Stock ADD ValorInventario DECIMAL(14,2) NULL;
+GO
+
+UPDATE f
+   SET f.ValorInventario = CAST(f.StockDisponible * p.CostoUnitario AS DECIMAL(14,2))
+FROM Fact_Stock f
+JOIN Dim_Producto p ON p.IdProducto = f.IdProducto;
+GO
+
+ALTER TABLE Fact_Stock ALTER COLUMN ValorInventario DECIMAL(14,2) NOT NULL;
 GO
 
 /* ==========================================================================
