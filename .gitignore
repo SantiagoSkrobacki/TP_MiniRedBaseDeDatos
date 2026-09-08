@@ -21,10 +21,21 @@ obj/
 *.bak
 *.trn
 
+# ---------- Landing page ----------
+# Si la landing se arma con npm, esto es imprescindible: node_modules son
+# decenas de miles de archivos que nunca deben entrar al repositorio.
+node_modules/
+.env
+.env.local
+
 # ---------- Logs y temporales ----------
 *.log
 *.tmp
 ~$*
+
+# Restos de conflictos de merge
+*.orig
+*.rej
 
 # ---------- Sistema operativo ----------
 Thumbs.db
