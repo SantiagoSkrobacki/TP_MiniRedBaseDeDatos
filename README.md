@@ -37,9 +37,38 @@ Las dos preguntas que responde el trabajo:
 | 8 | **Guía de construcción del cubo** | Procedimiento de 10 fases adaptado a MiniRed, en `docs/guia-cubo-ssas.html`. |
 | 9 | **Datos exportados para la landing** | `data/datos_landing.json` con KPIs, heatmap, serie mensual, SKU críticos y semáforo por sucursal. |
 
+| 10 | **Proyecto SSAS iniciado** | `Cubo_MiniRed_Logistica/` — origen de datos, vista del origen y las cinco dimensiones con sus jerarquías, versionado en este repo. |
+
+### Cubo en SSAS — avance por fase
+
+Según la guía de `docs/guia-cubo-ssas.html`:
+
+| Fase | Estado | Detalle |
+|------|--------|---------|
+| 1 · Crear el proyecto | ✅ | Proyecto multidimensional, despliegue apuntando a `localhost` |
+| 2 · Origen de datos | ✅ | `MSOLEDBSQL` a `MiniRed_DW`, con `ImpersonateServiceAccount` |
+| 3 · Vista del origen (DSV) | ✅ | Las 7 tablas del recorte, sin `vw_Cubo_Logistica` |
+| 4 · Verificar relaciones | ✅ | Las 8 relaciones inferidas: 5 desde `Fact_Ventas`, 3 desde `Fact_Stock` |
+| 5 · Dimensiones y jerarquías | ✅ | Las 5 con jerarquía; `Dim_Tiempo` con `Type = Time` y `NameColumn = Fecha` |
+| 6 · El cubo | ⏳ | **Acá quedamos.** Ver "Próximo paso" abajo |
+| 7 · Semi-aditividad | ⬜ | `StockDisponible` y `ValorInventario` → `LastNonEmpty` |
+| 8 · Uso de dimensiones | ⬜ | Cajero y MedioPago quedan vacíos contra `Fact_Stock` |
+| 9 · Cálculos MDX | ⬜ | Tasa de quiebre, días de cobertura, valor de inventario |
+| 10 · Implementar y procesar | ⬜ | |
+
+**Próximo paso concreto:** el DSV quedó desactualizado. `EsQuiebre` y `EsBajoMinimo`
+pasaron de `BIT` a `TINYINT` en la base, pero el DSV todavía los declara como
+`xs:boolean`, y mientras siga así el asistente de cubos **no las va a ofrecer como
+medida**. Antes de retomar la fase 6: abrir `Mini Red DW.dsv`, clic derecho sobre
+`Fact_Stock` → `Actualizar`, guardar, y recién ahí lanzar el asistente.
+
+Pendientes menores del modelo: renombrar las jerarquías (quedaron como `Jerarquía`
+y `Jerarquía 2`) y encadenar las relaciones de atributo para que desaparezca el
+aviso ⚠ de las jerarquías.
+
 ### Pendiente
 
-- [ ] Construir el cubo en SSAS siguiendo `docs/guia-cubo-ssas.html`
+- [ ] Terminar el cubo en SSAS — fases 6 a 10
 - [ ] Landing page — portal de operaciones para gerentes de abastecimiento
 - [ ] Redacción de los 6 puntos teóricos del informe
 - [ ] Pitch ejecutivo de 10 minutos
