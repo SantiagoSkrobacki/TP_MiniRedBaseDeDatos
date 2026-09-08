@@ -1,0 +1,541 @@
+<title>Cubo MiniRed en SSAS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+
+<style>
+:root{
+  --paper:#F1F3F0;
+  --surface:#FFFFFF;
+  --surface-2:#E9ECE8;
+  --ink:#171A18;
+  --ink-2:#3D443F;
+  --muted:#6B736D;
+  --rule:#D4D9D3;
+  --fact:#1C6E51;
+  --fact-soft:#DDEBE4;
+  --dim:#A66420;
+  --dim-soft:#F5E7D6;
+  --alert:#B93A2B;
+  --alert-soft:#F7E1DD;
+  --shadow:0 1px 2px rgba(23,26,24,.06),0 8px 24px -16px rgba(23,26,24,.24);
+  --mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  --sans:"IBM Plex Sans",-apple-system,Segoe UI,Roboto,sans-serif;
+  --display:"Archivo","Archivo Black",Segoe UI,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#141715;
+    --surface:#1C201E;
+    --surface-2:#252A27;
+    --ink:#E8EBE8;
+    --ink-2:#C0C7C2;
+    --muted:#8B948D;
+    --rule:#333A36;
+    --fact:#5FBF97;
+    --fact-soft:#1B3A2F;
+    --dim:#DFA05C;
+    --dim-soft:#3A2C18;
+    --alert:#E8796A;
+    --alert-soft:#3B211D;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px -18px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#141715;
+  --surface:#1C201E;
+  --surface-2:#252A27;
+  --ink:#E8EBE8;
+  --ink-2:#C0C7C2;
+  --muted:#8B948D;
+  --rule:#333A36;
+  --fact:#5FBF97;
+  --fact-soft:#1B3A2F;
+  --dim:#DFA05C;
+  --dim-soft:#3A2C18;
+  --alert:#E8796A;
+  --alert-soft:#3B211D;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px -18px rgba(0,0,0,.8);
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px 96px}
+
+/* ---------- cabecera ---------- */
+.masthead{
+  border-bottom:2px solid var(--ink);
+  padding:44px 0 20px;
+  margin-bottom:36px;
+}
+.eyebrow{
+  font-family:var(--mono);
+  font-size:11.5px;
+  font-weight:500;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin:0 0 14px;
+}
+h1{
+  font-family:var(--display);
+  font-weight:700;
+  font-size:clamp(2.1rem,5.2vw,3.4rem);
+  line-height:1.03;
+  letter-spacing:-.022em;
+  margin:0 0 16px;
+  text-wrap:balance;
+}
+.standfirst{
+  font-size:1.075rem;
+  color:var(--ink-2);
+  max-width:64ch;
+  margin:0 0 26px;
+}
+.specs{
+  display:flex;flex-wrap:wrap;gap:0;
+  border:1px solid var(--rule);
+  border-radius:3px;
+  background:var(--surface);
+  overflow:hidden;
+}
+.spec{
+  flex:1 1 165px;
+  padding:11px 16px;
+  border-right:1px solid var(--rule);
+}
+.spec:last-child{border-right:0}
+.spec dt{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 3px;
+}
+.spec dd{margin:0;font-family:var(--mono);font-size:13px;font-weight:500;color:var(--ink)}
+
+/* ---------- estructura ---------- */
+.cols{display:grid;grid-template-columns:190px minmax(0,1fr);gap:52px;align-items:start}
+@media (max-width:900px){.cols{grid-template-columns:1fr;gap:28px}}
+
+nav.rail{position:sticky;top:24px}
+@media (max-width:900px){
+  nav.rail{position:static;border:1px solid var(--rule);border-radius:3px;background:var(--surface);padding:16px 18px}
+}
+.rail h2{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 12px;font-weight:500;
+}
+.rail ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1px}
+.rail a{
+  display:grid;grid-template-columns:22px 1fr;gap:8px;
+  padding:5px 0;text-decoration:none;color:var(--ink-2);
+  font-size:13.5px;line-height:1.35;border-radius:2px;
+}
+.rail a:hover{color:var(--fact)}
+.rail a:focus-visible{outline:2px solid var(--fact);outline-offset:2px}
+.rail .n{font-family:var(--mono);font-size:11px;color:var(--muted);padding-top:2px}
+
+/* ---------- fases ---------- */
+.phase{margin:0 0 52px;scroll-margin-top:24px}
+.phase-head{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:baseline;margin:0 0 6px}
+.phase-num{
+  font-family:var(--mono);font-size:12px;font-weight:600;color:var(--muted);
+  border:1px solid var(--rule);border-radius:2px;padding:2px 7px;background:var(--surface);
+}
+.phase h3{
+  font-family:var(--display);font-weight:600;font-size:1.42rem;letter-spacing:-.012em;
+  margin:0;text-wrap:balance;
+}
+.phase > p{max-width:68ch;color:var(--ink-2)}
+.phase h4{
+  font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);font-weight:500;margin:26px 0 9px;
+}
+
+ol.steps{margin:14px 0 0;padding:0 0 0 1.35em;max-width:68ch}
+ol.steps li{margin:0 0 9px;color:var(--ink-2)}
+ol.steps li::marker{font-family:var(--mono);font-size:12px;color:var(--muted)}
+ul.plain{margin:12px 0 0;padding:0 0 0 1.1em;max-width:68ch}
+ul.plain li{margin:0 0 7px;color:var(--ink-2)}
+
+code{
+  font-family:var(--mono);font-size:.875em;
+  background:var(--surface-2);padding:1px 5px;border-radius:2px;
+  color:var(--ink);white-space:nowrap;
+}
+.ui{
+  font-family:var(--mono);font-size:.85em;font-weight:500;
+  color:var(--fact);white-space:nowrap;
+}
+:root[data-theme="dark"] .ui,
+:root:not([data-theme="light"]) .ui{color:var(--fact)}
+
+pre{
+  font-family:var(--mono);font-size:12.5px;line-height:1.62;
+  background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--fact);
+  border-radius:3px;padding:14px 16px;margin:12px 0 0;
+  overflow-x:auto;color:var(--ink);
+}
+pre .c{color:var(--muted)}
+
+/* ---------- avisos ---------- */
+.note{
+  border-left:3px solid var(--dim);
+  background:var(--dim-soft);
+  padding:13px 16px;margin:16px 0 0;border-radius:0 3px 3px 0;max-width:68ch;
+}
+.note.critical{border-left-color:var(--alert);background:var(--alert-soft)}
+.note .lbl{
+  display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;
+  text-transform:uppercase;font-weight:600;margin:0 0 5px;color:var(--dim);
+}
+.note.critical .lbl{color:var(--alert)}
+.note p{margin:0;font-size:14.5px;color:var(--ink-2)}
+.note p + p{margin-top:8px}
+
+/* ---------- tablas ---------- */
+.tablewrap{overflow-x:auto;margin:14px 0 0;border:1px solid var(--rule);border-radius:3px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:520px}
+th{
+  text-align:left;font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--muted);font-weight:500;
+  padding:9px 14px;border-bottom:1px solid var(--rule);white-space:nowrap;
+}
+td{padding:9px 14px;border-bottom:1px solid var(--rule);color:var(--ink-2);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.mono,th.mono{font-family:var(--mono);font-size:12.5px;font-variant-numeric:tabular-nums;white-space:nowrap}
+td strong{color:var(--ink);font-weight:600}
+
+/* etiquetas de tipo de tabla: convencion Kimball del diagrama */
+.tag{
+  display:inline-block;font-family:var(--mono);font-size:10px;font-weight:600;
+  letter-spacing:.07em;text-transform:uppercase;padding:2px 6px;border-radius:2px;
+  border:1px solid;white-space:nowrap;
+}
+.tag.f{color:var(--fact);border-color:var(--fact);background:var(--fact-soft)}
+.tag.d{color:var(--dim);border-color:var(--dim);background:var(--dim-soft)}
+
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin:14px 0 0;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+
+hr.sep{border:0;border-top:1px solid var(--rule);margin:0 0 44px}
+
+footer{
+  margin-top:20px;padding-top:22px;border-top:2px solid var(--ink);
+  font-size:13.5px;color:var(--muted);max-width:68ch;
+}
+footer strong{color:var(--ink-2)}
+</style>
+
+<div class="wrap">
+
+<header class="masthead">
+  <p class="eyebrow">MiniRed S.A. · TP Unidad 3 · Perspectiva Logística e Inventario</p>
+  <h1>Construcción del cubo MiniRed en Analysis&nbsp;Services</h1>
+  <p class="standfirst">El recorrido del instructivo de cátedra, adaptado a <code>MiniRed_DW</code> en lugar de AdventureWorks. Diez fases, en orden: cada una depende de la anterior. Las marcadas en rojo son las que deciden si el cubo devuelve números reales o basura agregada.</p>
+  <dl class="specs">
+    <div class="spec"><dt>Servidor</dt><dd>localhost</dd></div>
+    <div class="spec"><dt>Instancia SSAS</dt><dd>MSAS17.MSSQLSERVER</dd></div>
+    <div class="spec"><dt>Modo</dt><dd>Multidimensional</dd></div>
+    <div class="spec"><dt>Base origen</dt><dd>MiniRed_DW</dd></div>
+    <div class="spec"><dt>Esquema</dt><dd>Constelación</dd></div>
+  </dl>
+</header>
+
+<div class="cols">
+
+<nav class="rail">
+  <h2>Fases</h2>
+  <ol>
+    <li><a href="#f1"><span class="n">01</span><span>Crear el proyecto</span></a></li>
+    <li><a href="#f2"><span class="n">02</span><span>Origen de datos</span></a></li>
+    <li><a href="#f3"><span class="n">03</span><span>Vista del origen (DSV)</span></a></li>
+    <li><a href="#f4"><span class="n">04</span><span>Verificar relaciones</span></a></li>
+    <li><a href="#f5"><span class="n">05</span><span>Dimensiones y jerarquías</span></a></li>
+    <li><a href="#f6"><span class="n">06</span><span>El cubo</span></a></li>
+    <li><a href="#f7"><span class="n">07</span><span>Semi-aditividad</span></a></li>
+    <li><a href="#f8"><span class="n">08</span><span>Uso de dimensiones</span></a></li>
+    <li><a href="#f9"><span class="n">09</span><span>Cálculos MDX</span></a></li>
+    <li><a href="#f10"><span class="n">10</span><span>Implementar y procesar</span></a></li>
+  </ol>
+</nav>
+
+<main>
+
+<section class="phase" id="f1">
+  <div class="phase-head"><span class="phase-num">01</span><h3>Crear el proyecto</h3></div>
+  <p>Visual Studio 2022, con la extensión <em>Microsoft Analysis Services Projects</em> ya instalada.</p>
+  <ol class="steps">
+    <li><span class="ui">Archivo → Nuevo → Proyecto</span></li>
+    <li>Buscá <span class="ui">Analysis Services Multidimensional and Data Mining Project</span>. Si no aparece, la extensión no quedó instalada: cerrá Visual Studio y reinstalá el VSIX.</li>
+    <li>Nombre: <code>Cubo_MiniRed_Logistica</code>. Evitá <code>Cubo_Prueba</code> — el nombre del proyecto termina siendo el nombre de la base de datos en el servidor.</li>
+  </ol>
+  <div class="note">
+    <span class="lbl">Por qué este tipo y no otro</span>
+    <p>La extensión instala también proyectos <em>Tabular</em>. No sirven: tu servidor está en modo Multidimensional y un proyecto Tabular no despliega contra él. Además el modelo dimensional con constelación y medidas semi-aditivas es el que pide la consigna.</p>
+  </div>
+</section>
+
+<hr class="sep">
+
+<section class="phase" id="f2">
+  <div class="phase-head"><span class="phase-num">02</span><h3>Origen de datos</h3></div>
+  <ol class="steps">
+    <li>En el <span class="ui">Explorador de soluciones</span>, clic derecho en <span class="ui">Orígenes de datos → Nuevo origen de datos</span></li>
+    <li><span class="ui">Nueva…</span> → proveedor <span class="ui">Native OLE DB\SQL Server Native Client</span> o <span class="ui">Microsoft OLE DB Driver for SQL Server</span></li>
+    <li>Nombre del servidor: <code>localhost</code> · Autenticación de Windows · Base de datos: <code>MiniRed_DW</code></li>
+    <li><span class="ui">Probar conexión</span> antes de seguir</li>
+    <li>En la pantalla <span class="ui">Información de suplantación</span>, elegí <strong>Usar la cuenta de servicio</strong></li>
+  </ol>
+  <div class="note critical">
+    <span class="lbl">Acá falla la mitad de la gente</span>
+    <p>Si dejás la suplantación en <span class="ui">Heredar</span> o en credenciales específicas, la conexión de prueba anda igual pero el <strong>procesamiento del cubo falla</strong> mucho más adelante, con un error que no menciona la suplantación. Ponelo bien ahora.</p>
+    <p>La cuenta de servicio de SSAS es <code>NT Service\MSSQLServerOLAPService</code> y ya tiene acceso al motor local.</p>
+  </div>
+</section>
+
+<hr class="sep">
+
+<section class="phase" id="f3">
+  <div class="phase-head"><span class="phase-num">03</span><h3>Vista del origen de datos</h3></div>
+  <p>Clic derecho en <span class="ui">Vistas del origen de datos → Nueva vista del origen de datos</span>. Acá se define el recorte del modelo, y ese recorte <em>es</em> tu perspectiva de análisis: hay que poder justificarlo en el pitch.</p>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Tabla</th><th>Tipo</th><th>Por qué entra</th></tr></thead>
+      <tbody>
+        <tr><td class="mono"><strong>Fact_Stock</strong></td><td><span class="tag f">Hechos</span></td><td>El centro del análisis: quiebres, cobertura y rotación</td></tr>
+        <tr><td class="mono"><strong>Fact_Ventas</strong></td><td><span class="tag f">Hechos</span></td><td>Segundo proceso; habilita el drill-across vendido vs. ingresado</td></tr>
+        <tr><td class="mono">Dim_Tiempo</td><td><span class="tag d">Conformada</span></td><td>Estacionalidad y efecto fin de semana</td></tr>
+        <tr><td class="mono">Dim_Sucursal</td><td><span class="tag d">Conformada</span></td><td>Zona y tipo de ubicación</td></tr>
+        <tr><td class="mono">Dim_Producto</td><td><span class="tag d">Conformada</span></td><td>Categoría, rubro y proveedor</td></tr>
+        <tr><td class="mono">Dim_Cajero</td><td><span class="tag d">Sólo ventas</span></td><td>No aplica al stock: el ingreso de mercadería no pasa por caja</td></tr>
+        <tr><td class="mono">Dim_MedioPago</td><td><span class="tag d">Sólo ventas</span></td><td>Ídem — se incluye para sostener la constelación completa</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="legend">
+    <span><span class="tag f">Hechos</span> tabla de hechos</span>
+    <span><span class="tag d">Conformada</span> dimensión compartida por ambos procesos</span>
+  </div>
+
+  <div class="note">
+    <span class="lbl">El argumento para el pitch</span>
+    <p>Que <code>Dim_Cajero</code> y <code>Dim_MedioPago</code> no apliquen a <code>Fact_Stock</code> es justamente la prueba de que el stock es un <strong>proceso de negocio distinto</strong> con su propio grano, y no una columna más en <code>Fact_Ventas</code>. Esa asimetría es lo que convierte dos estrellas en una constelación.</p>
+  </div>
+</section>
+
+<hr class="sep">
+
+<section class="phase" id="f4">
+  <div class="phase-head"><span class="phase-num">04</span><h3>Verificar las relaciones</h3></div>
+  <p>El asistente infiere las relaciones desde las claves foráneas. Las de <code>MiniRed_DW</code> están declaradas, así que deberían aparecer solas — pero verificalo en el diagrama antes de seguir.</p>
+  <h4>Deben existir siete flechas</h4>
+  <ul class="plain">
+    <li><code>Fact_Ventas</code> → Tiempo, Sucursal, Producto, Cajero, MedioPago</li>
+    <li><code>Fact_Stock</code> → Tiempo, Sucursal, Producto</li>
+  </ul>
+  <p>Si falta alguna, arrastrá el campo de la tabla de hechos sobre la clave primaria de la dimensión para dibujarla a mano.</p>
+  <div class="note">
+    <span class="lbl">Síntoma típico</span>
+    <p>Una relación faltante no da error acá. Aparece en la fase 8 como una dimensión que no se puede cruzar con un grupo de medida, o peor: como un cubo que procesa bien pero devuelve el mismo total repetido en todas las filas.</p>
+  </div>
+</section>
+
+<hr class="sep">
+
+<section class="phase" id="f5">
+  <div class="phase-head"><span class="phase-num">05</span><h3>Dimensiones y jerarquías</h3></div>
+  <p>Clic derecho en <span class="ui">Dimensiones → Nueva dimensión</span> para cada una. El asistente no arma las jerarquías: hay que arrastrar los atributos al panel <span class="ui">Jerarquías</span> a mano.</p>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Dimensión</th><th>Clave</th><th>Jerarquía a construir</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">Dim_Tiempo</td><td class="mono">IdTiempo</td><td class="mono">Anio › Trimestre › MesNombre › Fecha</td></tr>
+        <tr><td class="mono">Dim_Producto</td><td class="mono">IdProducto</td><td class="mono">Categoria › Rubro › NombreProducto</td></tr>
+        <tr><td class="mono">Dim_Sucursal</td><td class="mono">IdSucursal</td><td class="mono">Zona › NombreSucursal</td></tr>
+        <tr><td class="mono">Dim_Cajero</td><td class="mono">IdCajero</td><td class="mono">Turno › NombreCajero</td></tr>
+        <tr><td class="mono">Dim_MedioPago</td><td class="mono">IdMedioPago</td><td class="mono">TipoPago › Campania</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Ajustes por dimensión</h4>
+  <ul class="plain">
+    <li><strong>Tiempo:</strong> marcala como dimensión de tipo <span class="ui">Time</span> (propiedad <code>Type</code>) y asigná los tipos de atributo <code>Years</code>, <code>Quarters</code>, <code>Months</code>, <code>Date</code>. Sin esto no funcionan las funciones MDX de tiempo.</li>
+    <li>En <code>Dim_Tiempo</code>, poné <code>Fecha</code> como <code>NameColumn</code> del atributo clave: si no, en el explorador vas a ver <code>20250114</code> en lugar de la fecha.</li>
+    <li>Agregá también <code>EsFinDeSemana</code> y <code>Temporada</code> como atributos sueltos — son los predictores de tus reglas inductivas.</li>
+    <li>En <code>Dim_Sucursal</code>, sumá <code>TipoUbicacion</code>: te permite filtrar el depósito Central del análisis de góndola.</li>
+    <li>En <code>Dim_Producto</code>, sumá <code>Proveedor</code> y <code>DiasReposicion</code> — sin ellos no podés demostrar la regla del ciclo de reposición.</li>
+  </ul>
+
+  <div class="note">
+    <span class="lbl">Relaciones de atributo</span>
+    <p>Después de crear cada jerarquía, revisá la pestaña <span class="ui">Relaciones de atributo</span>. Que exista la jerarquía no implica que SSAS conozca la dependencia funcional. Definí <code>NombreProducto → Rubro → Categoria</code> explícitamente: acelera el procesamiento y evita totales mal distribuidos al hacer drill-down.</p>
+  </div>
+</section>
+
+<hr class="sep">
+
+<section class="phase" id="f6">
+  <div class="phase-head"><span class="phase-num">06</span><h3>El cubo</h3></div>
+  <ol class="steps">
+    <li>Clic derecho en <span class="ui">Cubos → Nuevo cubo</span> → <span class="ui">Usar tablas existentes</span></li>
+    <li>Como tablas de grupo de medida marcá <strong>las dos</strong>: <code>Fact_Stock</code> y <code>Fact_Ventas</code></li>
+    <li>Seleccioná las cinco dimensiones ya creadas (no dejes que las genere de nuevo)</li>
+    <li>Quitá las medidas que son claves foráneas o contadores automáticos que no vas a usar</li>
+  </ol>
+
+  <h4>Medidas que deben quedar</h4>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Medida</th><th>Grupo</th><th class="mono">AggregateFunction</th><th>Aditividad</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">CantidadIngresada</td><td>Stock</td><td class="mono">Sum</td><td>Aditiva</td></tr>
+        <tr><td class="mono">CantidadVendida</td><td>Stock</td><td class="mono">Sum</td><td>Aditiva</td></tr>
+        <tr><td class="mono"><strong>StockDisponible</strong></td><td>Stock</td><td class="mono"><strong>LastNonEmpty</strong></td><td><strong>Semi-aditiva</strong></td></tr>
+        <tr><td class="mono">EsQuiebre</td><td>Stock</td><td class="mono">Sum</td><td>Aditiva (conteo)</td></tr>
+        <tr><td class="mono">EsBajoMinimo</td><td>Stock</td><td class="mono">Sum</td><td>Aditiva (conteo)</td></tr>
+        <tr><td class="mono">Fact Stock Recuento</td><td>Stock</td><td class="mono">Count</td><td>Denominador de las tasas</td></tr>
+        <tr><td class="mono">Cantidad</td><td>Ventas</td><td class="mono">Sum</td><td>Aditiva</td></tr>
+        <tr><td class="mono">ImporteTotal</td><td>Ventas</td><td class="mono">Sum</td><td>Aditiva</td></tr>
+        <tr><td class="mono">CostoTotal</td><td>Ventas</td><td class="mono">Sum</td><td>Aditiva</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note">
+    <span class="lbl">No agregues TicketPromedio como medida</span>
+    <p>Es <strong>no aditiva</strong>: no se almacena nunca. Se calcula en la capa de BI, y va en la fase 9 como miembro calculado.</p>
+  </div>
+</section>
+
+<hr class="sep">
+
+<section class="phase" id="f7">
+  <div class="phase-head"><span class="phase-num">07</span><h3>Semi-aditividad</h3></div>
+  <p>Esta es la fase corta y la que más pesa en la nota. El asistente deja <code>StockDisponible</code> en <code>Sum</code> por defecto, y eso está mal.</p>
+  <ol class="steps">
+    <li>Pestaña <span class="ui">Estructura del cubo</span>, panel <span class="ui">Medidas</span></li>
+    <li>Seleccioná <code>StockDisponible</code></li>
+    <li>En <span class="ui">Propiedades</span>, cambiá <code>AggregateFunction</code> de <code>Sum</code> a <strong><code>LastNonEmpty</code></strong></li>
+  </ol>
+  <div class="note critical">
+    <span class="lbl">El error de agregación que evita esto</span>
+    <p><code>StockDisponible</code> es una <strong>foto al cierre del día</strong>, no un flujo. Sumar lunes más martes cuenta dos veces la misma góndola.</p>
+    <p>Sobre los 731 días de <code>MiniRed_DW</code> la diferencia es exactamente ésta: <strong>6.159.125 unidades</strong> si sumás mal, contra <strong>8.161</strong> reales en góndola. Tres órdenes de magnitud. Es el número que conviene mostrar en el pitch.</p>
+    <p>Se suma por sucursal y por producto; no se suma por tiempo. Eso es una medida semi-aditiva, y <code>LastNonEmpty</code> es la función que lo implementa.</p>
+  </div>
+</section>
+
+<hr class="sep">
+
+<section class="phase" id="f8">
+  <div class="phase-head"><span class="phase-num">08</span><h3>Uso de dimensiones</h3></div>
+  <p>Pestaña <span class="ui">Uso de dimensiones</span>. Es una matriz de dimensiones contra grupos de medida, y es donde la constelación se vuelve real.</p>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Dimensión</th><th>Fact_Stock</th><th>Fact_Ventas</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">Dim_Tiempo</td><td class="mono">IdTiempo</td><td class="mono">IdTiempo</td></tr>
+        <tr><td class="mono">Dim_Sucursal</td><td class="mono">IdSucursal</td><td class="mono">IdSucursal</td></tr>
+        <tr><td class="mono">Dim_Producto</td><td class="mono">IdProducto</td><td class="mono">IdProducto</td></tr>
+        <tr><td class="mono">Dim_Cajero</td><td style="color:var(--muted)">— vacío —</td><td class="mono">IdCajero</td></tr>
+        <tr><td class="mono">Dim_MedioPago</td><td style="color:var(--muted)">— vacío —</td><td class="mono">IdMedioPago</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <span class="lbl">Qué mirar</span>
+    <p>Las tres primeras filas tienen relación con <strong>ambos</strong> grupos de medida: ésas son las <strong>dimensiones conformadas</strong>, y son el puente que permite preguntar "unidades vendidas contra unidades ingresadas, por producto y por mes" en una sola consulta.</p>
+    <p>Las dos últimas quedan vacías del lado del stock. Dejalas vacías: rellenarlas sería inventar una relación que en el negocio no existe.</p>
+  </div>
+</section>
+
+<hr class="sep">
+
+<section class="phase" id="f9">
+  <div class="phase-head"><span class="phase-num">09</span><h3>Cálculos MDX</h3></div>
+  <p>Pestaña <span class="ui">Cálculos</span> → <span class="ui">Nuevo miembro calculado</span> para cada uno. Estos son los indicadores que después consume la landing page.</p>
+
+  <h4>Tasa de quiebre</h4>
+  <pre>[Measures].[Es Quiebre]
+  / [Measures].[Fact Stock Recuento]
+
+<span class="c">-- Formato: Percent. El indicador principal del análisis.</span></pre>
+
+  <h4>Días de cobertura</h4>
+  <pre>[Measures].[Stock Disponible]
+  / [Measures].[Cantidad Vendida]
+
+<span class="c">-- Cuántos días de venta cubre lo que hay en góndola.</span>
+<span class="c">-- Más interpretable que la rotación para un gerente de</span>
+<span class="c">-- abastecimiento: MiniRed opera entre 3,4 y 4,2 días,</span>
+<span class="c">-- salvo San Justo que está en 10.</span></pre>
+
+  <h4>Valor de inventario</h4>
+  <pre>[Measures].[Stock Disponible]
+  * [Measures].[Costo Unitario]
+
+<span class="c">-- Capital inmovilizado. Hereda la semi-aditividad de</span>
+<span class="c">-- Stock Disponible, así que se lee por corte de tiempo,</span>
+<span class="c">-- nunca acumulado.</span></pre>
+
+  <h4>Ticket promedio</h4>
+  <pre>[Measures].[Importe Total]
+  / [Measures].[Fact Ventas Recuento]
+
+<span class="c">-- La medida NO aditiva del modelo. Se calcula acá,</span>
+<span class="c">-- jamás se almacena en la tabla de hechos.</span></pre>
+
+  <div class="note">
+    <span class="lbl">Los nombres cambian</span>
+    <p>SSAS renombra las medidas separando las palabras: <code>StockDisponible</code> pasa a ser <code>[Stock Disponible]</code>. Verificá los nombres exactos en el panel de metadatos del editor antes de escribir el MDX, o los cálculos van a fallar al procesar.</p>
+  </div>
+</section>
+
+<hr class="sep">
+
+<section class="phase" id="f10">
+  <div class="phase-head"><span class="phase-num">10</span><h3>Implementar y procesar</h3></div>
+  <ol class="steps">
+    <li>Clic derecho en el proyecto → <span class="ui">Propiedades → Implementación</span>. Servidor: <code>localhost</code></li>
+    <li>Clic derecho en el proyecto → <span class="ui">Implementar</span></li>
+    <li>Al terminar, <span class="ui">Procesar</span> con la opción <span class="ui">Procesar completo</span></li>
+  </ol>
+
+  <h4>Verificación</h4>
+  <ul class="plain">
+    <li>Abrí la pestaña <span class="ui">Explorador</span> del cubo. Arrastrá <code>Zona</code> a filas, <code>Categoria</code> a columnas y <code>Tasa de Quiebre</code> a los datos.</li>
+    <li>Deberías ver <strong>Oeste marcadamente por encima del resto en Bebidas</strong>. Si sale plano, algo quedó mal en la fase 8.</li>
+    <li>Comprobá la semi-aditividad: poné <code>Stock Disponible</code> con <code>Anio</code> en filas. El total general tiene que parecerse al stock de un día, no a la suma de 731.</li>
+  </ul>
+
+  <div class="note critical">
+    <span class="lbl">Si el procesamiento falla</span>
+    <p>El error casi siempre es de permisos y apunta a la fase 2. Volvé al origen de datos y confirmá que la suplantación esté en <strong>Usar la cuenta de servicio</strong>.</p>
+    <p>Si el error menciona un atributo con clave duplicada, es una jerarquía de la fase 5 sin relaciones de atributo bien definidas.</p>
+  </div>
+
+  <h4>Para las capturas del informe</h4>
+  <ul class="plain">
+    <li>La matriz de <span class="ui">Uso de dimensiones</span> con las tres conformadas — es la prueba visual de la constelación.</li>
+    <li>La propiedad <code>AggregateFunction = LastNonEmpty</code> en el panel de propiedades.</li>
+    <li>Una tabla dinámica de Excel conectada al cubo: <span class="ui">Datos → Obtener datos → De base de datos → De Analysis Services</span>.</li>
+  </ul>
+</section>
+
+<footer>
+  <p>Los cuatro patrones de <code>MiniRed_DW</code> —quiebre de bebidas en Oeste, ciclo de reposición de Arcor, estacionalidad de congelados y sobrestock en San Justo— ya están validados con soporte, confianza, lift y hold-out temporal en <strong>02_MiniRed_consultas_analiticas.sql</strong>. El cubo no los descubre: los hace navegables y demostrables en vivo.</p>
+</footer>
+
+</main>
+</div>
+</div>

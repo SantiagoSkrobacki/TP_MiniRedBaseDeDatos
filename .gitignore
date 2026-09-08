@@ -1,0 +1,32 @@
+# ---------- Visual Studio / SSAS ----------
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.userprefs
+*.dwproj.user
+
+# Salidas de compilación del proyecto de Analysis Services
+*.asdatabase
+*.configsettings
+*.deploymentoptions
+*.deploymenttargets
+*.abf
+
+# ---------- SQL Server ----------
+*.mdf
+*.ldf
+*.ndf
+*.bak
+*.trn
+
+# ---------- Logs y temporales ----------
+*.log
+*.tmp
+~$*
+
+# ---------- Sistema operativo ----------
+Thumbs.db
+desktop.ini
+.DS_Store
