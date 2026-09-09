@@ -316,6 +316,27 @@ function renderAlertas(sucMap) {
 
 /* -------------------------------------------------------------- mapa de calor */
 
+/** Resuelve una variable CSS a su valor actual (cambia con el tema). */
+function valorVar(nombre) {
+  return getComputedStyle(document.documentElement).getPropertyValue(nombre).trim();
+}
+
+/** Luminancia relativa (WCAG) para decidir si encima va tinta clara u oscura.
+ *  Hay que mirarla de verdad y no deducirla del número de escalón: en tema
+ *  oscuro la rampa va de oscuro a claro, así que el escalón más alto es el
+ *  más brillante y ahí el texto blanco no se lee. */
+function tintaSobre(colorFondo) {
+  const m = colorFondo.match(/^#?([0-9a-f]{6})$/i);
+  if (!m) return "#ffffff";
+  const n = parseInt(m[1], 16);
+  const lin = c => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));
+  const L = 0.2126 * lin((n >> 16 & 255) / 255)
+          + 0.7152 * lin((n >> 8 & 255) / 255)
+          + 0.0722 * lin((n & 255) / 255);
+  // 0.179 es el punto donde tinta negra y blanca dan el mismo contraste en sRGB
+  return L > 0.179 ? "#0b0b0b" : "#ffffff";
+}
+
 const RAMPA = ["--seq-0", "--seq-1", "--seq-2", "--seq-3", "--seq-4", "--seq-5", "--seq-6"];
 const pasoRampa = (v, max) => {
   if (max <= 0) return 0;
@@ -352,10 +373,9 @@ function renderHeatmap() {
         fill: a ? `var(${RAMPA[pasoRampa(a.tasa, max)]})` : "var(--surface-2)"
       }, svg);
       if (!a) return;
-      const oscuro = pasoRampa(a.tasa, max) >= 4;
       const lbl = el("text", {
         x: x + cw / 2, y: y + ch / 2 + 4, "text-anchor": "middle",
-        class: "datalabel", fill: oscuro ? "#fff" : "var(--ink)"
+        class: "datalabel", fill: tintaSobre(valorVar(RAMPA[pasoRampa(a.tasa, max)]))
       }, svg);
       lbl.textContent = nf1.format(a.tasa) + "%";
       rect.style.cursor = "pointer";
