@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Qué es el portal de abastecimiento de MiniRed, cómo se lee y de dónde salen sus números.">
+<title>Guía del Portal MiniRed</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap">
+
+<style>
+:root{
+  color-scheme: light;
+  --plane:#f4f4f1;
+  --surface:#fcfcfb;
+  --surface-2:#eceae5;
+  --ink:#0b0b0b;
+  --ink-2:#4a4946;
+  --muted:#89877f;
+  --rule:#dedcd4;
+  --accent:#2a78d6;
+  --accent-soft:#dee9fa;
+  --warm:#c2521f;
+  --warm-soft:#f8e4da;
+  --good:#0b7d3f;
+  --serif:"IBM Plex Serif",Georgia,serif;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --plane:#0d0d0d;
+    --surface:#1a1a19;
+    --surface-2:#242422;
+    --ink:#f6f6f4;
+    --ink-2:#c3c2b7;
+    --muted:#8d8b83;
+    --rule:#2e2e2b;
+    --accent:#5b9bea;
+    --accent-soft:#152a44;
+    --warm:#e8875c;
+    --warm-soft:#332016;
+    --good:#4cbb7a;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --plane:#0d0d0d;
+  --surface:#1a1a19;
+  --surface-2:#242422;
+  --ink:#f6f6f4;
+  --ink-2:#c3c2b7;
+  --muted:#8d8b83;
+  --rule:#2e2e2b;
+  --accent:#5b9bea;
+  --accent-soft:#152a44;
+  --warm:#e8875c;
+  --warm-soft:#332016;
+  --good:#4cbb7a;
+}
+
+*{box-sizing:border-box}
+body{background:var(--plane);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.001ms!important;animation-duration:.001ms!important}}
+
+.page{max-width:1120px;margin:0 auto;padding:0 26px 90px}
+.cols{display:grid;grid-template-columns:186px minmax(0,1fr);gap:56px;align-items:start}
+@media (max-width:940px){.cols{grid-template-columns:1fr;gap:24px}}
+
+/* ---------- portada ---------- */
+.hero{padding:56px 0 26px;border-bottom:1px solid var(--rule);margin-bottom:34px}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin:0 0 16px}
+h1{font-family:var(--serif);font-weight:600;font-size:clamp(2.2rem,5.4vw,3.5rem);line-height:1.05;letter-spacing:-.02em;margin:0 0 18px;text-wrap:balance}
+.lede{font-family:var(--serif);font-size:1.22rem;line-height:1.55;color:var(--ink-2);max-width:60ch;margin:0 0 26px}
+.herolink{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:13px;color:var(--accent);text-decoration:none;border:1px solid var(--accent);border-radius:3px;padding:8px 14px;background:var(--accent-soft)}
+.herolink:hover{background:var(--accent);color:#fff}
+.herolink:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+/* ---------- índice ---------- */
+nav.toc{position:sticky;top:22px}
+@media (max-width:940px){nav.toc{position:static;background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:16px 18px}}
+nav.toc h2{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 12px;font-weight:500}
+nav.toc ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px}
+nav.toc a{display:block;font-size:13.5px;line-height:1.35;color:var(--ink-2);text-decoration:none;padding:3px 0}
+nav.toc a:hover{color:var(--accent)}
+nav.toc a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ---------- prosa ---------- */
+section{margin:0 0 52px;scroll-margin-top:22px}
+h2{font-family:var(--serif);font-weight:600;font-size:1.72rem;letter-spacing:-.014em;margin:0 0 6px;text-wrap:balance}
+h3{font-size:1.02rem;font-weight:600;margin:30px 0 7px;letter-spacing:-.005em}
+p{max-width:66ch;margin:0 0 15px;color:var(--ink-2)}
+p strong{color:var(--ink);font-weight:600}
+.sub{color:var(--muted);font-size:14.5px;margin:0 0 22px;max-width:66ch}
+ul,ol.plain{max-width:66ch;padding-left:1.15em;margin:0 0 15px}
+li{margin:0 0 8px;color:var(--ink-2)}
+li strong{color:var(--ink)}
+code{font-family:var(--mono);font-size:.86em;background:var(--surface-2);padding:1.5px 5px;border-radius:2px;color:var(--ink)}
+em{font-style:italic}
+
+/* ---------- tarjetas de recorrido ---------- */
+.walk{display:flex;flex-direction:column;gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:4px;overflow:hidden;margin:20px 0 0}
+.walk-item{background:var(--surface);padding:16px 20px;display:grid;grid-template-columns:190px minmax(0,1fr);gap:22px}
+@media (max-width:720px){.walk-item{grid-template-columns:1fr;gap:6px}}
+.walk-name{font-weight:600;font-size:14.5px;color:var(--ink);line-height:1.4}
+.walk-name span{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500;margin-top:3px}
+.walk-desc{font-size:14.5px;color:var(--ink-2);margin:0}
+.walk-desc b{color:var(--ink);font-weight:600}
+
+/* ---------- tabla ---------- */
+.tablewrap{overflow-x:auto;margin:18px 0 0;border:1px solid var(--rule);border-radius:4px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:440px}
+th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:10px 15px;border-bottom:1px solid var(--rule);white-space:nowrap}
+td{padding:10px 15px;border-bottom:1px solid var(--rule);color:var(--ink-2);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.mono,th.mono{font-family:var(--mono);font-size:12.5px;font-variant-numeric:tabular-nums;white-space:nowrap}
+td strong{color:var(--ink);font-weight:600}
+
+/* ---------- diagrama ---------- */
+figure{margin:22px 0 0;padding:0}
+.diagram{background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:20px 18px 14px;overflow-x:auto}
+.diagram svg{display:block;width:100%;min-width:600px;height:auto}
+figcaption{font-size:13px;color:var(--muted);margin-top:10px;max-width:66ch}
+
+/* ---------- pasos numerados (sólo donde el orden importa) ---------- */
+ol.steps{list-style:none;counter-reset:s;padding:0;margin:20px 0 0;max-width:66ch;display:flex;flex-direction:column;gap:16px}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:26px 1fr;gap:14px;margin:0}
+ol.steps li::before{content:counter(s);font-family:var(--mono);font-size:11px;font-weight:600;color:var(--accent);background:var(--accent-soft);border-radius:3px;width:26px;height:22px;display:grid;place-items:center;margin-top:2px}
+ol.steps b{color:var(--ink);display:block;margin-bottom:2px}
+
+/* ---------- notas ---------- */
+.note{border-left:3px solid var(--accent);background:var(--surface);border:1px solid var(--rule);border-left-width:3px;border-radius:0 4px 4px 0;padding:16px 20px;margin:22px 0 0}
+.note.warm{border-left-color:var(--warm)}
+.note-label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:7px}
+.note.warm .note-label{color:var(--warm)}
+.note p{margin:0;font-size:14.5px}
+.note p+p{margin-top:10px}
+
+/* ---------- cierre ---------- */
+footer{margin-top:16px;padding-top:22px;border-top:1px solid var(--rule);font-size:13.5px;color:var(--muted);max-width:66ch}
+footer code{font-size:12px}
+</style>
+
+</head>
+<body>
+<div class="page">
+
+<header class="hero">
+  <p class="kicker">MiniRed S.A. · Perspectiva Logística e Inventario</p>
+  <h1>Guía del Portal de Abastecimiento</h1>
+  <p class="lede">Qué muestra la página, cómo se lee, y de dónde salen los números que aparecen en pantalla. Escrito para que lo entienda cualquiera, con el detalle técnico al final para quien lo necesite.</p>
+  <a class="herolink" href="https://santiagoskrobacki.github.io/TP_MiniRedBaseDeDatos/landing/" target="_blank" rel="noopener">Abrir el portal →</a>
+</header>
+
+<div class="cols">
+
+<nav class="toc">
+  <h2>Contenido</h2>
+  <ol>
+    <li><a href="#que-es">Qué es</a></li>
+    <li><a href="#pantalla">Recorrido por la pantalla</a></li>
+    <li><a href="#leer">Cómo leer los números</a></li>
+    <li><a href="#datos">De dónde salen los datos</a></li>
+    <li><a href="#filtros">Por qué los filtros dan exacto</a></li>
+    <li><a href="#adentro">Cómo está hecho</a></li>
+    <li><a href="#decisiones">Decisiones de diseño</a></li>
+    <li><a href="#limites">Lo que conviene saber</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<section id="que-es">
+  <h2>Qué es</h2>
+  <p class="sub">Una herramienta de trabajo, no un informe.</p>
+
+  <p>MiniRed es una cadena de minimercados con seis sucursales y un depósito central. Todos los días vende mercadería y todos los días repone góndolas. Cuando esas dos cosas no están bien calibradas pasan dos problemas opuestos, y los dos cuestan plata.</p>
+
+  <p>Si repone de menos, la góndola se vacía y el cliente se va sin comprar: eso es un <strong>quiebre de stock</strong>. Si repone de más, queda mercadería parada que nadie compró: eso es <strong>capital inmovilizado</strong>. Un depósito lleno no es una buena noticia, es plata dormida que además puede vencerse.</p>
+
+  <p>El portal es la pantalla que mira el gerente de abastecimiento para saber dónde está parado en cada uno de esos dos frentes. Responde dos preguntas:</p>
+
+  <ul>
+    <li><strong>¿Dónde y cuándo nos quedamos sin mercadería?</strong></li>
+    <li><strong>¿Dónde hay stock que no rota?</strong></li>
+  </ul>
+
+  <p>No es un tablero de ventas. No hay facturación, ni promociones, ni medios de pago. Todo lo que se ve está mirado desde la logística.</p>
+</section>
+
+<section id="pantalla">
+  <h2>Recorrido por la pantalla</h2>
+  <p class="sub">De arriba hacia abajo, en el orden en que aparece.</p>
+
+  <div class="walk">
+    <div class="walk-item">
+      <div class="walk-name">Filtros<span>Arriba de todo</span></div>
+      <p class="walk-desc">Dos listas: <b>zona</b> y <b>categoría</b>. Todo lo que está debajo se recalcula al instante. Si elegís "Oeste", el resto de la página pasa a hablar únicamente del Oeste.</p>
+    </div>
+    <div class="walk-item">
+      <div class="walk-name">Cuatro indicadores<span>El resumen</span></div>
+      <p class="walk-desc">El estado general en cuatro números. La barrita de color arriba de cada uno dice si está bien o preocupa, sin necesidad de saber qué valor es "normal".</p>
+    </div>
+    <div class="walk-item">
+      <div class="walk-name">Alertas operativas<span>Qué hacer</span></div>
+      <p class="walk-desc">Las tres cosas más urgentes, ordenadas por gravedad. Cada una <b>nombra el lugar concreto</b> donde hay que intervenir: una sucursal, un producto, un proveedor.</p>
+    </div>
+    <div class="walk-item">
+      <div class="walk-name">Mapa de calor<span>Zona × categoría</span></div>
+      <p class="walk-desc">Una grilla donde cada casilla cruza una zona con una categoría. Cuanto más oscura, más faltantes. Sirve para encontrar el cruce problemático de un vistazo: acá salta que <b>Bebidas en el Oeste</b> es el peor de todos, muy por encima del resto.</p>
+    </div>
+    <div class="walk-item">
+      <div class="walk-name">Quiebre por día<span>El efecto de arrastre</span></div>
+      <p class="walk-desc">Muestra algo que no es obvio: el faltante <b>no aparece el día del pico de venta, sino después</b>. El fin de semana vacía la góndola y el hueco se ve el lunes y el martes.</p>
+    </div>
+    <div class="walk-item">
+      <div class="walk-name">Evolución mensual<span>Dos años</span></div>
+      <p class="walk-desc">Dos gráficos apilados que comparten el eje de meses: arriba el porcentaje de faltantes, abajo las unidades vendidas. Sirve para ver estacionalidad — los congelados en verano, por ejemplo.</p>
+    </div>
+    <div class="walk-item">
+      <div class="walk-name">Productos críticos<span>Ranking</span></div>
+      <p class="walk-desc">Los doce productos con más días sin stock. Es la lista corta por donde empezar.</p>
+    </div>
+    <div class="walk-item">
+      <div class="walk-name">Sucursales<span>Tabla ordenable</span></div>
+      <p class="walk-desc">Cada sucursal con sus dos indicadores y una etiqueta de estado. Se puede ordenar haciendo clic en cualquier columna. Acá se ve que <b>los dos problemas son opuestos</b>: hay sucursales que quiebran y una que tiene demasiado.</p>
+    </div>
+    <div class="walk-item">
+      <div class="walk-name">Reglas descubiertas<span>El análisis</span></div>
+      <p class="walk-desc">Cuatro patrones encontrados en los datos, cada uno con la acción concreta que sugiere. No responden a los filtros y está aclarado: son conclusiones sobre los dos años completos.</p>
+    </div>
+    <div class="walk-item">
+      <div class="walk-name">Control de correlación<span>El chequeo</span></div>
+      <p class="walk-desc">La parte más interesante para discutir. Compara la tasa de cada proveedor <b>antes y después de sacar la zona Oeste del cálculo</b>, para separar a los proveedores que realmente tienen un problema de los que sólo parecían tenerlo.</p>
+    </div>
+  </div>
+</section>
+
+<section id="leer">
+  <h2>Cómo leer los números</h2>
+  <p class="sub">Los dos indicadores principales y qué significa cada rango.</p>
+
+  <h3>Tasa de quiebre</h3>
+  <p>De cada 100 días que un producto estuvo a la venta en una sucursal, en cuántos la góndola estaba vacía. Si dice <strong>5,22%</strong>, quiere decir que en 5 de cada 100 casos el cliente que fue a buscar ese producto no lo encontró.</p>
+
+  <h3>Días de cobertura</h3>
+  <p>Cuántos días duraría la mercadería que hay en góndola si dejaran de reponer. Es la medida del colchón. Muy bajo significa vivir al límite; muy alto significa plata dormida.</p>
+
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr><th>Estado</th><th class="mono">Tasa de quiebre</th><th class="mono">Días de cobertura</th><th>Qué significa</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Normal</strong></td><td class="mono">menos de 2%</td><td class="mono">2,5 a 6 días</td><td>Nada que hacer</td></tr>
+        <tr><td><strong>Atención</strong></td><td class="mono">2% a 5%</td><td class="mono">menos de 2,5</td><td>Sin colchón ante un pico de demanda</td></tr>
+        <tr><td><strong>Alto</strong></td><td class="mono">5% a 8%</td><td class="mono">6 a 8 días</td><td>Empieza a costar plata</td></tr>
+        <tr><td><strong>Crítico</strong></td><td class="mono">8% o más</td><td class="mono">más de 8 días</td><td>Venta perdida, o capital inmovilizado</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <span class="note-label">Los dos extremos son malos</span>
+    <p>Es lo que más confunde al principio. Una sucursal con <strong>0% de quiebre</strong> parece perfecta, pero si tiene 10 días de cobertura significa que le mandan mucha más mercadería de la que vende. Nunca le falta nada porque le sobra todo. Eso también aparece en rojo, y con razón.</p>
+  </div>
+</section>
+
+<section id="datos">
+  <h2>De dónde salen los datos</h2>
+  <p class="sub">El recorrido completo, desde la base de datos hasta la pantalla.</p>
+
+  <p>Los números no están escritos a mano en la página. Salen de una base de datos con casi medio millón de registros, y pasan por tres etapas antes de llegar al navegador.</p>
+
+  <figure>
+    <div class="diagram">
+      <svg viewBox="0 0 720 200" role="img" aria-label="Recorrido de los datos: base de datos, resumen en SQL, archivo JSON y navegador">
+        <!-- etapa 1 -->
+        <rect x="8" y="42" width="150" height="76" rx="4" fill="var(--surface-2)" stroke="var(--rule)"/>
+        <text x="83" y="66" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="12.5" font-weight="600" fill="var(--ink)">Base de datos</text>
+        <text x="83" y="86" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="16" font-weight="600" fill="var(--accent)">470.000</text>
+        <text x="83" y="102" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="11" fill="var(--muted)">registros de hechos</text>
+
+        <path d="M164 80 L198 80" stroke="var(--rule)" stroke-width="1.5" fill="none"/>
+        <path d="M193 76 L199 80 L193 84 Z" fill="var(--rule)"/>
+        <text x="181" y="66" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9" letter-spacing="0.06em" fill="var(--muted)">AGRUPA</text>
+
+        <!-- etapa 2 -->
+        <rect x="204" y="42" width="152" height="76" rx="4" fill="var(--surface-2)" stroke="var(--rule)"/>
+        <text x="280" y="66" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="12.5" font-weight="600" fill="var(--ink)">Resumen en SQL</text>
+        <text x="280" y="86" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="var(--ink-2)">sp_PortalDashboard</text>
+        <text x="280" y="102" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="11" fill="var(--muted)">totales por grupo</text>
+
+        <path d="M362 80 L396 80" stroke="var(--rule)" stroke-width="1.5" fill="none"/>
+        <path d="M391 76 L397 80 L391 84 Z" fill="var(--rule)"/>
+        <text x="379" y="66" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9" letter-spacing="0.06em" fill="var(--muted)">ENVÍA</text>
+
+        <!-- etapa 3 -->
+        <rect x="402" y="42" width="150" height="76" rx="4" fill="var(--surface-2)" stroke="var(--rule)"/>
+        <text x="477" y="66" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="12.5" font-weight="600" fill="var(--ink)">Archivo de datos</text>
+        <text x="477" y="86" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="16" font-weight="600" fill="var(--accent)">783</text>
+        <text x="477" y="102" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="11" fill="var(--muted)">filas · 113 KB</text>
+
+        <path d="M558 80 L592 80" stroke="var(--rule)" stroke-width="1.5" fill="none"/>
+        <path d="M587 76 L593 80 L587 84 Z" fill="var(--rule)"/>
+        <text x="575" y="66" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9" letter-spacing="0.06em" fill="var(--muted)">LEE</text>
+
+        <!-- etapa 4 -->
+        <rect x="598" y="42" width="114" height="76" rx="4" fill="var(--accent-soft)" stroke="var(--accent)"/>
+        <text x="655" y="70" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="12.5" font-weight="600" fill="var(--ink)">Navegador</text>
+        <text x="655" y="90" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="11" fill="var(--ink-2)">filtra y</text>
+        <text x="655" y="104" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="11" fill="var(--ink-2)">vuelve a sumar</text>
+
+        <!-- llaves de reduccion -->
+        <path d="M8 132 L8 140 L552 140 L552 132" stroke="var(--rule)" stroke-width="1" fill="none"/>
+        <text x="280" y="160" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="11.5" fill="var(--muted)">la reducción ocurre en el servidor, una sola vez</text>
+      </svg>
+    </div>
+    <figcaption>El navegador nunca ve un ticket ni un día de stock individual: recibe sólo los totales por grupo.</figcaption>
+  </figure>
+
+  <ol class="steps">
+    <li><b>La base de datos guarda el detalle</b> Cada línea de ticket y cada día de stock de cada producto en cada sucursal. Son 315.969 líneas de venta y 153.510 fotos diarias de góndola, sobre dos años completos.</li>
+    <li><b>SQL Server resume</b> Un procedimiento agrupa esos registros y calcula los totales: cuántos días hubo faltante en cada mes, en cada zona, para cada categoría. De casi medio millón de filas quedan 783.</li>
+    <li><b>El resumen viaja como archivo</b> Esas 783 filas son 113 KB, menos que una foto de celular. Por eso la página abre al instante.</li>
+    <li><b>El navegador arma la pantalla</b> Toma el resumen, dibuja los gráficos, y cuando alguien cambia un filtro vuelve a sumar sólo las filas que corresponden. No le pregunta nada a la base de datos.</li>
+  </ol>
+</section>
+
+<section id="filtros">
+  <h2>Por qué los filtros dan exacto</h2>
+  <p class="sub">La parte que parece un detalle y no lo es.</p>
+
+  <p>Si el navegador sólo tiene un resumen, ¿cómo puede filtrar sin equivocarse? La respuesta está en <em>qué</em> guarda el resumen.</p>
+
+  <p>Cada fila no trae solamente el porcentaje ya calculado. Trae también <strong>los dos números con los que se calculó</strong>: cuántos días se observaron y en cuántos hubo faltante. Eso cambia todo.</p>
+
+  <div class="note warm">
+    <span class="note-label">Por qué no alcanza con guardar el porcentaje</span>
+    <p>Imaginá dos sucursales. Una estuvo observada 900 días y falló 90 veces: 10%. La otra, 100 días y falló 2 veces: 2%.</p>
+    <p>Si promediás los porcentajes te da <strong>6%</strong>. Pero la cuenta correcta es sumar: 92 fallas sobre 1000 días, o sea <strong>9,2%</strong>. Promediar porcentajes de grupos de distinto tamaño <em>siempre</em> da mal, porque le da el mismo peso a la sucursal grande que a la chica.</p>
+    <p>Guardando los conteos, el navegador suma primero y divide al final. El resultado es idéntico al que daría preguntarle a la base de datos.</p>
+  </div>
+
+  <p>Se puede comprobar: al filtrar <strong>zona Oeste + Bebidas</strong>, el portal calcula una tasa de <strong>19,34%</strong>. Ese mismo número, calculado directamente por SQL Server sobre los 470.000 registros originales, da igual hasta el segundo decimal.</p>
+
+  <p>Es la misma idea que hay detrás de un cubo dimensional: resumir una vez en el servidor y después navegar los resúmenes.</p>
+</section>
+
+<section id="adentro">
+  <h2>Cómo está hecho</h2>
+  <p class="sub">Para quien quiera abrir el capó.</p>
+
+  <h3>Sin dependencias</h3>
+  <p>Tres archivos: el HTML con la estructura, el CSS con los estilos y un JavaScript con toda la lógica. No usa ninguna librería externa, no hay que compilar nada y no hay que instalar nada. Los gráficos están dibujados a mano en SVG, que es el formato de dibujo que entiende el navegador.</p>
+
+  <p>Esto no es purismo: significa que la página <strong>no se puede romper porque una librería cambió</strong>, y que abre con doble clic en cualquier computadora.</p>
+
+  <h3>Tres orígenes de datos, en cascada</h3>
+  <p>Al abrir, la página busca los datos en este orden y se queda con el primero que responde:</p>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th class="mono">#</th><th>Origen</th><th>Cuándo entra en juego</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">1</td><td><strong>El backend</strong></td><td>Si hay un servidor conectado a la base, trae datos en vivo</td></tr>
+        <tr><td class="mono">2</td><td><strong>El archivo de datos</strong></td><td>Si la página se sirve desde un servidor web</td></tr>
+        <tr><td class="mono">3</td><td><strong>La copia embebida</strong></td><td>Siempre. Es la red de seguridad</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Los tres devuelven exactamente la misma estructura, así que la página funciona igual en los tres casos. <strong>La etiqueta de la barra superior dice cuál está usando</strong> en cada momento.</p>
+
+  <p>La tercera opción es la que garantiza que una demostración en vivo no se caiga: aunque no haya servidor, ni internet, ni base de datos, la página abre y muestra todo.</p>
+
+  <h3>Conectar el backend</h3>
+  <p>El backend todavía no existe, pero la página ya está preparada. Cuando esté, hay que cambiar <strong>una línea</strong>: la dirección de la API. Nada más. El servidor sólo tiene que devolver lo que el procedimiento de SQL Server ya arma.</p>
+</section>
+
+<section id="decisiones">
+  <h2>Decisiones de diseño</h2>
+  <p class="sub">Por qué algunas cosas están hechas de una manera y no de otra.</p>
+
+  <h3>Dos gráficos en vez de uno con dos ejes</h3>
+  <p>La evolución mensual son dos gráficos apilados y no uno solo con dos escalas superpuestas. Un gráfico de doble eje deja que quien lo arma elija dónde alinear las dos escalas, y esa elección arbitraria <strong>hace aparecer correlaciones que los datos no tienen</strong>. Separarlos es más honesto.</p>
+
+  <h3>Los colores están verificados</h3>
+  <p>La paleta pasó por un verificador de daltonismo: las dos series que se comparan en el gráfico de proveedores son distinguibles para las formas más comunes de ceguera al color, tanto en tema claro como oscuro.</p>
+
+  <h3>El color nunca decide solo</h3>
+  <p>Las etiquetas de estado siempre llevan <strong>un ícono y una palabra</strong> además del color. Quien no distingue rojo de verde lee "Crítico" igual. Un color por sí solo no comunica nada en esta página.</p>
+
+  <h3>Todo gráfico tiene su tabla</h3>
+  <p>Cada gráfico tiene un botón "Tabla" que muestra los mismos datos como números. Sirve para lectores de pantalla, y también para copiar un valor al informe sin tener que estimarlo mirando una barra.</p>
+
+  <h3>Los hallazgos no se filtran</h3>
+  <p>Las reglas y el control de correlación quedan afuera de los filtros, y está aclarado en pantalla. No es un olvido: el control necesita comparar el total <em>con</em> y <em>sin</em> la zona Oeste. Si se pudiera filtrar por zona, la comparación perdería sentido.</p>
+</section>
+
+<section id="limites">
+  <h2>Lo que conviene saber</h2>
+  <p class="sub">Tres aclaraciones honestas.</p>
+
+  <h3>Los datos son simulados</h3>
+  <p>La base de datos no es de una empresa real: la generamos nosotros para el trabajo práctico, con comportamientos realistas puestos a propósito. Está documentado en el código y declarado en el repositorio.</p>
+  <p>Ahora bien: <strong>los números de la pantalla no están inventados</strong>. Son el resultado real de consultas sobre esa base. Una cosa es que el almacén sea simulado y otra que las cuentas estén escritas a mano — acá pasa lo primero, no lo segundo.</p>
+
+  <h3>La copia embebida es una foto</h3>
+  <p>Cuando la página usa la copia de respaldo, muestra los datos tal como estaban el día que se generó. Si la base cambia, hay que regenerarla con un comando. No se actualiza sola.</p>
+
+  <h3>La versión publicada no tiene backend</h3>
+  <p>El portal publicado en GitHub Pages sirve archivos, no ejecuta programas ni se conecta a bases de datos. Ahí siempre lee el archivo de datos. Para mostrar datos en vivo hay que levantarlo en una máquina con la base al lado.</p>
+</section>
+
+<footer>
+  <p>Portal de operaciones de MiniRed S.A. — trabajo práctico de Minería de Datos, Proceso KDD y Modelado Dimensional, Unidad 3. Código fuente y documentación técnica en el repositorio, carpeta <code>landing/</code>.</p>
+</footer>
+
+</main>
+</div>
+</div>
+
+</body>
+</html>
