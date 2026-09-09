@@ -170,6 +170,10 @@ table.reparto tr td:first-child { font-weight:bold; color:#22252B; width:26%; }
 table.ruta td.c { text-align:center; white-space:nowrap; color:#5C6270; }
 table.ruta td.q { color:#5C6270; font-style:italic; }
 table.ruta tr td:nth-child(2) { font-weight:bold; color:#22252B; }
+.seccion { padding-top: 12mm; }
+.secmark { margin:0 0 10pt; }
+.seccion h2 { margin:0 0 12pt; }
+.seccion p { max-width: 42em; }
 """
 
 html = ["<!doctype html><html lang='es'><head><meta charset='utf-8'>",
@@ -224,6 +228,26 @@ for p in partes:
         if p["transicion"]:
             html.append(f"<p class='trans'><b>Pasa a:</b> {p['transicion']}</p>")
         html.append("</section>")
+    elif p["titulo"].startswith("Participante"):
+        # portadilla de sección: quién es, su texto, y su hoja de ruta
+        quien = "P1" if "1" in p["titulo"][:15] else "P2"
+        cls = "quien b" if quien == "P2" else "quien"
+        rotulo = "Participante 1" if quien == "P1" else "Participante 2"
+        mias = [x for x in partes if x["quien"] == quien]
+        html.append("<section class='slide libre seccion'>")
+        html.append(f"<p class='secmark'><span class='{cls}'>{rotulo}</span></p>")
+        html.append(f"<h2 style='font-size:24pt'>{p['titulo']}</h2>")
+        for blk in p["libres"]:
+            html.append(f"<p>{inline(blk)}</p>")
+        html.append("<table class='ruta'>")
+        html.append("<tr><th>Dia.</th><th>Tema</th><th>Minuto</th><th>Arrancás con…</th></tr>")
+        for x in mias:
+            primera = re.sub(r"<[^>]+>", "", x["hablado"][0] if x["hablado"] else "")
+            corte = primera.find(".")
+            primera = primera[:corte + 1] if 0 < corte < 130 else primera[:120] + "…"
+            html.append(f"<tr><td class='c'>{x['num']}</td><td>{x['titulo']}</td>"
+                        f"<td class='c'>{x['tiempo']}</td><td class='q'>{primera}</td></tr>")
+        html.append("</table></section>")
     else:
         # secciones sin diapositiva: checklist previo y preguntas
         html.append("<section class='slide libre'>")
@@ -239,26 +263,6 @@ for p in partes:
         if tabla:
             html.append(tabla)
         html.append("</div></section>")
-
-# ------------- hojas de ruta, una por participante -------------
-for quien, rotulo in (("P1", "Participante 1"), ("P2", "Participante 2")):
-    mias = [x for x in partes if x["quien"] == quien]
-    cls = "quien b" if quien == "P2" else "quien"
-    html.append("<section class='slide libre'>")
-    html.append(f"<h2>Hoja de ruta — <span class='{cls}' style='font-size:12pt'>{rotulo}</span></h2>")
-    html.append(f"<p style='color:#5C6270'>Tus {len(mias)} diapositivas, con la primera frase de cada una "
-                "para arrancar sin dudar. En el resto, seguí a tu compañero.</p>")
-    html.append("<table class='ruta'>")
-    html.append("<tr><th>Dia.</th><th>Tema</th><th>Minuto</th><th>Arrancás con…</th></tr>")
-    for x in mias:
-        primera = x["hablado"][0] if x["hablado"] else ""
-        primera = re.sub(r"<[^>]+>", "", primera)
-        corte = primera.find(".")
-        primera = primera[:corte + 1] if 0 < corte < 130 else primera[:120] + "…"
-        html.append(f"<tr><td class='c'>{x['num']}</td><td>{x['titulo']}</td>"
-                    f"<td class='c'>{x['tiempo']}</td><td class='q'>{primera}</td></tr>")
-    html.append("</table>")
-    html.append("</section>")
 
 html.append("</body></html>")
 io.open(SALIDA, "w", encoding="utf-8").write("\n".join(html))
