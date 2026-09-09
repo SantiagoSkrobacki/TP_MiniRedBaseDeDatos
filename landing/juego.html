@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Data Detective · MiniRed</title>
+  <meta name="description" content="Juego interactivo para aprender análisis multidimensional, minería de datos y KDD con el cubo de MiniRed.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="juego.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-in">
+      <a class="brand brand-link" href="index.html" aria-label="Volver al portal de MiniRed">
+        <span class="brand-mark" aria-hidden="true">MR</span>
+        <span>
+          <span class="brand-name">MiniRed S.A.</span>
+          <span class="brand-sub">Data Detective</span>
+        </span>
+      </a>
+      <div class="topbar-meta">
+        <span class="srcbadge" data-src="json"><span class="dot" aria-hidden="true"></span><span id="data-source">cargando datos</span></span>
+        <span class="xp-badge"><strong id="xp-total">0</strong> / 1000 XP</span>
+        <a class="back-link" href="index.html">Volver al tablero</a>
+        <button class="iconbtn" id="tema" type="button" aria-label="Cambiar entre tema claro y oscuro" title="Cambiar tema">◐</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="game-wrap">
+    <section class="game-hero" aria-labelledby="game-title">
+      <div>
+        <p class="eyebrow">Caso DD-2025 · Crisis de abastecimiento</p>
+        <h1 id="game-title">Convertite en Data Detective</h1>
+        <p>MiniRed necesita separar señales reales de conclusiones apresuradas. Investigá el dataset, consultá el cubo y defendé tus hallazgos ante el Director.</p>
+      </div>
+      <div class="case-status" aria-label="Progreso total">
+        <span id="rank-label">Analista en entrenamiento</span>
+        <div class="progress-track"><span id="progress-fill"></span></div>
+        <small id="progress-text">0 de 4 misiones resueltas</small>
+      </div>
+    </section>
+
+    <nav class="mission-map" id="mission-map" aria-label="Misiones del caso"></nav>
+
+    <div class="game-notice" id="game-notice" role="status" aria-live="polite" hidden></div>
+    <section id="mission-stage" aria-live="polite"></section>
+
+    <section class="final-report" id="final-report" hidden aria-labelledby="final-title"></section>
+
+    <footer class="game-footer">
+      <p>Las preguntas analíticas usan el mismo dataset que el Portal de Abastecimiento.</p>
+      <button class="text-button" id="restart-game" type="button">Reiniciar investigación</button>
+    </footer>
+  </main>
+
+  <noscript><p class="noscript">Este juego necesita JavaScript habilitado.</p></noscript>
+  <script src="seed-data.js"></script>
+  <script src="juego.js"></script>
+</body>
+</html>

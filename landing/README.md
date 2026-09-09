@@ -10,6 +10,9 @@ landing/
   index.html         estructura de la consola
   styles.css         tokens de tema y componentes
   app.js             capa de datos, agregación y gráficos (SVG a mano)
+  juego.html         acceso al modo Data Detective
+  juego.css          presentación de misiones y respuestas
+  juego.js           preguntas, puntaje y progreso local
   data/portal.json   datos que consume el portal (generado)
   seed-data.js       copia embebida de esos datos (generado, no editar)
   build-seed.py      regenera seed-data.js desde data/portal.json
@@ -18,6 +21,15 @@ landing/
 La landing es estática. El modo en vivo depende del backend local de `backend/`,
 que consulta el cubo SSAS mediante MDX. `sql/03_portal_api.sql` queda únicamente
 como referencia relacional y respaldo de resultados.
+
+## Modo Data Detective
+
+El botón **Modo Data Detective** abre `juego.html`, una actividad basada en las
+cuatro misiones de la consigna: Data Audit (100 XP), Cube Master (200 XP),
+Pattern Hunter (300 XP) y Director MiniRed (400 XP). Las preguntas analíticas
+se construyen con `portal.json` y usan `seed-data.js` al abrir mediante
+`file://`; no requieren backend. El avance se guarda únicamente en
+`localStorage` y puede reiniciarse desde el pie de la pantalla.
 
 ## Cómo abrirlo
 

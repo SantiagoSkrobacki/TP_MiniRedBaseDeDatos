@@ -188,6 +188,14 @@ body {
 .retry-api:disabled { cursor: wait; opacity: .65; }
 .retry-api:focus-visible { outline: 2px solid var(--s1); outline-offset: 2px; }
 
+.game-link {
+  font: 600 11px var(--sans); color: #fff; background: var(--s1);
+  border: 1px solid var(--s1); border-radius: 999px; padding: 5px 10px;
+  text-decoration: none; white-space: nowrap;
+}
+.game-link:hover { filter: brightness(.92); }
+.game-link:focus-visible { outline: 2px solid var(--s1); outline-offset: 2px; }
+
 .iconbtn {
   width: 32px; height: 32px; flex: none;
   display: grid; place-items: center;
