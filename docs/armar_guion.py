@@ -28,6 +28,22 @@ def imagen(n):
     return "data:image/png;base64," + base64.b64encode(p.read_bytes()).decode()
 
 
+def tabla_md(bloques):
+    """Convierte un bloque de filas |a|b|c| en una tabla HTML."""
+    filas = [b for b in bloques if b.startswith("|")]
+    if not filas:
+        return None, bloques
+    out = ["<table class='reparto'>"]
+    for i, f in enumerate(filas):
+        celdas = [c.strip() for c in f.strip().strip("|").split("|")]
+        if all(set(c) <= set("-: ") for c in celdas):
+            continue
+        tag = "th" if i == 0 else "td"
+        out.append("<tr>" + "".join(f"<{tag}>{inline(c)}</{tag}>" for c in celdas) + "</tr>")
+    out.append("</table>")
+    return chr(10).join(out), [b for b in bloques if not b.startswith("|")]
+
+
 def inline(t):
     """Marcado en línea de Markdown a HTML."""
     t = (t.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"))
@@ -48,7 +64,7 @@ for sec in secciones:
     cabecera = lineas[0].strip()
     cuerpo = "\n".join(lineas[1:])
 
-    m = re.match(r"^(\d+) · (.+?) — \*\*([AB])\*\* — (.+)$", cabecera)
+    m = re.match(r"^(\d+) · (.+?) — \*\*(P1|P2)\*\* — (.+)$", cabecera)
 
     # ---- párrafos hablados, acotaciones y transición ----
     hablado, acot, transicion = [], [], None
@@ -144,6 +160,16 @@ h1 { font-family: Cambria, Georgia, serif; font-size: 25pt; margin:0 0 6pt;
 .libre h2 { font-family: Cambria, serif; font-size:16pt; margin:0 0 9pt; }
 .libre p { margin:0 0 7pt; }
 .qa p { margin:0 0 9pt; }
+table.reparto, table.ruta { border-collapse:collapse; width:100%; margin-top:10pt;
+  font-size:10pt; }
+table.reparto th, table.ruta th { text-align:left; background:#22252B; color:#fff;
+  padding:5pt 7pt; font-size:8.5pt; letter-spacing:.06em; text-transform:uppercase; }
+table.reparto td, table.ruta td { padding:5pt 7pt; border-bottom:1px solid #E0E0DA;
+  vertical-align:top; }
+table.reparto tr td:first-child { font-weight:bold; color:#22252B; width:26%; }
+table.ruta td.c { text-align:center; white-space:nowrap; color:#5C6270; }
+table.ruta td.q { color:#5C6270; font-style:italic; }
+table.ruta tr td:nth-child(2) { font-weight:bold; color:#22252B; }
 """
 
 html = ["<!doctype html><html lang='es'><head><meta charset='utf-8'>",
@@ -154,26 +180,38 @@ html = ["<!doctype html><html lang='es'><head><meta charset='utf-8'>",
 html.append("""
 <div class="portada">
   <span class="chip">Guion de presentación</span>
-  <h1 style="margin-top:9pt">Pitch MiniRed — 10 minutos, dos presentadores</h1>
+  <h1 style="margin-top:9pt">Pitch MiniRed — 10 minutos, dos alumnos</h1>
   <p>Cada página corresponde a una diapositiva de <strong>MiniRed_Pitch.pptx</strong>.
-  Arriba, la lámina tal como se ve proyectada; abajo, qué se dice sobre ella.</p>
-  <p><strong>A</strong> lleva la voz del negocio: abre, plantea el problema, el impacto y el cierre.
-  <strong>B</strong> lleva la voz técnica: el modelo, las reglas, la validación y la demo.
-  Así ninguno habla más de dos minutos seguidos.</p>
+  Arriba, la lámina tal como se ve proyectada; abajo, qué se dice sobre ella y
+  <strong>quién de los dos la presenta</strong>.</p>
   <p>Lo escrito es para ensayar, no para leer. Una vez tomada la idea, contarlo con
   palabras propias suena mucho mejor.</p>
+  <table class="reparto">
+    <tr><th></th><th>Participante 1</th><th>Participante 2</th></tr>
+    <tr><td>Diapositivas</td><td>1, 2, 3, 6, 7, 8, 12, 14</td><td>4, 5, 9, 10, 11, 13</td></tr>
+    <tr><td>Tramos</td>
+        <td>0:00–2:00 · 3:40–5:30<br>7:50–8:30 · 9:30–10:00</td>
+        <td>2:00–3:40 · 5:30–7:50<br>8:30–9:30</td></tr>
+    <tr><td>Tiempo total</td><td>5:00</td><td>5:00</td></tr>
+    <tr><td>Le toca</td>
+        <td>Abrir, el problema, el marco teórico, el impacto y el cierre</td>
+        <td>El modelo, las reglas, la validación y la demo en vivo</td></tr>
+  </table>
+  <p style="margin-top:10pt; font-size:10.5pt">Las dos últimas páginas son la hoja de
+  ruta de cada uno: sólo sus diapositivas, para llevar en la mano.</p>
 </div>
 """)
 
 for p in partes:
     if p["num"]:
         img = imagen(int(p["num"]))
-        cls = "quien b" if p["quien"] == "B" else "quien"
+        cls = "quien b" if p["quien"] == "P2" else "quien"
+        rotulo = "Participante 1" if p["quien"] == "P1" else "Participante 2"
         html.append("<section class='slide'>")
         html.append("<div class='cab'>"
                     f"<span class='num'>{p['num']}</span>"
                     f"<span class='tit'>{p['titulo']}</span>"
-                    f"<span class='{cls}'>Habla {p['quien']}</span>"
+                    f"<span class='{cls}'>{rotulo}</span>"
                     f"<span class='tiempo'>{p['tiempo']}</span></div>")
         if img:
             html.append(f"<img class='thumb' src='{img}' alt='Diapositiva {p[chr(39)+'num'+chr(39)] if False else p['num']}'>")
@@ -192,12 +230,35 @@ for p in partes:
         html.append(f"<h2>{p['titulo']}</h2>")
         es_qa = "Pregunta" in p["titulo"]
         html.append("<div class='qa'>" if es_qa else "<div>")
-        for blk in p["libres"]:
+        tabla, sueltos = tabla_md(p["libres"])
+        for blk in sueltos:
             if blk.startswith("CHECK:"):
                 html.append(f"<p class='acot check'>{inline(blk[6:])}</p>")
             else:
                 html.append(f"<p>{inline(blk)}</p>")
+        if tabla:
+            html.append(tabla)
         html.append("</div></section>")
+
+# ------------- hojas de ruta, una por participante -------------
+for quien, rotulo in (("P1", "Participante 1"), ("P2", "Participante 2")):
+    mias = [x for x in partes if x["quien"] == quien]
+    cls = "quien b" if quien == "P2" else "quien"
+    html.append("<section class='slide libre'>")
+    html.append(f"<h2>Hoja de ruta — <span class='{cls}' style='font-size:12pt'>{rotulo}</span></h2>")
+    html.append(f"<p style='color:#5C6270'>Tus {len(mias)} diapositivas, con la primera frase de cada una "
+                "para arrancar sin dudar. En el resto, seguí a tu compañero.</p>")
+    html.append("<table class='ruta'>")
+    html.append("<tr><th>Dia.</th><th>Tema</th><th>Minuto</th><th>Arrancás con…</th></tr>")
+    for x in mias:
+        primera = x["hablado"][0] if x["hablado"] else ""
+        primera = re.sub(r"<[^>]+>", "", primera)
+        corte = primera.find(".")
+        primera = primera[:corte + 1] if 0 < corte < 130 else primera[:120] + "…"
+        html.append(f"<tr><td class='c'>{x['num']}</td><td>{x['titulo']}</td>"
+                    f"<td class='c'>{x['tiempo']}</td><td class='q'>{primera}</td></tr>")
+    html.append("</table>")
+    html.append("</section>")
 
 html.append("</body></html>")
 io.open(SALIDA, "w", encoding="utf-8").write("\n".join(html))

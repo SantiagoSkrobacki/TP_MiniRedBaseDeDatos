@@ -1,9 +1,21 @@
 # Guion del pitch — 10 minutos, dos presentadores
 
-Acompaña a `MiniRed_Pitch.pptx`. Lo exponen dos alumnos. El reparto no es
-arbitrario: **A** lleva el hilo del problema y de las conclusiones, y **B** la
-parte técnica (el modelo, las reglas, la validación y la demo). Así se escuchan
-dos registros distintos y ninguno habla más de dos minutos seguidos.
+Acompaña a `MiniRed_Pitch.pptx`. Lo exponen dos alumnos, con **cinco minutos
+exactos cada uno**.
+
+El reparto no es arbitrario: el **Participante 1** lleva el hilo del problema y
+de las conclusiones, y el **Participante 2** la parte técnica —el modelo, las
+reglas, la validación y la demo—. Así se escuchan dos registros distintos y
+ninguno habla más de dos minutos y medio seguidos.
+
+| | Participante 1 | Participante 2 |
+|---|---|---|
+| **Diapositivas** | 1, 2, 3, 6, 7, 8, 12, 14 | 4, 5, 9, 10, 11, 13 |
+| **Tramos** | 0:00–2:00 · 3:40–5:30 · 7:50–8:30 · 9:30–10:00 | 2:00–3:40 · 5:30–7:50 · 8:30–9:30 |
+| **Total** | 5:00 | 5:00 |
+| **Le toca** | Abrir, el problema, el marco teórico, el impacto y el cierre | El modelo, las reglas, la validación y la demo en vivo |
+
+Al final hay una hoja de ruta por participante, para que cada uno lleve la suya.
 
 El caso plantea que el equipo actúe como una consultora analítica. Eso se
 menciona una vez, como parte del enunciado, y de ahí en más se habla en primera
@@ -21,10 +33,11 @@ que lo tengan por la idea, contarlo con sus palabras suena mucho mejor.
 - [ ] La presentación en modo presentador, para leer las notas de cada lámina
 - [ ] Alguien cronometrando: a los 8 minutos hay que estar en la demo
 - [ ] Acordar quién dice cada nombre en la presentación inicial
+- [ ] Cada uno con su hoja de ruta (las dos últimas páginas)
 
 ---
 
-## 1 · Portada — **A** — 0:00 a 0:30
+## 1 · Portada — **P1** — 0:00 a 0:30
 
 >  Buenas tardes. Somos [nombre] y [nombre], y venimos a presentar el trabajo
 > práctico de la Unidad 3.
@@ -43,7 +56,7 @@ que lo tengan por la idea, contarlo con sus palabras suena mucho mejor.
 
 ---
 
-## 2 · Dos formas de perder plata — **A** — 0:30 a 1:20
+## 2 · Dos formas de perder plata — **P1** — 0:30 a 1:20
 
 > Cuando uno piensa en un problema de stock, piensa en la góndola vacía. El
 > cliente va a buscar el producto, no lo encuentra, y se va. Eso es venta
@@ -66,7 +79,7 @@ que lo tengan por la idea, contarlo con sus palabras suena mucho mejor.
 
 ---
 
-## 3 · Punto de partida — **A** — 1:20 a 2:00
+## 3 · Punto de partida — **P1** — 1:20 a 2:00
 
 > Un detalle de método, porque seguramente lo van a preguntar: la cátedra define
 > el diseño del caso, pero no entrega la base cargada. La construimos nosotros.
@@ -83,11 +96,11 @@ que lo tengan por la idea, contarlo con sus palabras suena mucho mejor.
 > Ahora bien, eso mismo nos obliga a ser más rigurosos con la validación. Y ese
 > rigor es justamente uno de los puntos teóricos que vamos a mostrar.
 
-**Transición:** *"Te paso la palabra para el modelo."* → **B**
+**Transición:** *"Te paso la palabra para el modelo."* → **Participante 2**
 
 ---
 
-## 4 · El modelo dimensional — **B** — 2:00 a 2:50
+## 4 · El modelo dimensional — **P2** — 2:00 a 2:50
 
 > Vender y reponer parecen lo mismo, pero son dos procesos distintos.
 >
@@ -110,7 +123,7 @@ que lo tengan por la idea, contarlo con sus palabras suena mucho mejor.
 
 ---
 
-## 5 · Semi-aditividad — **B** — 2:50 a 3:40
+## 5 · Semi-aditividad — **P2** — 2:50 a 3:40
 
 > Esta es la lámina más importante del trabajo.
 >
@@ -131,11 +144,11 @@ que lo tengan por la idea, contarlo con sus palabras suena mucho mejor.
 
 *(Pausa acá. Es el número que se recuerda.)*
 
-**Transición:** *"Te devuelvo para la parte conceptual."* → **A**
+**Transición:** *"Te devuelvo para la parte conceptual."* → **Participante 1**
 
 ---
 
-## 6 · De la consulta al patrón — **A** — 3:40 a 4:20
+## 6 · De la consulta al patrón — **P1** — 3:40 a 4:20
 
 > Una aclaración conceptual, porque es fácil confundir las dos cosas.
 >
@@ -153,7 +166,7 @@ que lo tengan por la idea, contarlo con sus palabras suena mucho mejor.
 
 ---
 
-## 7 · Tipos de variables — **A** — 4:20 a 4:50
+## 7 · Tipos de variables — **P1** — 4:20 a 4:50
 
 > Rápido, porque es más técnico que interesante, pero define qué operación tiene
 > sentido sobre cada columna.
@@ -170,7 +183,7 @@ que lo tengan por la idea, contarlo con sus palabras suena mucho mejor.
 
 ---
 
-## 8 · Proceso KDD — **A** — 4:50 a 5:30
+## 8 · Proceso KDD — **P1** — 4:50 a 5:30
 
 > Las cinco fases del proceso, en una lámina.
 >
@@ -190,11 +203,11 @@ que lo tengan por la idea, contarlo con sus palabras suena mucho mejor.
 >
 > Las dos últimas son las que tienen contenido propio, así que ahí nos detenemos.
 
-**Transición:** *"Contales qué encontramos."* → **B**
+**Transición:** *"Contales qué encontramos."* → **Participante 2**
 
 ---
 
-## 9 · Las cuatro reglas — **B** — 5:30 a 6:20
+## 9 · Las cuatro reglas — **P2** — 5:30 a 6:20
 
 > Cuatro reglas, y cada una tiene una acción asociada. Les cuento dos.
 >
@@ -216,7 +229,7 @@ que lo tengan por la idea, contarlo con sus palabras suena mucho mejor.
 
 ---
 
-## 10 · Validación con hold-out — **B** — 6:20 a 7:00
+## 10 · Validación con hold-out — **P2** — 6:20 a 7:00
 
 > Con suficientes cruces, siempre aparece alguna coincidencia llamativa. Así que
 > hicimos esto:
@@ -234,7 +247,7 @@ que lo tengan por la idea, contarlo con sus palabras suena mucho mejor.
 
 ---
 
-## 11 · Correlación espuria — **B** — 7:00 a 7:50
+## 11 · Correlación espuria — **P2** — 7:00 a 7:50
 
 *(La lámina más fuerte. No apurarla.)*
 
@@ -254,11 +267,11 @@ que lo tengan por la idea, contarlo con sus palabras suena mucho mejor.
 > Si hubiéramos presentado sólo la primera columna, MiniRed habría ido a
 > renegociar el contrato equivocado.
 
-**Transición:** *"¿Cuánto vale todo esto en pesos?"* → **A**
+**Transición:** *"¿Cuánto vale todo esto en pesos?"* → **Participante 1**
 
 ---
 
-## 12 · Impacto — **A** — 7:50 a 8:30
+## 12 · Impacto — **P1** — 7:50 a 8:30
 
 > Tres números y tres decisiones.
 >
@@ -273,11 +286,11 @@ que lo tengan por la idea, contarlo con sus palabras suena mucho mejor.
 > bebidas del Oeste; renegociar el ciclo con Arcor o compensarlo; y recalibrar
 > San Justo.
 
-**Transición:** *"Y esto no queda en un informe. Mostrales."* → **B**
+**Transición:** *"Y esto no queda en un informe. Mostrales."* → **Participante 2**
 
 ---
 
-## 13 · Demo en vivo — **B** — 8:30 a 9:30
+## 13 · Demo en vivo — **P2** — 8:30 a 9:30
 
 *(Cambiar a la ventana del portal. Cuatro movimientos, sin improvisar.)*
 
@@ -299,11 +312,11 @@ que lo tengan por la idea, contarlo con sus palabras suena mucho mejor.
 
 *(Volver a la presentación.)*
 
-**Transición:** *"Cerrá vos."* → **A**
+**Transición:** *"Cerrá vos."* → **Participante 1**
 
 ---
 
-## 14 · Cierre — **A** — 9:30 a 10:00
+## 14 · Cierre — **P1** — 9:30 a 10:00
 
 > Para cerrar, una sola idea.
 >

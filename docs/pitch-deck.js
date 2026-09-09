@@ -118,7 +118,7 @@ function pie(slide, texto) {
     x: 5.5, y: 6.3, w: 7.1, h: 0.4, isTextBox: true, margin: 0,
     fontFace: CUERPO, fontSize: 11, color: SLATE_CLARO
   });
-  s.addNotes("Presentarse por nombre. En 10 minutos: qué encontramos, cómo lo validamos y qué recomienda el análisis. Arrancar por el problema, no por la tecnología.");
+  s.addNotes("[PARTICIPANTE 1]  Presentarse por nombre. En 10 minutos: qué encontramos, cómo lo validamos y qué recomienda el análisis. Arrancar por el problema, no por la tecnología.");
 }
 
 /* ==================================================================
@@ -155,7 +155,7 @@ function pie(slide, texto) {
   s.addText("en góndola al cierre\ndel período analizado", { x: x2 + 2.75, y: cy + 2.0, w: 2.5, h: 0.6, isTextBox: true, margin: 0, fontFace: CUERPO, fontSize: 11, color: SLATE, lineSpacing: 14 });
 
   pie(s, "Fuente: MiniRed_DW · 131.580 observaciones diarias de góndola sobre 731 días");
-  s.addNotes("Insistir: no alcanza con 'reponer más'. Una sucursal con cero quiebre puede ser la peor gestionada de la cadena. Ese es el hallazgo que más sorprende y lo mostramos en el minuto 6.");
+  s.addNotes("[PARTICIPANTE 1]  Insistir: no alcanza con 'reponer más'. Una sucursal con cero quiebre puede ser la peor gestionada de la cadena. Ese es el hallazgo que más sorprende y lo mostramos en el minuto 6.");
 }
 
 /* ==================================================================
@@ -188,7 +188,7 @@ function pie(slide, texto) {
   s.addText("Un dataset generado al azar no contiene ninguna regla que descubrir: sería buscar huellas en una playa donde nadie caminó. La contrapartida —que la validación estadística no alcanza y todo hallazgo debe contrastarse contra la lógica del negocio— es exactamente el punto 5 de la consigna.", {
     x: M + 0.4, y: 5.55, w: W - M * 2 - 0.8, h: 0.75, isTextBox: true, margin: 0, fontFace: CUERPO, fontSize: 12, color: SLATE, lineSpacing: 17
   });
-  s.addNotes("Declararlo de entrada quita el aire a la pregunta incómoda. Y convierte una limitación en material teórico.");
+  s.addNotes("[PARTICIPANTE 1]  Declararlo de entrada quita el aire a la pregunta incómoda. Y convierte una limitación en material teórico.");
 }
 
 /* ==================================================================
@@ -250,7 +250,7 @@ function pie(slide, texto) {
   s.addText("Dim_Cajero y Dim_MedioPago quedan sólo del lado de las ventas: el ingreso de mercadería no pasa por caja. Esa asimetría es la prueba de que el stock es un proceso separado y no una columna más en Fact_Ventas.", {
     x: 1.9, y: 5.9, w: 9.5, h: 0.66, isTextBox: true, margin: 0, fontFace: CUERPO, fontSize: 12.5, color: SLATE, lineSpacing: 18
   });
-  s.addNotes("Si preguntan por qué no una sola tabla: distinto grano. Un ticket es un evento; el stock es una foto diaria. Meterlos juntos rompe la aditividad.");
+  s.addNotes("[PARTICIPANTE 2]  Si preguntan por qué no una sola tabla: distinto grano. Un ticket es un evento; el stock es una foto diaria. Meterlos juntos rompe la aditividad.");
 }
 
 /* ==================================================================
@@ -278,7 +278,7 @@ function pie(slide, texto) {
   s.addText("Tres órdenes de magnitud de diferencia. En el cubo se resuelve configurando la medida con LastNonEmpty; el asistente la deja en Sum por defecto.", {
     x: M, y: 5.4, w: 11.4, h: 0.8, isTextBox: true, margin: 0, fontFace: CUERPO, fontSize: 14, color: BLANCO, lineSpacing: 21
   });
-  s.addNotes("Este es el punto técnico que más pesa. Si sólo se llevan una cosa del pitch, que sea ésta: el 750x de diferencia entre sumar mal y sumar bien.");
+  s.addNotes("[PARTICIPANTE 2]  Este es el punto técnico que más pesa. Si sólo se llevan una cosa del pitch, que sea ésta: el 750x de diferencia entre sumar mal y sumar bien.");
 }
 
 /* ==================================================================
@@ -316,7 +316,7 @@ function pie(slide, texto) {
     s.addText(d[0], { x: dx + 0.48, y: y, w: 4.7, h: 0.32, isTextBox: true, margin: 0, fontFace: CUERPO, fontSize: 12.5, bold: true, color: GRAFITO });
     s.addText(d[1], { x: dx + 0.48, y: y + 0.32, w: 4.7, h: 0.5, isTextBox: true, margin: 0, fontFace: CUERPO, fontSize: 11, color: SLATE, lineSpacing: 15 });
   });
-  s.addNotes("Puntos 1 y 4 de la consigna resueltos en una sola lámina. El ejemplo del martes es concreto y se puede mostrar en vivo después.");
+  s.addNotes("[PARTICIPANTE 1]  Puntos 1 y 4 de la consigna resueltos en una sola lámina. El ejemplo del martes es concreto y se puede mostrar en vivo después.");
 }
 
 /* ==================================================================
@@ -346,7 +346,7 @@ function pie(slide, texto) {
     });
   });
   pie(s, "La variable objetivo del análisis es EsQuiebre: binaria, y por eso el modelo se evalúa con confianza y lift, no con un error promedio.");
-  s.addNotes("Punto 2. Mencionar que EsQuiebre se guarda como entero y no como bit, justamente porque se suma para contar días de faltante.");
+  s.addNotes("[PARTICIPANTE 1]  Punto 2. Mencionar que EsQuiebre se guarda como entero y no como bit, justamente porque se suma para contar días de faltante.");
 }
 
 /* ==================================================================
@@ -375,7 +375,7 @@ function pie(slide, texto) {
     s.addText(f[1], { x: x + 0.28, y: 4.0, w: bw - 0.56, h: 1.8, isTextBox: true, margin: 0, fontFace: CUERPO, fontSize: 10.5, color: SLATE, lineSpacing: 14.5 });
   });
   pie(s, "Punto 3 de la consigna. Cada fase dejó su rastro en el repositorio: scripts, controles y resultados reproducibles.");
-  s.addNotes("Pasar rápido por 1 a 3 y detenerse en 4 y 5, que es donde está el contenido propio.");
+  s.addNotes("[PARTICIPANTE 1]  Pasar rápido por 1 a 3 y detenerse en 4 y 5, que es donde está el contenido propio.");
 }
 
 /* ==================================================================
@@ -408,7 +408,7 @@ function pie(slide, texto) {
     s.addText("→ " + r[4], { x: M + 8.0, y: y + 0.24, w: 3.75, h: 0.38, isTextBox: true, margin: 0, fontFace: CUERPO, fontSize: 11.5, color: SLATE, valign: "middle" });
   });
   pie(s, "El lift indica cuántas veces más probable es el quiebre cuando se cumple la condición. Un lift de 1 sería ruido.");
-  s.addNotes("Punto 6. No leer las cuatro: contar R1 y R3, que son las más visuales, y dejar R2 para la lámina siguiente.");
+  s.addNotes("[PARTICIPANTE 2]  Punto 6. No leer las cuatro: contar R1 y R3, que son las más visuales, y dejar R2 para la lámina siguiente.");
 }
 
 /* ==================================================================
@@ -447,7 +447,7 @@ function pie(slide, texto) {
   });
   s.addText("< 1,3 pts", { x: 9.3, y: 4.95, w: 3.0, h: 0.55, isTextBox: true, margin: 0, fontFace: TITULO, fontSize: 28, bold: true, color: GRAFITO });
   s.addText("de desvío máximo entre\nel año de inducción y el de prueba", { x: 9.3, y: 5.5, w: 3.0, h: 0.5, isTextBox: true, margin: 0, fontFace: CUERPO, fontSize: 10.5, color: SLATE, lineSpacing: 14 });
-  s.addNotes("Punto 5, primera mitad: sobreajuste. La segunda mitad es la lámina que sigue.");
+  s.addNotes("[PARTICIPANTE 2]  Punto 5, primera mitad: sobreajuste. La segunda mitad es la lámina que sigue.");
 }
 
 /* ==================================================================
@@ -490,7 +490,7 @@ function pie(slide, texto) {
   s.addText("Acá sí hay un problema real de ciclo de entrega.", { x: 9.38, y: 5.43, w: 2.95, h: 0.5, isTextBox: true, margin: 0, fontFace: CUERPO, fontSize: 11, color: SLATE, lineSpacing: 15 });
 
   pie(s, "Presentar sólo la primera serie llevaría a renegociar el contrato equivocado.");
-  s.addNotes("La lámina más fuerte del pitch. Pausar acá. Si hay una sola pregunta del jurado, va a salir de esta diapositiva.");
+  s.addNotes("[PARTICIPANTE 2]  La lámina más fuerte del pitch. Pausar acá. Si hay una sola pregunta del jurado, va a salir de esta diapositiva.");
 }
 
 /* ==================================================================
@@ -526,7 +526,7 @@ function pie(slide, texto) {
     x: M, y: 5.1, w: 11.4, h: 1.2, isTextBox: true, margin: 0,
     fontFace: CUERPO, fontSize: 13, color: SLATE, paraSpaceAfter: 9, lineSpacing: 18
   });
-  s.addNotes("Cerrar con acciones, no con números. El jurado quiere ver que el análisis termina en una decisión.");
+  s.addNotes("[PARTICIPANTE 1]  Cerrar con acciones, no con números. El jurado quiere ver que el análisis termina en una decisión.");
 }
 
 /* ==================================================================
@@ -568,7 +568,7 @@ function pie(slide, texto) {
     fontFace: CUERPO, fontSize: 11, color: "D6D8DC", paraSpaceAfter: 8, lineSpacing: 15
   });
   s.addText("santiagoskrobacki.github.io", { x: 9.0, y: 5.78, w: 3.3, h: 0.3, isTextBox: true, margin: 0, fontFace: CUERPO, fontSize: 10, color: SLATE_CLARO });
-  s.addNotes("Abrir el portal en otra ventana ANTES de empezar el pitch. Si falla internet, la copia embebida hace que abra igual con doble clic.");
+  s.addNotes("[PARTICIPANTE 2]  Abrir el portal en otra ventana ANTES de empezar el pitch. Si falla internet, la copia embebida hace que abra igual con doble clic.");
 }
 
 /* ==================================================================
@@ -604,7 +604,7 @@ function pie(slide, texto) {
     x: M, y: 6.45, w: 11.4, h: 0.35, isTextBox: true, margin: 0,
     fontFace: CUERPO, fontSize: 12, color: SLATE_CLARO
   });
-  s.addNotes("Cierre en una sola idea: un supuesto mal puesto en la política de reposición explica los cuatro hallazgos. Abrir preguntas.");
+  s.addNotes("[PARTICIPANTE 1]  Cierre en una sola idea: un supuesto mal puesto en la política de reposición explica los cuatro hallazgos. Abrir preguntas.");
 }
 
 pres.writeFile({ fileName: "MiniRed_Pitch.pptx" }).then(f => console.log("escrito:", f));
