@@ -5,7 +5,13 @@ ADOMD.NET. No consulta directamente `MiniRed_DW`.
 
 ## Configuración
 
-Los valores editables están en `appsettings.json`:
+Los valores por computadora se editan en el `.env` de la raíz y se aplican con:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/aplicar-configuracion.ps1
+```
+
+El script actualiza `appsettings.json` con:
 
 - servidor SSAS: `localhost\SSAS`;
 - base: `Cubo_MiniRed_Logistica`;

@@ -87,6 +87,35 @@ embebida. El backend SSAS queda como demostración opcional mediante el botón
   extensión *Microsoft Analysis Services Projects*
 - .NET 8 SDK para el backend local
 
+## Configuración central por computadora
+
+Las direcciones y cuentas que cambian entre computadoras se centralizan en
+`.env`. Al clonar el repositorio:
+
+```powershell
+Copy-Item .env.example .env
+notepad .env
+powershell -ExecutionPolicy Bypass -File scripts\aplicar-configuracion.ps1
+```
+
+Variables disponibles:
+
+```text
+SQL_SERVER=localhost\SQLEXPRESS
+SSAS_SERVER=localhost\SSAS
+SSAS_SERVICE_ACCOUNT=NT Service\MSOLAP$SSAS
+API_HOST=127.0.0.1
+API_PORT=5050
+```
+
+El aplicador sincroniza el datasource y el destino de despliegue de SSAS, la
+cuenta de lectura usada por la migración SQL, `backend/appsettings.json` y la
+URL opcional de la landing. `.env` es local y está ignorado por Git;
+`.env.example` contiene la plantilla versionada.
+
+Los nombres lógicos `MiniRed_DW`, `Cubo_MiniRed_Logistica` y
+`MiniRed Logistica` permanecen fijos porque forman parte del modelo.
+
 ## Cómo levantar la base
 
 Desde SSMS, abrir y ejecutar en orden:
@@ -101,6 +130,19 @@ Desde la línea de comandos:
 ```
 sqlcmd -S localhost\SQLEXPRESS -E -f 65001 -i sql\01_MiniRed_DW_crear_y_poblar.sql
 sqlcmd -S localhost\SQLEXPRESS -E -f 65001 -i sql\02_MiniRed_consultas_analiticas.sql
+```
+
+Alternativamente, después de configurar `.env`, todo el modelo relacional puede
+crearse con un solo comando explícito:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\crear-base.ps1 -Modo Recrear
+```
+
+Para aplicar únicamente la migración idempotente sobre una base existente:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\crear-base.ps1 -Modo Migrar
 ```
 
 Para regenerar el JSON de la landing (usar `bcp`, no `sqlcmd`: este último agrega
@@ -130,6 +172,12 @@ Para deshacer todo: `DROP DATABASE MiniRed_DW;`
 El código del backend se versiona en GitHub, pero no se ejecuta en GitHub Pages:
 Pages sólo sirve la landing estática. Más detalles en `backend/README.md`.
 
+Con `.env` configurado, los pasos 2 y 3 también pueden automatizarse con:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\desplegar-cubo.ps1
+```
+
 ---
 
 ## Estructura del repositorio
@@ -149,7 +197,11 @@ landing/                              Portal de abastecimiento (ver su README)
 Cubo_MiniRed_Logistica/               Proyecto de Analysis Services
 backend/                              API local ASP.NET Core 8 + ADOMD.NET
 scripts/actualizar-respaldo.ps1       Regenera los respaldos desde la API/SSAS
+scripts/aplicar-configuracion.ps1     Aplica .env a todos los componentes
+scripts/crear-base.ps1                Crea o migra MiniRed_DW usando .env
+scripts/desplegar-cubo.ps1            Compila, despliega y procesa el cubo
 docs/
+  configuracion-base-y-cubo.md        Guía práctica de instalación mediante .env y PowerShell
   guia-cubo-ssas.html                 Guía de 10 fases para construir el cubo
 ```
 

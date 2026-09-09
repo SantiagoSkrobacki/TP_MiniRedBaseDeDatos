@@ -86,7 +86,8 @@ GitHub Pages sólo aloja los archivos estáticos y funciona normalmente con
 pedir permiso para que la página acceda a la red local; hay que aceptarlo.
 
 La API escucha sólo en loopback, permite CORS y responde 503 si SSAS o el cubo
-no están disponibles. Su configuración está en `backend/appsettings.json`.
+no están disponibles. Su dirección se toma de `landing/config.js`, generado
+desde el `.env` raíz por `scripts/aplicar-configuracion.ps1`.
 
 ## Regenerar los datos
 

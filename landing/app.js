@@ -19,7 +19,7 @@
 
 /* El frontend puede estar publicado en GitHub Pages, pero la API se ejecuta en
    la misma computadora que SSAS. 127.0.0.1 es intencional. */
-const API_BASE = "http://127.0.0.1:5050/api";
+const API_BASE = window.MINIRED_CONFIG?.apiBase || "http://127.0.0.1:5050/api";
 
 const state = { zona: "*", cat: "*", orden: { col: "tasa", dir: -1 }, tablas: {} };
 let DATA = null;

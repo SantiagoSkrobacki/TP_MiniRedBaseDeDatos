@@ -46,16 +46,29 @@ IF EXISTS (
       ALTER COLUMN ValorInventario DECIMAL(14,2) NOT NULL;
 GO
 
-IF SUSER_ID(N'NT Service\MSOLAP$SSAS') IS NULL
-    CREATE LOGIN [NT Service\MSOLAP$SSAS] FROM WINDOWS;
-GO
+-- Esta asignacion es actualizada por scripts/aplicar-configuracion.ps1.
+DECLARE @CuentaServicioSsas SYSNAME = N'NT Service\MSOLAP$SSAS';
+DECLARE @SqlPermisos NVARCHAR(MAX);
 
-IF USER_ID(N'NT Service\MSOLAP$SSAS') IS NULL
-    CREATE USER [NT Service\MSOLAP$SSAS] FOR LOGIN [NT Service\MSOLAP$SSAS];
-GO
+IF SUSER_ID(@CuentaServicioSsas) IS NULL
+BEGIN
+    SET @SqlPermisos = N'CREATE LOGIN ' + QUOTENAME(@CuentaServicioSsas) + N' FROM WINDOWS;';
+    EXEC sys.sp_executesql @SqlPermisos;
+END;
 
-IF IS_ROLEMEMBER(N'db_datareader', N'NT Service\MSOLAP$SSAS') <> 1
-    ALTER ROLE db_datareader ADD MEMBER [NT Service\MSOLAP$SSAS];
+IF USER_ID(@CuentaServicioSsas) IS NULL
+BEGIN
+    SET @SqlPermisos = N'CREATE USER ' + QUOTENAME(@CuentaServicioSsas)
+                     + N' FOR LOGIN ' + QUOTENAME(@CuentaServicioSsas) + N';';
+    EXEC sys.sp_executesql @SqlPermisos;
+END;
+
+IF IS_ROLEMEMBER(N'db_datareader', @CuentaServicioSsas) <> 1
+BEGIN
+    SET @SqlPermisos = N'ALTER ROLE db_datareader ADD MEMBER '
+                     + QUOTENAME(@CuentaServicioSsas) + N';';
+    EXEC sys.sp_executesql @SqlPermisos;
+END;
 GO
 
 SELECT EsSobrestock, Filas = COUNT_BIG(*)
