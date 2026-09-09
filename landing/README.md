@@ -33,17 +33,21 @@ python -m http.server 8777
 y abrir <http://127.0.0.1:8777/landing/index.html>.
 
 El badge de la barra superior dice de dónde salieron los datos que estás viendo:
-`datos en vivo` (backend), `archivo local` (JSON) o `copia embebida` (seed).
+`archivo local` (JSON, predeterminado), `copia embebida` (seed) o `datos en vivo`
+si el usuario conecta manualmente con SSAS.
 
 ## Capa de datos
 
-`app.js` pide los datos en orden y se queda con el primero que responde:
+`app.js` carga los datos estáticos en este orden:
 
 | # | Origen | Cuándo aplica |
 |---|--------|---------------|
-| 1 | `GET http://127.0.0.1:5050/api/dashboard` | backend local y SSAS disponibles |
-| 2 | `landing/data/portal.json` | servido por HTTP |
-| 3 | `window.__MINIRED_SEED__` | `file://`, sin servidor — respaldo para la demo |
+| 1 | `landing/data/portal.json` | origen predeterminado cuando se sirve por HTTP |
+| 2 | `window.__MINIRED_SEED__` | `file://` o JSON inaccesible |
+
+La API no se consulta durante la carga inicial. El botón **Conectar a SSAS**
+solicita manualmente `GET http://127.0.0.1:5050/api/dashboard` y cambia el origen
+a `datos en vivo` si la conexión tiene éxito.
 
 Los tres devuelven **el mismo documento**. En vivo, todos los valores numéricos
 se obtienen del cubo; los filtros se aplican luego en el navegador.
@@ -75,11 +79,11 @@ ponderando `stockProm` y `ventaProm` por las observaciones de cada fila.
 
 ### Backend local y GitHub Pages
 
-GitHub Pages sólo aloja los archivos estáticos. Antes de abrir el portal para la
-demostración, ejecutar `backend/iniciar-backend.bat` y comprobar
-<http://127.0.0.1:5050/api/health>. Chrome puede pedir permiso para que la página
-acceda a la red local; hay que aceptarlo. El botón **Reintentar conexión** vuelve
-a solicitar los datos sin recargar toda la página.
+GitHub Pages sólo aloja los archivos estáticos y funciona normalmente con
+`portal.json`, sin backend. Para una demostración opcional en vivo, ejecutar
+`backend/iniciar-backend.bat`, comprobar
+<http://127.0.0.1:5050/api/health> y pulsar **Conectar a SSAS**. Chrome puede
+pedir permiso para que la página acceda a la red local; hay que aceptarlo.
 
 La API escucha sólo en loopback, permite CORS y responde 503 si SSAS o el cubo
 no están disponibles. Su configuración está en `backend/appsettings.json`.

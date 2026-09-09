@@ -72,10 +72,10 @@ Según la guía de `docs/guia-cubo-ssas.html`:
 Para verlo local, doble clic en `landing/index.html` — funciona sin servidor.
 Documentación del módulo y contrato de la API en [`landing/README.md`](landing/README.md).
 
-La versión publicada en GitHub Pages consulta la API local en
-`http://127.0.0.1:5050/api`. El frontend pide los datos en cascada — SSAS a
-través del backend, JSON servido, copia embebida — con el mismo contrato en los
-tres casos. Si usa un respaldo lo informa y permite reintentar la conexión.
+La versión publicada en GitHub Pages carga siempre `landing/data/portal.json`
+como origen predeterminado. Si ese archivo no está disponible usa la copia
+embebida. El backend SSAS queda como demostración opcional mediante el botón
+**Conectar a SSAS**, sin afectar la carga normal de la landing.
 
 ---
 
@@ -112,7 +112,7 @@ bcp "EXEC MiniRed_DW.dbo.sp_LandingDataJson" queryout data\datos_landing.json -S
 
 Para deshacer todo: `DROP DATABASE MiniRed_DW;`
 
-## Cómo levantar el cubo y la landing en vivo
+## Cómo levantar el cubo y la conexión en vivo opcional
 
 1. Ejecutar `sql/04_preparar_cubo_existente.sql` en `localhost\SQLEXPRESS`. Es
    idempotente: agrega `EsSobrestock` si falta y concede lectura al servicio SSAS.
@@ -121,10 +121,11 @@ Para deshacer todo: `DROP DATABASE MiniRed_DW;`
 3. En las propiedades de implementación seleccionar servidor `localhost\SSAS`
    y base `Cubo_MiniRed_Logistica`; luego **Implementar**. El despliegue realiza
    `ProcessFull`.
-4. Ejecutar `backend/iniciar-backend.bat` y comprobar
+4. Para demostrar la conexión en vivo, ejecutar `backend/iniciar-backend.bat` y comprobar
    <http://127.0.0.1:5050/api/health>.
-5. Abrir la landing local o la versión de GitHub Pages. Si Chrome solicita
-   acceso a la red local, aceptarlo.
+5. Abrir la landing local o la versión de GitHub Pages. Inicialmente mostrará
+   `archivo local`. Pulsar **Conectar a SSAS** y, si Chrome solicita acceso a la
+   red local, aceptarlo.
 
 El código del backend se versiona en GitHub, pero no se ejecuta en GitHub Pages:
 Pages sólo sirve la landing estática. Más detalles en `backend/README.md`.

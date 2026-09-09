@@ -2,10 +2,12 @@
    MiniRed · Portal de Operaciones y Abastecimiento
    --------------------------------------------------------------------------
    CAPA DE DATOS
-   El portal pide los datos en este orden y se queda con el primero que responde:
-     1. API del backend      GET {API_BASE}/dashboard
-     2. JSON servido         data/portal.json             (requiere http://)
-     3. Semilla embebida     seed-data.js                 (funciona con file://)
+   El portal pide los datos estáticos en este orden:
+     1. JSON servido         data/portal.json             (requiere http://)
+     2. Semilla embebida     seed-data.js                 (funciona con file://)
+
+   La conexión API/SSAS es opcional y sólo se intenta cuando el usuario pulsa
+   "Conectar a SSAS". La carga inicial nunca depende del backend.
 
    El contrato es el mismo en los tres casos. En vivo, el backend obtiene todos
    los valores numéricos del cubo SSAS mediante MDX.
@@ -18,14 +20,6 @@
 /* El frontend puede estar publicado en GitHub Pages, pero la API se ejecuta en
    la misma computadora que SSAS. 127.0.0.1 es intencional. */
 const API_BASE = "http://127.0.0.1:5050/api";
-
-const API_ES_ABSOLUTA = /^https?:\/\//i.test(API_BASE);
-
-/* GitHub Pages es hosting estático: no hay backend en su propio origen, así que
-   con una API relativa se saltea el intento y no queda un 404 en la consola.
-   Si se configura una API absoluta, se prueba igual — Pages contra un backend
-   externo es un escenario válido. */
-const API_HABILITADA = API_ES_ABSOLUTA || !/\.github\.io$/i.test(location.hostname);
 
 const state = { zona: "*", cat: "*", orden: { col: "tasa", dir: -1 }, tablas: {} };
 let DATA = null;
@@ -820,12 +814,11 @@ function marcarFuente(src) {
     src === "api"  ? `Conectado al backend en ${API_BASE}/dashboard` :
     src === "json" ? "Leído de landing/data/portal.json" :
                      "Sin servidor: usando la copia embebida en seed-data.js";
-  $("#data-notice").hidden = src === "api";
+  $("#data-notice").hidden = src !== "seed";
   $("#retry-api").hidden = src === "api";
 }
 
 async function cargarApi() {
-  if (!API_HABILITADA) return null;
   const r = await fetch(`${API_BASE}/dashboard`, {
     headers: { Accept: "application/json" },
     // Chromium clasifica 127.0.0.1 como loopback para Local Network Access.
@@ -837,12 +830,7 @@ async function cargarApi() {
 }
 
 async function cargar() {
-  // 1. backend
-  if (API_HABILITADA) try {
-    const j = await cargarApi();
-    if (j) return { data: j, src: "api" };
-  } catch { /* sin backend todavía */ }
-  // 2. json servido por http
+  // 1. JSON estático: origen predeterminado aun cuando el backend esté activo.
   try {
     const r = await fetch("data/portal.json");
     if (r.ok) {
@@ -850,7 +838,7 @@ async function cargar() {
       if (j && j.meta) return { data: j, src: "json" };
     }
   } catch { /* file:// bloquea el fetch local */ }
-  // 3. semilla embebida
+  // 2. Semilla embebida para file:// o si el JSON no está disponible.
   return { data: window.__MINIRED_SEED__, src: "seed" };
 }
 
@@ -889,10 +877,12 @@ async function main() {
       actualizarMeta();
       render();
     } catch {
+      $("#data-notice").innerHTML =
+        `No se pudo conectar con SSAS. Verificá <code>${API_BASE}/health</code> y volvé a intentarlo.`;
       $("#data-notice").hidden = false;
     } finally {
       button.disabled = false;
-      button.textContent = "Reintentar conexión";
+      button.textContent = "Conectar a SSAS";
     }
   });
 
@@ -901,7 +891,7 @@ async function main() {
     $("#kpis").innerHTML = `<div class="kpi" data-state="critical">
       <span class="kpi-label">Sin datos</span>
       <span class="kpi-value">—</span>
-      <span class="kpi-foot">No se pudo leer el backend, el JSON ni la copia embebida.</span></div>`;
+      <span class="kpi-foot">No se pudo leer el JSON ni la copia embebida.</span></div>`;
     return;
   }
   DATA = data;
