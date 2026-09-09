@@ -7,21 +7,17 @@
      2. JSON servido         data/portal.json             (requiere http://)
      3. Semilla embebida     seed-data.js                 (funciona con file://)
 
-   El contrato es el mismo en los tres casos: el documento que devuelve
-   MiniRed_DW.dbo.sp_PortalDashboard. Cuando exista el backend no hay que
-   tocar nada de este archivo salvo API_BASE.
+   El contrato es el mismo en los tres casos. En vivo, el backend obtiene todos
+   los valores numéricos del cubo SSAS mediante MDX.
 
    Cada fila del contrato trae CONTEOS además de la tasa ya calculada, y por
    eso los filtros pueden reagregar con exactitud: promediar tasas de
    subgrupos de distinto tamaño da un número equivocado; sumar conteos, no.
    ========================================================================== */
 
-/* Ruta de la API.
-   - Relativa ("/api"): el backend vive en el mismo origen que la página.
-   - Absoluta ("https://mi-api.example.com/api"): backend en otro servidor.
-     En ese caso el backend debe permitir CORS para este origen y responder
-     por HTTPS, porque una página HTTPS no puede consultar un backend HTTP. */
-const API_BASE = "/api";
+/* El frontend puede estar publicado en GitHub Pages, pero la API se ejecuta en
+   la misma computadora que SSAS. 127.0.0.1 es intencional. */
+const API_BASE = "http://127.0.0.1:5050/api";
 
 const API_ES_ABSOLUTA = /^https?:\/\//i.test(API_BASE);
 
@@ -824,16 +820,27 @@ function marcarFuente(src) {
     src === "api"  ? `Conectado al backend en ${API_BASE}/dashboard` :
     src === "json" ? "Leído de landing/data/portal.json" :
                      "Sin servidor: usando la copia embebida en seed-data.js";
+  $("#data-notice").hidden = src === "api";
+  $("#retry-api").hidden = src === "api";
+}
+
+async function cargarApi() {
+  if (!API_HABILITADA) return null;
+  const r = await fetch(`${API_BASE}/dashboard`, {
+    headers: { Accept: "application/json" },
+    // Chromium clasifica 127.0.0.1 como loopback para Local Network Access.
+    targetAddressSpace: "loopback"
+  });
+  if (!r.ok) throw new Error(`API ${r.status}`);
+  const j = await r.json();
+  return j && j.meta && j.serie ? j : null;
 }
 
 async function cargar() {
   // 1. backend
   if (API_HABILITADA) try {
-    const r = await fetch(`${API_BASE}/dashboard`, { headers: { Accept: "application/json" } });
-    if (r.ok) {
-      const j = await r.json();
-      if (j && j.meta && j.serie) return { data: j, src: "api" };
-    }
+    const j = await cargarApi();
+    if (j) return { data: j, src: "api" };
   } catch { /* sin backend todavía */ }
   // 2. json servido por http
   try {
@@ -870,6 +877,25 @@ async function main() {
     aplicarVistas();
   }));
 
+  $("#retry-api").addEventListener("click", async e => {
+    const button = e.currentTarget;
+    button.disabled = true;
+    button.textContent = "Conectando…";
+    try {
+      const data = await cargarApi();
+      if (!data) throw new Error("Respuesta inválida");
+      DATA = data;
+      marcarFuente("api");
+      actualizarMeta();
+      render();
+    } catch {
+      $("#data-notice").hidden = false;
+    } finally {
+      button.disabled = false;
+      button.textContent = "Reintentar conexión";
+    }
+  });
+
   const { data, src } = await cargar();
   if (!data) {
     $("#kpis").innerHTML = `<div class="kpi" data-state="critical">
@@ -880,14 +906,16 @@ async function main() {
   }
   DATA = data;
   marcarFuente(src);
+  actualizarMeta();
+  poblarFiltros();
+  render();
+}
 
+function actualizarMeta() {
   $("#periodo").textContent = `${DATA.meta.desde} → ${DATA.meta.hasta}`;
   $("#foot-meta").innerHTML =
     `${num(DATA.meta.observaciones)} observaciones · ${DATA.meta.dias} días · ` +
     `${DATA.meta.sucursales} sucursales · ${DATA.meta.productos} productos`;
-
-  poblarFiltros();
-  render();
 }
 
 main();

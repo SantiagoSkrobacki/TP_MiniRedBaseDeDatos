@@ -178,7 +178,7 @@ BEGIN
                        N'Recalibrar el nivel objetivo de San Justo a su demanda real',
                        v.Anio,
                        CASE WHEN v.NombreSucursal = N'San Justo' THEN 1 ELSE 0 END,
-                       CASE WHEN v.StockDisponible > v.StockMinimo * 2 THEN 1 ELSE 0 END
+                       CAST(v.EsSobrestock AS INT)
                 FROM vw_Cubo_Logistica v
             ) R
             GROUP BY R.id, R.regla, R.accion

@@ -163,6 +163,7 @@ CREATE TABLE Fact_Stock (
     -- porque no las considera un tipo numerico agregable.
     EsQuiebre          TINYINT     NOT NULL,   -- 1 = stock en cero al cierre
     EsBajoMinimo       TINYINT     NOT NULL,   -- 1 = por debajo del punto de pedido
+    EsSobrestock       TINYINT     NOT NULL,   -- 1 = mas del doble del stock minimo
     CONSTRAINT FK_FS_Tiempo   FOREIGN KEY (IdTiempo)   REFERENCES Dim_Tiempo(IdTiempo),
     CONSTRAINT FK_FS_Sucursal FOREIGN KEY (IdSucursal) REFERENCES Dim_Sucursal(IdSucursal),
     CONSTRAINT FK_FS_Producto FOREIGN KEY (IdProducto) REFERENCES Dim_Producto(IdProducto)
@@ -486,7 +487,7 @@ ConLag AS (
 )
 INSERT INTO Fact_Stock (IdTiempo, IdSucursal, IdProducto, CantidadIngresada,
                         CantidadVendida, StockDisponible, StockMinimo,
-                        EsQuiebre, EsBajoMinimo)
+                        EsQuiebre, EsBajoMinimo, EsSobrestock)
 SELECT
     cl.IdTiempo,
     cl.IdSucursal,
@@ -499,7 +500,8 @@ SELECT
     StockDisponible   = cl.Stock,
     StockMinimo       = cl.StockMinimo,
     EsQuiebre         = CASE WHEN cl.Stock = 0 THEN 1 ELSE 0 END,
-    EsBajoMinimo      = CASE WHEN cl.Stock < cl.StockMinimo THEN 1 ELSE 0 END
+    EsBajoMinimo      = CASE WHEN cl.Stock < cl.StockMinimo THEN 1 ELSE 0 END,
+    EsSobrestock      = CASE WHEN cl.Stock > cl.StockMinimo * 2 THEN 1 ELSE 0 END
 FROM ConLag cl;
 GO
 
@@ -516,7 +518,7 @@ GO
 
 INSERT INTO Fact_Stock (IdTiempo, IdSucursal, IdProducto, CantidadIngresada,
                         CantidadVendida, StockDisponible, StockMinimo,
-                        EsQuiebre, EsBajoMinimo)
+                        EsQuiebre, EsBajoMinimo, EsSobrestock)
 SELECT
     t.IdTiempo,
     7,
@@ -526,7 +528,8 @@ SELECT
     StockDisponible   = ss.StockSeguridad,
     StockMinimo       = ss.StockSeguridad,
     EsQuiebre         = 0,
-    EsBajoMinimo      = 0
+    EsBajoMinimo      = 0,
+    EsSobrestock      = 0
 FROM Dim_Tiempo t
 CROSS JOIN Dim_Producto p
 LEFT JOIN (

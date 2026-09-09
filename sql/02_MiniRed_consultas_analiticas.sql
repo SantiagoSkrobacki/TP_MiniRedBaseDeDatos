@@ -172,6 +172,7 @@ SELECT
     f.StockMinimo,
     f.EsQuiebre,
     f.EsBajoMinimo,
+    f.EsSobrestock,
     ValorInventario = CAST(f.StockDisponible * p.CostoUnitario AS DECIMAL(14,2))
 FROM Fact_Stock f
 JOIN Dim_Tiempo   t ON t.IdTiempo   = f.IdTiempo

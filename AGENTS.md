@@ -1,0 +1,1 @@
+Este es un proyecto estudiantil para un trabajo práctico de la materia base de datos aplicada. Lee al inicio de un nuevo chat todo el contexto del proyecto y siempre para los requisitos princiaples toma como fuente de verdad la consigna del trabajo práctico, la cual se encuentra dentro de la carpeta ./Consigna separado en 3 imagenes ordenadas numericamente.

@@ -92,10 +92,6 @@
         </KeyColumn>
       </KeyColumns>
       <AttributeRelationships>
-        <AttributeRelationship dwd:design-time-name="4cbc5583-c0ae-434e-918d-549c174b77a1">
-          <AttributeID>Tipo Pago</AttributeID>
-          <Name>Tipo Pago</Name>
-        </AttributeRelationship>
         <AttributeRelationship dwd:design-time-name="476f22e7-6a13-481b-9100-e9ae1c29a44b">
           <AttributeID>Campania</AttributeID>
           <Name>Campania</Name>
@@ -127,14 +123,27 @@
       <Name>Campania</Name>
       <KeyColumns>
         <KeyColumn dwd:design-time-name="85216d7c-5834-4c9e-8665-8e86838754f4">
-          <DataType>WChar</DataType>
-          <DataSize>40</DataSize>
+          <DataType>Integer</DataType>
           <Source xsi:type="ColumnBinding" dwd:design-time-name="5d7e156a-fc1b-4c24-a59c-a04ccc38b931">
             <TableID>dbo_Dim_MedioPago</TableID>
-            <ColumnID>Campania</ColumnID>
+            <ColumnID>IdMedioPago</ColumnID>
           </Source>
         </KeyColumn>
       </KeyColumns>
+      <NameColumn>
+        <DataType>WChar</DataType>
+        <DataSize>40</DataSize>
+        <Source xsi:type="ColumnBinding">
+          <TableID>dbo_Dim_MedioPago</TableID>
+          <ColumnID>Campania</ColumnID>
+        </Source>
+      </NameColumn>
+      <AttributeRelationships>
+        <AttributeRelationship dwd:design-time-name="7462854b-cac9-45a2-a7ee-aa68138a0607">
+          <AttributeID>Tipo Pago</AttributeID>
+          <Name>Tipo Pago</Name>
+        </AttributeRelationship>
+      </AttributeRelationships>
       <OrderBy>Key</OrderBy>
       <ddl200:ProcessingState>Unprocessed</ddl200:ProcessingState>
       <ddl300:AttributeHierarchyProcessingState>Unprocessed</ddl300:AttributeHierarchyProcessingState>
@@ -142,8 +151,8 @@
   </Attributes>
   <Hierarchies>
     <Hierarchy dwd:design-time-name="c1ce5e6d-47ee-43ea-9569-8aa80e4525cd">
-      <ID>Jerarquía</ID>
-      <Name>Jerarquía</Name>
+      <ID>Medios y Campanias</ID>
+      <Name>Medios y Campanias</Name>
       <Levels>
         <Level dwd:design-time-name="6f613b0b-d1b9-45b6-b280-1b815055c3ea">
           <ID>Tipo Pago</ID>

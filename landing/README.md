@@ -15,10 +15,9 @@ landing/
   build-seed.py      regenera seed-data.js desde data/portal.json
 ```
 
-> Este módulo es **autocontenido**. No modifica `sql/01`, `sql/02` ni
-> `data/datos_landing.json`: su API vive en `sql/03_portal_api.sql`, que sólo
-> agrega el procedimiento `sp_PortalDashboard`. El `sp_LandingDataJson` original
-> sigue intacto y funcionando.
+La landing es estática. El modo en vivo depende del backend local de `backend/`,
+que consulta el cubo SSAS mediante MDX. `sql/03_portal_api.sql` queda únicamente
+como referencia relacional y respaldo de resultados.
 
 ## Cómo abrirlo
 
@@ -42,13 +41,12 @@ El badge de la barra superior dice de dónde salieron los datos que estás viend
 
 | # | Origen | Cuándo aplica |
 |---|--------|---------------|
-| 1 | `GET {API_BASE}/dashboard` | cuando exista el backend |
+| 1 | `GET http://127.0.0.1:5050/api/dashboard` | backend local y SSAS disponibles |
 | 2 | `landing/data/portal.json` | servido por HTTP |
 | 3 | `window.__MINIRED_SEED__` | `file://`, sin servidor — respaldo para la demo |
 
-Los tres devuelven **el mismo documento**: el que produce
-`MiniRed_DW.dbo.sp_PortalDashboard` (ver `sql/03_portal_api.sql`). Para conectar
-el backend alcanza con cambiar `API_BASE` en la primera línea de `app.js`.
+Los tres devuelven **el mismo documento**. En vivo, todos los valores numéricos
+se obtienen del cubo; los filtros se aplican luego en el navegador.
 
 ### Contrato
 
@@ -75,55 +73,25 @@ distinto tamaño da un número equivocado; sumar `quiebres` y `observaciones` y
 recién ahí dividir, no. Lo mismo con los días de cobertura, que se calculan
 ponderando `stockProm` y `ventaProm` por las observaciones de cada fila.
 
-### Backend
+### Backend local y GitHub Pages
 
-El endpoint sólo tiene que devolver lo que ya arma el procedimiento. Ejemplo
-mínimo con Node y `mssql`:
+GitHub Pages sólo aloja los archivos estáticos. Antes de abrir el portal para la
+demostración, ejecutar `backend/iniciar-backend.bat` y comprobar
+<http://127.0.0.1:5050/api/health>. Chrome puede pedir permiso para que la página
+acceda a la red local; hay que aceptarlo. El botón **Reintentar conexión** vuelve
+a solicitar los datos sin recargar toda la página.
 
-```js
-app.get("/api/dashboard", async (req, res) => {
-  const pool = await sql.connect(config);            // config apunta a MiniRed_DW
-  const r = await pool.request().execute("sp_PortalDashboard");
-  res.type("application/json").send(r.recordset[0].datos);
-});
-```
-
-`sp_PortalDashboard` ya devuelve el JSON serializado en una única columna
-`datos`, así que no hace falta re-serializar nada.
-
-### Backend en otro origen (por ejemplo, portal en GitHub Pages)
-
-Poner en `API_BASE` la URL completa del backend:
-
-```js
-const API_BASE = "https://minired-api.example.com/api";
-```
-
-Con una API absoluta el portal la consulta siempre, incluso desde Pages. Del
-lado del backend hacen falta dos cosas:
-
-1. **CORS.** El navegador bloquea la respuesta si el backend no declara que
-   acepta pedidos desde el origen de la página:
-   `Access-Control-Allow-Origin: https://<usuario>.github.io`
-2. **HTTPS.** Pages sirve por HTTPS y una página HTTPS no puede consultar un
-   backend HTTP: el navegador lo bloquea como contenido mixto, sin importar
-   qué diga el backend.
-
-Y el backend tiene que **poder llegar a SQL Server**. Un servidor en la nube no
-alcanza una base que corre en una notebook: o la base también está publicada, o
-se expone el backend local con un túnel (ngrok, Cloudflare Tunnel), que además
-resuelve el HTTPS.
+La API escucha sólo en loopback, permite CORS y responde 503 si SSAS o el cubo
+no están disponibles. Su configuración está en `backend/appsettings.json`.
 
 ## Regenerar los datos
 
-```
-sqlcmd -S localhost -E -f 65001 -i sql/03_portal_api.sql
-bcp "EXEC MiniRed_DW.dbo.sp_PortalDashboard" queryout landing/data/portal.json -S localhost -T -c -C 65001
-python landing/build-seed.py
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/actualizar-respaldo.ps1
 ```
 
-Se usa `bcp` y no `sqlcmd` porque este último agrega encabezados y recorta el
-ancho de línea, y eso rompe el JSON.
+El backend debe estar activo. El script consulta `/api/dashboard` y actualiza
+en una sola operación `data/portal.json` y `seed-data.js`.
 
 ## Decisiones de diseño
 

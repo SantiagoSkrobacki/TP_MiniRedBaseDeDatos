@@ -96,10 +96,6 @@
           <AttributeID>Nombre Sucursal</AttributeID>
           <Name>Nombre Sucursal</Name>
         </AttributeRelationship>
-        <AttributeRelationship dwd:design-time-name="a2a73cd2-5491-4336-993a-870b3d52d981">
-          <AttributeID>Zona</AttributeID>
-          <Name>Zona</Name>
-        </AttributeRelationship>
         <AttributeRelationship dwd:design-time-name="154bb570-c026-437c-a30e-3b09cab79a54">
           <AttributeID>Tipo Ubicacion</AttributeID>
           <Name>Tipo Ubicacion</Name>
@@ -122,6 +118,12 @@
           </Source>
         </KeyColumn>
       </KeyColumns>
+      <AttributeRelationships>
+        <AttributeRelationship dwd:design-time-name="6b0fae15-475f-4ac6-9ac5-4c63ea6dcf78">
+          <AttributeID>Zona</AttributeID>
+          <Name>Zona</Name>
+        </AttributeRelationship>
+      </AttributeRelationships>
       <OrderBy>Key</OrderBy>
       <ddl200:ProcessingState>Unprocessed</ddl200:ProcessingState>
       <ddl300:AttributeHierarchyProcessingState>Unprocessed</ddl300:AttributeHierarchyProcessingState>
@@ -162,8 +164,8 @@
   </Attributes>
   <Hierarchies>
     <Hierarchy dwd:design-time-name="66782cd4-af24-49d5-9832-ff627841ab70">
-      <ID>Jerarquía</ID>
-      <Name>Jerarquía</Name>
+      <ID>Geografia</ID>
+      <Name>Geografia</Name>
       <Levels>
         <Level dwd:design-time-name="9f9ab491-b2dc-441a-b19d-d7e27340e2bd">
           <ID>Zona</ID>

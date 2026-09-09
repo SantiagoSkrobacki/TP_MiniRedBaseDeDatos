@@ -96,10 +96,6 @@
           <AttributeID>Nombre Cajero</AttributeID>
           <Name>Nombre Cajero</Name>
         </AttributeRelationship>
-        <AttributeRelationship dwd:design-time-name="206410f7-11e4-430b-b8d4-15902c13583c">
-          <AttributeID>Turno</AttributeID>
-          <Name>Turno</Name>
-        </AttributeRelationship>
       </AttributeRelationships>
       <OrderBy>Key</OrderBy>
       <ddl200:ProcessingState>Unprocessed</ddl200:ProcessingState>
@@ -110,14 +106,27 @@
       <Name>Nombre Cajero</Name>
       <KeyColumns>
         <KeyColumn dwd:design-time-name="2ad4f906-63de-48f6-a1e4-1747ad58f8de">
-          <DataType>WChar</DataType>
-          <DataSize>50</DataSize>
+          <DataType>Integer</DataType>
           <Source xsi:type="ColumnBinding" dwd:design-time-name="41cdd232-5481-4c98-b715-1215cc1259ff">
             <TableID>dbo_Dim_Cajero</TableID>
-            <ColumnID>NombreCajero</ColumnID>
+            <ColumnID>IdCajero</ColumnID>
           </Source>
         </KeyColumn>
       </KeyColumns>
+      <NameColumn>
+        <DataType>WChar</DataType>
+        <DataSize>50</DataSize>
+        <Source xsi:type="ColumnBinding">
+          <TableID>dbo_Dim_Cajero</TableID>
+          <ColumnID>NombreCajero</ColumnID>
+        </Source>
+      </NameColumn>
+      <AttributeRelationships>
+        <AttributeRelationship dwd:design-time-name="7fbda2aa-f73a-4f06-9a3c-d7d1e8680c8b">
+          <AttributeID>Turno</AttributeID>
+          <Name>Turno</Name>
+        </AttributeRelationship>
+      </AttributeRelationships>
       <OrderBy>Key</OrderBy>
       <ddl200:ProcessingState>Unprocessed</ddl200:ProcessingState>
       <ddl300:AttributeHierarchyProcessingState>Unprocessed</ddl300:AttributeHierarchyProcessingState>
@@ -142,8 +151,8 @@
   </Attributes>
   <Hierarchies>
     <Hierarchy dwd:design-time-name="a08a3537-bd17-49f4-bdc2-58425687c165">
-      <ID>Jerarquía</ID>
-      <Name>Jerarquía</Name>
+      <ID>Organizacion</ID>
+      <Name>Organizacion</Name>
       <Levels>
         <Level dwd:design-time-name="2a1ce25e-e7a3-4bbf-b25b-3a089ac2b5be">
           <ID>Turno</ID>

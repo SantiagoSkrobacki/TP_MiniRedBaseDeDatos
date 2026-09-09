@@ -33,12 +33,13 @@ Las dos preguntas que responde el trabajo:
 | 4 | **Misión 1 · Data Audit** | Diccionario de variables continuas vs. discretas, perfilado estadístico y controles de calidad. |
 | 5 | **Misión 2 · Cube Master** | Agregación multidimensional con `GROUPING SETS` (roll-up y drill-down con subtotales) y demostración del error de agregación por semi-aditividad. |
 | 6 | **Misión 3 · Pattern Hunter** | 4 reglas inductivas extraídas y validadas con soporte, confianza, lift y hold-out temporal. Más un contraejemplo de correlación espuria. |
-| 7 | **Entorno SSAS listo** | SQL Server 2025 + Analysis Services en modo **Multidimensional**, y la extensión de proyectos de Analysis Services en Visual Studio 2022. |
+| 7 | **Entorno SSAS listo** | SQL Server 2025 + Analysis Services en modo **Multidimensional**, y la extensión de proyectos de Analysis Services en Visual Studio. |
 | 8 | **Guía de construcción del cubo** | Procedimiento de 10 fases adaptado a MiniRed, en `docs/guia-cubo-ssas.html`. |
 | 9 | **Datos exportados para la landing** | `data/datos_landing.json` con KPIs, heatmap, serie mensual, SKU críticos y semáforo por sucursal. |
 
-| 10 | **Proyecto SSAS iniciado** | `Cubo_MiniRed_Logistica/` — origen de datos, vista del origen y las cinco dimensiones con sus jerarquías, versionado en este repo. |
+| 10 | **Cubo SSAS terminado** | `MiniRed Logistica` contiene los grupos Stock y Ventas, dimensiones conformadas, medidas semiaditivas y cálculos MDX; compila, se despliega y procesa en `localhost\SSAS`. |
 | 11 | **Landing page terminada** | `landing/` — portal de operaciones para gerentes de abastecimiento, con filtros que reagregan, gráficos propios y vista de tabla en cada uno. Sin dependencias ni build. |
+| 12 | **Backend local terminado** | API mínima .NET 8 + ADOMD.NET en `127.0.0.1:5050`; consulta exclusivamente SSAS y conserva el documento generado en memoria. |
 
 ### Cubo en SSAS — avance por fase
 
@@ -51,26 +52,14 @@ Según la guía de `docs/guia-cubo-ssas.html`:
 | 3 · Vista del origen (DSV) | ✅ | Las 7 tablas del recorte, sin `vw_Cubo_Logistica` |
 | 4 · Verificar relaciones | ✅ | Las 8 relaciones inferidas: 5 desde `Fact_Ventas`, 3 desde `Fact_Stock` |
 | 5 · Dimensiones y jerarquías | ✅ | Las 5 con jerarquía; `Dim_Tiempo` con `Type = Time` y `NameColumn = Fecha` |
-| 6 · El cubo | ⏳ | **Acá quedamos.** Ver "Próximo paso" abajo |
-| 7 · Semi-aditividad | ⬜ | `StockDisponible` y `ValorInventario` → `LastNonEmpty` |
-| 8 · Uso de dimensiones | ⬜ | Cajero y MedioPago quedan vacíos contra `Fact_Stock` |
-| 9 · Cálculos MDX | ⬜ | Tasa de quiebre, días de cobertura, valor de inventario |
-| 10 · Implementar y procesar | ⬜ | |
-
-**Próximo paso concreto:** el DSV quedó desactualizado. `EsQuiebre` y `EsBajoMinimo`
-pasaron de `BIT` a `TINYINT` en la base, pero el DSV todavía los declara como
-`xs:boolean`, y mientras siga así el asistente de cubos **no las va a ofrecer como
-medida**. Antes de retomar la fase 6: abrir `Mini Red DW.dsv`, clic derecho sobre
-`Fact_Stock` → `Actualizar`, guardar, y recién ahí lanzar el asistente.
-
-Pendientes menores del modelo: renombrar las jerarquías (quedaron como `Jerarquía`
-y `Jerarquía 2`) y encadenar las relaciones de atributo para que desaparezca el
-aviso ⚠ de las jerarquías.
+| 6 · El cubo | ✅ | Grupos `Stock` y `Ventas`, con particiones MOLAP |
+| 7 · Semi-aditividad | ✅ | `Stock Disponible` y `Valor Inventario` usan `LastNonEmpty` |
+| 8 · Uso de dimensiones | ✅ | Tiempo, Sucursal y Producto son conformadas; Cajero y Medio de Pago sólo aplican a Ventas |
+| 9 · Cálculos MDX | ✅ | Tasas de quiebre/bajo mínimo, días de cobertura y ticket promedio |
+| 10 · Implementar y procesar | ✅ | Desplegado como `Cubo_MiniRed_Logistica` en `localhost\SSAS` y procesado con `ProcessFull` |
 
 ### Pendiente
 
-- [ ] Terminar el cubo en SSAS — fases 6 a 10
-- [ ] Backend que sirva `GET /api/dashboard` desde la base (el frontend ya lo consume)
 - [ ] Redacción de los 6 puntos teóricos del informe
 - [ ] Pitch ejecutivo de 10 minutos
 
@@ -83,14 +72,10 @@ aviso ⚠ de las jerarquías.
 Para verlo local, doble clic en `landing/index.html` — funciona sin servidor.
 Documentación del módulo y contrato de la API en [`landing/README.md`](landing/README.md).
 
-Es un módulo **autocontenido**: no modifica `sql/01`, `sql/02` ni
-`data/datos_landing.json`. Su API vive en `sql/03_portal_api.sql`, que sólo
-agrega el procedimiento `sp_PortalDashboard`; el `sp_LandingDataJson` original
-sigue intacto.
-
-El frontend pide los datos en cascada — API del backend, JSON servido, copia
-embebida — con el mismo contrato en los tres casos. Conectar el backend es
-cambiar `API_BASE` en `landing/app.js`.
+La versión publicada en GitHub Pages consulta la API local en
+`http://127.0.0.1:5050/api`. El frontend pide los datos en cascada — SSAS a
+través del backend, JSON servido, copia embebida — con el mismo contrato en los
+tres casos. Si usa un respaldo lo informa y permite reintentar la conexión.
 
 ---
 
@@ -100,6 +85,7 @@ cambiar `API_BASE` en `landing/app.js`.
 - SQL Server Management Studio
 - Para el cubo: **Analysis Services en modo Multidimensional** + Visual Studio con la
   extensión *Microsoft Analysis Services Projects*
+- .NET 8 SDK para el backend local
 
 ## Cómo levantar la base
 
@@ -113,8 +99,8 @@ Desde SSMS, abrir y ejecutar en orden:
 Desde la línea de comandos:
 
 ```
-sqlcmd -S localhost -E -f 65001 -i sql\01_MiniRed_DW_crear_y_poblar.sql
-sqlcmd -S localhost -E -f 65001 -i sql\02_MiniRed_consultas_analiticas.sql
+sqlcmd -S localhost\SQLEXPRESS -E -f 65001 -i sql\01_MiniRed_DW_crear_y_poblar.sql
+sqlcmd -S localhost\SQLEXPRESS -E -f 65001 -i sql\02_MiniRed_consultas_analiticas.sql
 ```
 
 Para regenerar el JSON de la landing (usar `bcp`, no `sqlcmd`: este último agrega
@@ -126,6 +112,23 @@ bcp "EXEC MiniRed_DW.dbo.sp_LandingDataJson" queryout data\datos_landing.json -S
 
 Para deshacer todo: `DROP DATABASE MiniRed_DW;`
 
+## Cómo levantar el cubo y la landing en vivo
+
+1. Ejecutar `sql/04_preparar_cubo_existente.sql` en `localhost\SQLEXPRESS`. Es
+   idempotente: agrega `EsSobrestock` si falta y concede lectura al servicio SSAS.
+2. Abrir `Cubo_MiniRed_Logistica/Cubo_MiniRed_Logistica.sln` con Visual Studio y
+   la extensión *Microsoft Analysis Services Projects*.
+3. En las propiedades de implementación seleccionar servidor `localhost\SSAS`
+   y base `Cubo_MiniRed_Logistica`; luego **Implementar**. El despliegue realiza
+   `ProcessFull`.
+4. Ejecutar `backend/iniciar-backend.bat` y comprobar
+   <http://127.0.0.1:5050/api/health>.
+5. Abrir la landing local o la versión de GitHub Pages. Si Chrome solicita
+   acceso a la red local, aceptarlo.
+
+El código del backend se versiona en GitHub, pero no se ejecuta en GitHub Pages:
+Pages sólo sirve la landing estática. Más detalles en `backend/README.md`.
+
 ---
 
 ## Estructura del repositorio
@@ -134,7 +137,8 @@ Para deshacer todo: `DROP DATABASE MiniRed_DW;`
 sql/
   01_MiniRed_DW_crear_y_poblar.sql    DDL + carga de datos + verificación de patrones
   02_MiniRed_consultas_analiticas.sql Las tres misiones analíticas
-  03_portal_api.sql                   sp_PortalDashboard: API del portal
+  03_portal_api.sql                   Referencia relacional del contrato del portal
+  04_preparar_cubo_existente.sql      Migración idempotente y permiso de lectura para SSAS
 data/
   datos_landing.json                  Export de la sección 4 de sql/02
 landing/                              Portal de abastecimiento (ver su README)
@@ -142,6 +146,8 @@ landing/                              Portal de abastecimiento (ver su README)
   data/portal.json                    Datos del portal (generado)
   seed-data.js                        Copia embebida (generado)
 Cubo_MiniRed_Logistica/               Proyecto de Analysis Services
+backend/                              API local ASP.NET Core 8 + ADOMD.NET
+scripts/actualizar-respaldo.ps1       Regenera los respaldos desde la API/SSAS
 docs/
   guia-cubo-ssas.html                 Guía de 10 fases para construir el cubo
 ```

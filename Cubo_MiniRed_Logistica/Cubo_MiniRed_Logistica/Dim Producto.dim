@@ -96,14 +96,6 @@
           <AttributeID>Nombre Producto</AttributeID>
           <Name>Nombre Producto</Name>
         </AttributeRelationship>
-        <AttributeRelationship dwd:design-time-name="b9fcb801-4357-419c-9570-e1321abcec6b">
-          <AttributeID>Categoria</AttributeID>
-          <Name>Categoria</Name>
-        </AttributeRelationship>
-        <AttributeRelationship dwd:design-time-name="193bc087-2e50-408b-bd03-99953a602ae4">
-          <AttributeID>Rubro</AttributeID>
-          <Name>Rubro</Name>
-        </AttributeRelationship>
         <AttributeRelationship dwd:design-time-name="9b7d02a1-81b6-4ed9-8375-3a52533290e7">
           <AttributeID>Proveedor</AttributeID>
           <Name>Proveedor</Name>
@@ -122,14 +114,27 @@
       <Name>Nombre Producto</Name>
       <KeyColumns>
         <KeyColumn dwd:design-time-name="13f82a87-ac60-4421-9269-66a6cc12508a">
-          <DataType>WChar</DataType>
-          <DataSize>80</DataSize>
+          <DataType>Integer</DataType>
           <Source xsi:type="ColumnBinding" dwd:design-time-name="3003725c-680b-4546-82e7-607aa7a9c2aa">
             <TableID>dbo_Dim_Producto</TableID>
-            <ColumnID>NombreProducto</ColumnID>
+            <ColumnID>IdProducto</ColumnID>
           </Source>
         </KeyColumn>
       </KeyColumns>
+      <NameColumn>
+        <DataType>WChar</DataType>
+        <DataSize>80</DataSize>
+        <Source xsi:type="ColumnBinding">
+          <TableID>dbo_Dim_Producto</TableID>
+          <ColumnID>NombreProducto</ColumnID>
+        </Source>
+      </NameColumn>
+      <AttributeRelationships>
+        <AttributeRelationship dwd:design-time-name="7bc9f1e7-81fe-4112-8fbb-1fc5d74ba6ef">
+          <AttributeID>Rubro</AttributeID>
+          <Name>Rubro</Name>
+        </AttributeRelationship>
+      </AttributeRelationships>
       <OrderBy>Key</OrderBy>
       <ddl200:ProcessingState>Unprocessed</ddl200:ProcessingState>
       <ddl300:AttributeHierarchyProcessingState>Unprocessed</ddl300:AttributeHierarchyProcessingState>
@@ -164,6 +169,12 @@
           </Source>
         </KeyColumn>
       </KeyColumns>
+      <AttributeRelationships>
+        <AttributeRelationship dwd:design-time-name="93f85222-d7aa-4d99-b199-5bc6a2e8aa0a">
+          <AttributeID>Categoria</AttributeID>
+          <Name>Categoria</Name>
+        </AttributeRelationship>
+      </AttributeRelationships>
       <OrderBy>Key</OrderBy>
       <ddl200:ProcessingState>Unprocessed</ddl200:ProcessingState>
       <ddl300:AttributeHierarchyProcessingState>Unprocessed</ddl300:AttributeHierarchyProcessingState>
@@ -204,8 +215,8 @@
   </Attributes>
   <Hierarchies>
     <Hierarchy dwd:design-time-name="e75736d3-3af8-47fd-9b84-6dc134753471">
-      <ID>Jerarquía 2</ID>
-      <Name>Jerarquía 2</Name>
+      <ID>Catalogo</ID>
+      <Name>Catalogo</Name>
       <Levels>
         <Level dwd:design-time-name="8dcc2a6e-c954-43d3-bdbf-9b51d2d567af">
           <ID>Categoria</ID>

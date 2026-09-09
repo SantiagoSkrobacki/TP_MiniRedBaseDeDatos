@@ -104,18 +104,6 @@
           <AttributeID>Fecha</AttributeID>
           <Name>Fecha</Name>
         </AttributeRelationship>
-        <AttributeRelationship dwd:design-time-name="87948735-8ce4-45ce-b7df-c65eba6ac05e">
-          <AttributeID>Anio</AttributeID>
-          <Name>Anio</Name>
-        </AttributeRelationship>
-        <AttributeRelationship dwd:design-time-name="c1a01c51-6006-4654-816c-2f142a866abb">
-          <AttributeID>Trimestre</AttributeID>
-          <Name>Trimestre</Name>
-        </AttributeRelationship>
-        <AttributeRelationship dwd:design-time-name="1615146c-30d5-417e-b3ea-5d8c1c9705a1">
-          <AttributeID>Mes Nombre</AttributeID>
-          <Name>Mes Nombre</Name>
-        </AttributeRelationship>
         <AttributeRelationship dwd:design-time-name="c8910901-1dd4-48cc-b812-d57d816bbed7">
           <AttributeID>Dia Semana Nombre</AttributeID>
           <Name>Dia Semana Nombre</Name>
@@ -136,6 +124,7 @@
     <Attribute dwd:design-time-name="0c56aee6-7a96-4257-8bbf-3c0f4b76d80f">
       <ID>Fecha</ID>
       <Name>Fecha</Name>
+      <Type>Date</Type>
       <KeyColumns>
         <KeyColumn dwd:design-time-name="e3369c5e-2529-436c-be8e-1e2fd2c13f63">
           <DataType>Date</DataType>
@@ -145,6 +134,12 @@
           </Source>
         </KeyColumn>
       </KeyColumns>
+      <AttributeRelationships>
+        <AttributeRelationship dwd:design-time-name="eb55cd71-d973-4cdc-86af-8171602a0099">
+          <AttributeID>Mes Nombre</AttributeID>
+          <Name>Mes Nombre</Name>
+        </AttributeRelationship>
+      </AttributeRelationships>
       <OrderBy>Key</OrderBy>
       <ddl200:ProcessingState>Unprocessed</ddl200:ProcessingState>
       <ddl300:AttributeHierarchyProcessingState>Unprocessed</ddl300:AttributeHierarchyProcessingState>
@@ -152,6 +147,7 @@
     <Attribute dwd:design-time-name="eeb1c350-04ae-46b1-a656-b2d74d01e205">
       <ID>Anio</ID>
       <Name>Anio</Name>
+      <Type>Years</Type>
       <KeyColumns>
         <KeyColumn dwd:design-time-name="aa0c58b1-b490-40c1-9315-120d0fc93fb2">
           <DataType>Integer</DataType>
@@ -168,7 +164,15 @@
     <Attribute dwd:design-time-name="00ec2501-dbd2-47bd-abd4-0c348bfc0eaa">
       <ID>Trimestre</ID>
       <Name>Trimestre</Name>
+      <Type>Quarters</Type>
       <KeyColumns>
+        <KeyColumn dwd:design-time-name="f88d8518-5bf0-45e3-8360-46e46759cedf">
+          <DataType>Integer</DataType>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="4bdf86ef-e461-4198-91fb-d86eefb31496">
+            <TableID>dbo_Dim_Tiempo</TableID>
+            <ColumnID>Anio</ColumnID>
+          </Source>
+        </KeyColumn>
         <KeyColumn dwd:design-time-name="e81a7b7d-d5c3-4e13-9023-1d21638491a8">
           <DataType>UnsignedTinyInt</DataType>
           <Source xsi:type="ColumnBinding" dwd:design-time-name="2a14a206-59bb-485e-8df3-37d2fcce69d2">
@@ -177,6 +181,20 @@
           </Source>
         </KeyColumn>
       </KeyColumns>
+      <NameColumn dwd:design-time-name="059334fd-f101-4c18-95b4-f259c4e898e9">
+        <DataType>WChar</DataType>
+        <DataSize>2</DataSize>
+        <Source xsi:type="ColumnBinding" dwd:design-time-name="8fb554ad-10fd-4b75-a198-4c491655be9d">
+          <TableID>dbo_Dim_Tiempo</TableID>
+          <ColumnID>TrimestreNombre</ColumnID>
+        </Source>
+      </NameColumn>
+      <AttributeRelationships>
+        <AttributeRelationship dwd:design-time-name="84defdd5-ef59-4324-9c69-167a00512565">
+          <AttributeID>Anio</AttributeID>
+          <Name>Anio</Name>
+        </AttributeRelationship>
+      </AttributeRelationships>
       <OrderBy>Key</OrderBy>
       <ddl200:ProcessingState>Unprocessed</ddl200:ProcessingState>
       <ddl300:AttributeHierarchyProcessingState>Unprocessed</ddl300:AttributeHierarchyProcessingState>
@@ -184,16 +202,37 @@
     <Attribute dwd:design-time-name="d575bae7-bd22-4a03-9f1f-eed449d543b2">
       <ID>Mes Nombre</ID>
       <Name>Mes Nombre</Name>
+      <Type>Months</Type>
       <KeyColumns>
         <KeyColumn dwd:design-time-name="8a9e7c2a-14a6-4d89-9ba1-ae27ba653026">
-          <DataType>WChar</DataType>
-          <DataSize>15</DataSize>
+          <DataType>Integer</DataType>
           <Source xsi:type="ColumnBinding" dwd:design-time-name="cf54e8a0-e02f-45e6-ad95-c10bf66b31b3">
             <TableID>dbo_Dim_Tiempo</TableID>
-            <ColumnID>MesNombre</ColumnID>
+            <ColumnID>Anio</ColumnID>
+          </Source>
+        </KeyColumn>
+        <KeyColumn dwd:design-time-name="540f2b22-e9ca-46a8-ab9d-d13873defafd">
+          <DataType>UnsignedTinyInt</DataType>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="20b42cfb-12e8-4230-8f36-5ad137fb0c39">
+            <TableID>dbo_Dim_Tiempo</TableID>
+            <ColumnID>MesNumero</ColumnID>
           </Source>
         </KeyColumn>
       </KeyColumns>
+      <NameColumn dwd:design-time-name="ac460020-e173-4d60-af5c-f27d804486da">
+        <DataType>WChar</DataType>
+        <DataSize>15</DataSize>
+        <Source xsi:type="ColumnBinding" dwd:design-time-name="27475931-8d18-4d1c-a8fd-f4c4ebea9da0">
+          <TableID>dbo_Dim_Tiempo</TableID>
+          <ColumnID>MesNombre</ColumnID>
+        </Source>
+      </NameColumn>
+      <AttributeRelationships>
+        <AttributeRelationship dwd:design-time-name="57239527-3aa5-40a5-9171-77fcb7b0cd74">
+          <AttributeID>Trimestre</AttributeID>
+          <Name>Trimestre</Name>
+        </AttributeRelationship>
+      </AttributeRelationships>
       <OrderBy>Key</OrderBy>
       <ddl200:ProcessingState>Unprocessed</ddl200:ProcessingState>
       <ddl300:AttributeHierarchyProcessingState>Unprocessed</ddl300:AttributeHierarchyProcessingState>
@@ -251,8 +290,8 @@
   </Attributes>
   <Hierarchies>
     <Hierarchy dwd:design-time-name="547f223c-b7a0-4c75-97a8-378d99446f76">
-      <ID>Jerarquía</ID>
-      <Name>Jerarquía</Name>
+      <ID>Calendario</ID>
+      <Name>Calendario</Name>
       <Levels>
         <Level dwd:design-time-name="c4f33ab3-7bd9-43d8-9246-9129ac0de8d5">
           <ID>Anio</ID>

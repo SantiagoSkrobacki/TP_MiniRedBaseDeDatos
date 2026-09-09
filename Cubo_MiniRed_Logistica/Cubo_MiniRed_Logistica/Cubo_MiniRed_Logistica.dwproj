@@ -28,6 +28,18 @@
       <FullPath>Dim Tiempo.dim</FullPath>
     </ProjectItem>
   </Dimensions>
+  <Cubes>
+    <ProjectItem>
+      <Name>MiniRed Logistica.cube</Name>
+      <FullPath>MiniRed Logistica.cube</FullPath>
+      <Dependencies>
+        <ProjectItem>
+          <Name>MiniRed Logistica.partitions</Name>
+          <FullPath>MiniRed Logistica.partitions</FullPath>
+        </ProjectItem>
+      </Dependencies>
+    </ProjectItem>
+  </Cubes>
   <DataSources>
     <ProjectItem>
       <Name>Mini Red DW.ds</Name>
@@ -48,7 +60,7 @@
           <ConfigurationSetting>
             <Id>Mini Red DW</Id>
             <Name>Mini Red DW</Name>
-            <Value xsi:type="xsd:string">Provider=MSOLEDBSQL.1;Data Source=localhost;Integrated Security=SSPI;Initial Catalog=MiniRed_DW</Value>
+            <Value xsi:type="xsd:string">Provider=MSOLEDBSQL.1;Data Source=localhost\SQLEXPRESS;Integrated Security=SSPI;Initial Catalog=MiniRed_DW;Trust Server Certificate=True</Value>
           </ConfigurationSetting>
         </ConnectionMappings>
         <ConnectionSecurityMappings>

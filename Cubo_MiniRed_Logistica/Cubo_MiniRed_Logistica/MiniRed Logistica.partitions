@@ -1,0 +1,31 @@
+<Cube xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dwd="http://schemas.microsoft.com/DataWarehouse/Designer/1.0" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ID>MiniRed Logistica</ID>
+  <MeasureGroups>
+    <MeasureGroup>
+      <ID>Stock</ID>
+      <Partitions>
+        <Partition>
+          <ID>Stock</ID><Name>Stock</Name><State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding"><DataSourceViewID>Mini Red DW</DataSourceViewID><TableID>dbo_Fact_Stock</TableID></Source>
+          <StorageMode>Molap</StorageMode><CurrentStorageMode>Molap</CurrentStorageMode><ProcessingMode>Regular</ProcessingMode>
+          <ProactiveCaching><SilenceInterval>-PT1S</SilenceInterval><Latency>-PT1S</Latency><SilenceOverrideInterval>-PT1S</SilenceOverrideInterval><ForceRebuildInterval>-PT1S</ForceRebuildInterval><AggregationStorage>MolapOnly</AggregationStorage><Source xsi:type="ProactiveCachingInheritedBinding"><NotificationTechnique>Server</NotificationTechnique></Source></ProactiveCaching>
+          <EstimatedRows>153510</EstimatedRows>
+        </Partition>
+      </Partitions>
+      <AggregationDesigns />
+    </MeasureGroup>
+    <MeasureGroup>
+      <ID>Ventas</ID>
+      <Partitions>
+        <Partition>
+          <ID>Ventas</ID><Name>Ventas</Name><State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding"><DataSourceViewID>Mini Red DW</DataSourceViewID><TableID>dbo_Fact_Ventas</TableID></Source>
+          <StorageMode>Molap</StorageMode><CurrentStorageMode>Molap</CurrentStorageMode><ProcessingMode>Regular</ProcessingMode>
+          <ProactiveCaching><SilenceInterval>-PT1S</SilenceInterval><Latency>-PT1S</Latency><SilenceOverrideInterval>-PT1S</SilenceOverrideInterval><ForceRebuildInterval>-PT1S</ForceRebuildInterval><AggregationStorage>MolapOnly</AggregationStorage><Source xsi:type="ProactiveCachingInheritedBinding"><NotificationTechnique>Server</NotificationTechnique></Source></ProactiveCaching>
+          <EstimatedRows>315969</EstimatedRows>
+        </Partition>
+      </Partitions>
+      <AggregationDesigns />
+    </MeasureGroup>
+  </MeasureGroups>
+</Cube>

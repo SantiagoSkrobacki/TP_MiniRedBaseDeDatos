@@ -307,8 +307,9 @@
                   <xs:element name="CantidadVendida" msprop:FriendlyName="CantidadVendida" msprop:DbColumnName="CantidadVendida" msprop:design-time-name="a32225ac-7fb8-41ff-85fd-154bc00f2851" type="xs:int" />
                   <xs:element name="StockDisponible" msprop:FriendlyName="StockDisponible" msprop:DbColumnName="StockDisponible" msprop:design-time-name="7d801f7a-36e4-4262-af66-78a37db8bcc8" type="xs:int" />
                   <xs:element name="StockMinimo" msprop:FriendlyName="StockMinimo" msprop:DbColumnName="StockMinimo" msprop:design-time-name="358cb9ab-788a-4872-9513-aad50da7f866" type="xs:int" />
-                  <xs:element name="EsQuiebre" msprop:FriendlyName="EsQuiebre" msprop:DbColumnName="EsQuiebre" msprop:design-time-name="6c40e5ba-12cb-49c1-b42f-457c4e2343f8" type="xs:boolean" />
-                  <xs:element name="EsBajoMinimo" msprop:FriendlyName="EsBajoMinimo" msprop:DbColumnName="EsBajoMinimo" msprop:design-time-name="f49e5d11-80b1-401f-9b7f-99f8d556a80c" type="xs:boolean" />
+                  <xs:element name="EsQuiebre" msprop:FriendlyName="EsQuiebre" msprop:DbColumnName="EsQuiebre" msprop:design-time-name="6c40e5ba-12cb-49c1-b42f-457c4e2343f8" type="xs:unsignedByte" />
+                  <xs:element name="EsBajoMinimo" msprop:FriendlyName="EsBajoMinimo" msprop:DbColumnName="EsBajoMinimo" msprop:design-time-name="f49e5d11-80b1-401f-9b7f-99f8d556a80c" type="xs:unsignedByte" />
+                  <xs:element name="EsSobrestock" msprop:FriendlyName="EsSobrestock" msprop:DbColumnName="EsSobrestock" msprop:design-time-name="abe9cc70-196a-4f1a-b8df-a9563bf17631" type="xs:unsignedByte" />
                   <xs:element name="ValorInventario" msprop:design-time-name="6c13fd7e-8bbb-4840-b73a-89a6118854ad" msprop:DbColumnName="ValorInventario" type="xs:decimal" minOccurs="0" />
                 </xs:sequence>
               </xs:complexType>
@@ -320,6 +321,13 @@
                   <xs:element name="Fecha" msprop:FriendlyName="Fecha" msprop:DbColumnName="Fecha" msprop:design-time-name="45b607db-e589-4996-8270-a8c3d1370a15" type="xs:dateTime" />
                   <xs:element name="Anio" msprop:FriendlyName="Anio" msprop:DbColumnName="Anio" msprop:design-time-name="122ce270-1d20-4e91-b827-cb88ddde7b6c" type="xs:int" />
                   <xs:element name="Trimestre" msprop:FriendlyName="Trimestre" msprop:DbColumnName="Trimestre" msprop:design-time-name="2d4a2ffd-e6e9-493e-9ab9-8a06ae608e0a" type="xs:unsignedByte" />
+                  <xs:element name="TrimestreNombre" msdata:ReadOnly="true" msprop:FriendlyName="Trimestre Nombre" msprop:DbColumnName="TrimestreNombre" msprop:ComputedColumnExpression="'T' + CONVERT(varchar(1), Trimestre)" msprop:IsLogical="True" msprop:design-time-name="b1dd5910-9fd9-46aa-a8b3-52f32eb44420">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="2" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
                   <xs:element name="MesNumero" msprop:FriendlyName="MesNumero" msprop:DbColumnName="MesNumero" msprop:design-time-name="fee9884e-078d-4301-b464-5310233bc690" type="xs:unsignedByte" />
                   <xs:element name="MesNombre" msprop:FriendlyName="MesNombre" msprop:DbColumnName="MesNombre" msprop:design-time-name="a949be55-f5ab-42d3-ae50-f2937563f0e7">
                     <xs:simpleType>

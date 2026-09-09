@@ -1,0 +1,100 @@
+<Cube xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dwd="http://schemas.microsoft.com/DataWarehouse/Designer/1.0" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ID>MiniRed Logistica</ID>
+  <Name>MiniRed Logistica</Name>
+  <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+  <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+  <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+  <State>Unprocessed</State>
+  <Language>11274</Language>
+  <Collation>Modern_Spanish_CI_AS</Collation>
+  <Dimensions>
+    <Dimension><ID>Dim Tiempo</ID><Name>Tiempo</Name><DimensionID>Dim Tiempo</DimensionID><Attributes>
+      <Attribute><AttributeID>Id Tiempo</AttributeID><AttributeHierarchyVisible>false</AttributeHierarchyVisible></Attribute>
+      <Attribute><AttributeID>Fecha</AttributeID></Attribute><Attribute><AttributeID>Anio</AttributeID></Attribute>
+      <Attribute><AttributeID>Trimestre</AttributeID></Attribute><Attribute><AttributeID>Mes Nombre</AttributeID></Attribute>
+      <Attribute><AttributeID>Dia Semana Nombre</AttributeID></Attribute><Attribute><AttributeID>Es Fin De Semana</AttributeID></Attribute>
+      <Attribute><AttributeID>Temporada</AttributeID></Attribute>
+    </Attributes><Hierarchies><Hierarchy><HierarchyID>Calendario</HierarchyID></Hierarchy></Hierarchies></Dimension>
+    <Dimension><ID>Dim Sucursal</ID><Name>Sucursal</Name><DimensionID>Dim Sucursal</DimensionID><Attributes>
+      <Attribute><AttributeID>Id Sucursal</AttributeID><AttributeHierarchyVisible>false</AttributeHierarchyVisible></Attribute>
+      <Attribute><AttributeID>Nombre Sucursal</AttributeID></Attribute><Attribute><AttributeID>Zona</AttributeID></Attribute>
+      <Attribute><AttributeID>Tipo Ubicacion</AttributeID></Attribute>
+    </Attributes><Hierarchies><Hierarchy><HierarchyID>Geografia</HierarchyID></Hierarchy></Hierarchies></Dimension>
+    <Dimension><ID>Dim Producto</ID><Name>Producto</Name><DimensionID>Dim Producto</DimensionID><Attributes>
+      <Attribute><AttributeID>Id Producto</AttributeID><AttributeHierarchyVisible>false</AttributeHierarchyVisible></Attribute>
+      <Attribute><AttributeID>Nombre Producto</AttributeID></Attribute><Attribute><AttributeID>Categoria</AttributeID></Attribute>
+      <Attribute><AttributeID>Rubro</AttributeID></Attribute><Attribute><AttributeID>Proveedor</AttributeID></Attribute>
+      <Attribute><AttributeID>Dias Reposicion</AttributeID></Attribute>
+    </Attributes><Hierarchies><Hierarchy><HierarchyID>Catalogo</HierarchyID></Hierarchy></Hierarchies></Dimension>
+    <Dimension><ID>Dim Cajero</ID><Name>Cajero</Name><DimensionID>Dim Cajero</DimensionID><Attributes>
+      <Attribute><AttributeID>Id Cajero</AttributeID><AttributeHierarchyVisible>false</AttributeHierarchyVisible></Attribute>
+      <Attribute><AttributeID>Nombre Cajero</AttributeID></Attribute><Attribute><AttributeID>Turno</AttributeID></Attribute>
+    </Attributes><Hierarchies><Hierarchy><HierarchyID>Organizacion</HierarchyID></Hierarchy></Hierarchies></Dimension>
+    <Dimension><ID>Dim Medio Pago</ID><Name>Medio Pago</Name><DimensionID>Dim Medio Pago</DimensionID><Attributes>
+      <Attribute><AttributeID>Id Medio Pago</AttributeID><AttributeHierarchyVisible>false</AttributeHierarchyVisible></Attribute>
+      <Attribute><AttributeID>Tipo Pago</AttributeID></Attribute><Attribute><AttributeID>Campania</AttributeID></Attribute>
+    </Attributes><Hierarchies><Hierarchy><HierarchyID>Medios y Campanias</HierarchyID></Hierarchy></Hierarchies></Dimension>
+  </Dimensions>
+  <DefaultMeasure>[Measures].[Cantidad Vendida Stock]</DefaultMeasure>
+  <MeasureGroups>
+    <MeasureGroup>
+      <ID>Stock</ID><Name>Stock</Name>
+      <Measures>
+        <Measure><ID>Cantidad Ingresada</ID><Name>Cantidad Ingresada</Name><DataType>Integer</DataType><Source><DataType>Integer</DataType><Source xsi:type="ColumnBinding"><TableID>dbo_Fact_Stock</TableID><ColumnID>CantidadIngresada</ColumnID></Source></Source><FormatString>#,#</FormatString></Measure>
+        <Measure><ID>Cantidad Vendida Stock</ID><Name>Cantidad Vendida Stock</Name><DataType>Integer</DataType><Source><DataType>Integer</DataType><Source xsi:type="ColumnBinding"><TableID>dbo_Fact_Stock</TableID><ColumnID>CantidadVendida</ColumnID></Source></Source><FormatString>#,#</FormatString></Measure>
+        <Measure><ID>Stock Disponible</ID><Name>Stock Disponible</Name><AggregateFunction>LastNonEmpty</AggregateFunction><DataType>Integer</DataType><Source><DataType>Integer</DataType><Source xsi:type="ColumnBinding"><TableID>dbo_Fact_Stock</TableID><ColumnID>StockDisponible</ColumnID></Source></Source><FormatString>#,#</FormatString></Measure>
+        <Measure><ID>Stock Suma Tecnica</ID><Name>Stock Suma Tecnica</Name><DataType>Integer</DataType><Source><DataType>Integer</DataType><Source xsi:type="ColumnBinding"><TableID>dbo_Fact_Stock</TableID><ColumnID>StockDisponible</ColumnID></Source></Source><Visible>false</Visible></Measure>
+        <Measure><ID>Stock Minimo</ID><Name>Stock Minimo</Name><AggregateFunction>LastNonEmpty</AggregateFunction><DataType>Integer</DataType><Source><DataType>Integer</DataType><Source xsi:type="ColumnBinding"><TableID>dbo_Fact_Stock</TableID><ColumnID>StockMinimo</ColumnID></Source></Source><Visible>false</Visible></Measure>
+        <Measure><ID>Es Quiebre</ID><Name>Es Quiebre</Name><DataType>UnsignedTinyInt</DataType><Source><DataType>UnsignedTinyInt</DataType><Source xsi:type="ColumnBinding"><TableID>dbo_Fact_Stock</TableID><ColumnID>EsQuiebre</ColumnID></Source></Source><FormatString>#,#</FormatString></Measure>
+        <Measure><ID>Es Bajo Minimo</ID><Name>Es Bajo Minimo</Name><DataType>UnsignedTinyInt</DataType><Source><DataType>UnsignedTinyInt</DataType><Source xsi:type="ColumnBinding"><TableID>dbo_Fact_Stock</TableID><ColumnID>EsBajoMinimo</ColumnID></Source></Source><FormatString>#,#</FormatString></Measure>
+        <Measure><ID>Es Sobrestock</ID><Name>Es Sobrestock</Name><DataType>UnsignedTinyInt</DataType><Source><DataType>UnsignedTinyInt</DataType><Source xsi:type="ColumnBinding"><TableID>dbo_Fact_Stock</TableID><ColumnID>EsSobrestock</ColumnID></Source></Source><FormatString>#,#</FormatString></Measure>
+        <Measure><ID>Valor Inventario</ID><Name>Valor Inventario</Name><AggregateFunction>LastNonEmpty</AggregateFunction><DataType>Currency</DataType><Source><DataType>Currency</DataType><DataSize>8</DataSize><Source xsi:type="ColumnBinding"><TableID>dbo_Fact_Stock</TableID><ColumnID>ValorInventario</ColumnID></Source></Source><FormatString>Currency</FormatString></Measure>
+        <Measure><ID>Observaciones</ID><Name>Observaciones</Name><AggregateFunction>Count</AggregateFunction><DataType>BigInt</DataType><Source><DataType>Integer</DataType><DataSize>4</DataSize><Source xsi:type="RowBinding"><TableID>dbo_Fact_Stock</TableID></Source></Source><FormatString>#,#</FormatString></Measure>
+      </Measures>
+      <StorageMode>Molap</StorageMode><EstimatedRows>153510</EstimatedRows><ProcessingMode>Regular</ProcessingMode>
+      <Dimensions>
+        <Dimension xsi:type="RegularMeasureGroupDimension"><CubeDimensionID>Dim Tiempo</CubeDimensionID><Attributes><Attribute><AttributeID>Id Tiempo</AttributeID><KeyColumns><KeyColumn><DataType>Integer</DataType><Source xsi:type="ColumnBinding"><TableID>dbo_Fact_Stock</TableID><ColumnID>IdTiempo</ColumnID></Source></KeyColumn></KeyColumns><Type>Granularity</Type></Attribute></Attributes></Dimension>
+        <Dimension xsi:type="RegularMeasureGroupDimension"><CubeDimensionID>Dim Sucursal</CubeDimensionID><Attributes><Attribute><AttributeID>Id Sucursal</AttributeID><KeyColumns><KeyColumn><DataType>Integer</DataType><Source xsi:type="ColumnBinding"><TableID>dbo_Fact_Stock</TableID><ColumnID>IdSucursal</ColumnID></Source></KeyColumn></KeyColumns><Type>Granularity</Type></Attribute></Attributes></Dimension>
+        <Dimension xsi:type="RegularMeasureGroupDimension"><CubeDimensionID>Dim Producto</CubeDimensionID><Attributes><Attribute><AttributeID>Id Producto</AttributeID><KeyColumns><KeyColumn><DataType>Integer</DataType><Source xsi:type="ColumnBinding"><TableID>dbo_Fact_Stock</TableID><ColumnID>IdProducto</ColumnID></Source></KeyColumn></KeyColumns><Type>Granularity</Type></Attribute></Attributes></Dimension>
+      </Dimensions>
+      <Partitions /><AggregationDesigns />
+    </MeasureGroup>
+    <MeasureGroup>
+      <ID>Ventas</ID><Name>Ventas</Name><Type>Sales</Type>
+      <Measures>
+        <Measure><ID>Cantidad Vendida Ventas</ID><Name>Cantidad Vendida Ventas</Name><DataType>Integer</DataType><Source><DataType>Integer</DataType><Source xsi:type="ColumnBinding"><TableID>dbo_Fact_Ventas</TableID><ColumnID>Cantidad</ColumnID></Source></Source><FormatString>#,#</FormatString></Measure>
+        <Measure><ID>Importe Total</ID><Name>Importe Total</Name><DataType>Currency</DataType><Source><DataType>Currency</DataType><DataSize>8</DataSize><Source xsi:type="ColumnBinding"><TableID>dbo_Fact_Ventas</TableID><ColumnID>ImporteTotal</ColumnID></Source></Source><FormatString>Currency</FormatString></Measure>
+        <Measure><ID>Costo Total</ID><Name>Costo Total</Name><DataType>Currency</DataType><Source><DataType>Currency</DataType><DataSize>8</DataSize><Source xsi:type="ColumnBinding"><TableID>dbo_Fact_Ventas</TableID><ColumnID>CostoTotal</ColumnID></Source></Source><FormatString>Currency</FormatString></Measure>
+        <Measure><ID>Tickets</ID><Name>Tickets</Name><AggregateFunction>DistinctCount</AggregateFunction><DataType>BigInt</DataType><Source><DataType>BigInt</DataType><Source xsi:type="ColumnBinding"><TableID>dbo_Fact_Ventas</TableID><ColumnID>IdTicket</ColumnID></Source></Source><FormatString>#,#</FormatString></Measure>
+      </Measures>
+      <StorageMode>Molap</StorageMode><EstimatedRows>315969</EstimatedRows><ProcessingMode>Regular</ProcessingMode>
+      <Dimensions>
+        <Dimension xsi:type="RegularMeasureGroupDimension"><CubeDimensionID>Dim Tiempo</CubeDimensionID><Attributes><Attribute><AttributeID>Id Tiempo</AttributeID><KeyColumns><KeyColumn><DataType>Integer</DataType><Source xsi:type="ColumnBinding"><TableID>dbo_Fact_Ventas</TableID><ColumnID>IdTiempo</ColumnID></Source></KeyColumn></KeyColumns><Type>Granularity</Type></Attribute></Attributes></Dimension>
+        <Dimension xsi:type="RegularMeasureGroupDimension"><CubeDimensionID>Dim Sucursal</CubeDimensionID><Attributes><Attribute><AttributeID>Id Sucursal</AttributeID><KeyColumns><KeyColumn><DataType>Integer</DataType><Source xsi:type="ColumnBinding"><TableID>dbo_Fact_Ventas</TableID><ColumnID>IdSucursal</ColumnID></Source></KeyColumn></KeyColumns><Type>Granularity</Type></Attribute></Attributes></Dimension>
+        <Dimension xsi:type="RegularMeasureGroupDimension"><CubeDimensionID>Dim Producto</CubeDimensionID><Attributes><Attribute><AttributeID>Id Producto</AttributeID><KeyColumns><KeyColumn><DataType>Integer</DataType><Source xsi:type="ColumnBinding"><TableID>dbo_Fact_Ventas</TableID><ColumnID>IdProducto</ColumnID></Source></KeyColumn></KeyColumns><Type>Granularity</Type></Attribute></Attributes></Dimension>
+        <Dimension xsi:type="RegularMeasureGroupDimension"><CubeDimensionID>Dim Cajero</CubeDimensionID><Attributes><Attribute><AttributeID>Id Cajero</AttributeID><KeyColumns><KeyColumn><DataType>Integer</DataType><Source xsi:type="ColumnBinding"><TableID>dbo_Fact_Ventas</TableID><ColumnID>IdCajero</ColumnID></Source></KeyColumn></KeyColumns><Type>Granularity</Type></Attribute></Attributes></Dimension>
+        <Dimension xsi:type="RegularMeasureGroupDimension"><CubeDimensionID>Dim Medio Pago</CubeDimensionID><Attributes><Attribute><AttributeID>Id Medio Pago</AttributeID><KeyColumns><KeyColumn><DataType>Integer</DataType><Source xsi:type="ColumnBinding"><TableID>dbo_Fact_Ventas</TableID><ColumnID>IdMedioPago</ColumnID></Source></KeyColumn></KeyColumns><Type>Granularity</Type></Attribute></Attributes></Dimension>
+      </Dimensions>
+      <Partitions /><AggregationDesigns />
+    </MeasureGroup>
+  </MeasureGroups>
+  <Source><DataSourceViewID>Mini Red DW</DataSourceViewID></Source>
+  <MdxScripts><MdxScript><ID>MdxScript</ID><Name>MdxScript</Name><Commands><Command><Text>CALCULATE;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Tasa de Quiebre]
+ AS IIF([Measures].[Observaciones] = 0, NULL, [Measures].[Es Quiebre] / [Measures].[Observaciones]),
+ FORMAT_STRING = "Percent", ASSOCIATED_MEASURE_GROUP = 'Stock';
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Tasa Bajo Minimo]
+ AS IIF([Measures].[Observaciones] = 0, NULL, [Measures].[Es Bajo Minimo] / [Measures].[Observaciones]),
+ FORMAT_STRING = "Percent", ASSOCIATED_MEASURE_GROUP = 'Stock';
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Dias de Cobertura]
+ AS IIF([Measures].[Cantidad Vendida Stock] = 0, NULL, [Measures].[Stock Suma Tecnica] / [Measures].[Cantidad Vendida Stock]),
+ FORMAT_STRING = "0.00", ASSOCIATED_MEASURE_GROUP = 'Stock';
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Ticket Promedio]
+ AS IIF([Measures].[Tickets] = 0, NULL, [Measures].[Importe Total] / [Measures].[Tickets]),
+ FORMAT_STRING = "Currency", ASSOCIATED_MEASURE_GROUP = 'Ventas';</Text></Command></Commands></MdxScript></MdxScripts>
+  <ProactiveCaching><SilenceInterval>-PT1S</SilenceInterval><Latency>-PT1S</Latency><SilenceOverrideInterval>-PT1S</SilenceOverrideInterval><ForceRebuildInterval>-PT1S</ForceRebuildInterval><Source xsi:type="ProactiveCachingInheritedBinding" /></ProactiveCaching>
+</Cube>
