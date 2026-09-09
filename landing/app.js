@@ -16,11 +16,20 @@
    subgrupos de distinto tamaño da un número equivocado; sumar conteos, no.
    ========================================================================== */
 
+/* Ruta de la API.
+   - Relativa ("/api"): el backend vive en el mismo origen que la página.
+   - Absoluta ("https://mi-api.example.com/api"): backend en otro servidor.
+     En ese caso el backend debe permitir CORS para este origen y responder
+     por HTTPS, porque una página HTTPS no puede consultar un backend HTTP. */
 const API_BASE = "/api";
 
-/* En GitHub Pages no hay backend: se saltea el intento contra la API para no
-   dejar un 404 en consola durante la demo. En cualquier otro origen se prueba. */
-const API_HABILITADA = !/\.github\.io$/i.test(location.hostname);
+const API_ES_ABSOLUTA = /^https?:\/\//i.test(API_BASE);
+
+/* GitHub Pages es hosting estático: no hay backend en su propio origen, así que
+   con una API relativa se saltea el intento y no queda un 404 en la consola.
+   Si se configura una API absoluta, se prueba igual — Pages contra un backend
+   externo es un escenario válido. */
+const API_HABILITADA = API_ES_ABSOLUTA || !/\.github\.io$/i.test(location.hostname);
 
 const state = { zona: "*", cat: "*", orden: { col: "tasa", dir: -1 }, tablas: {} };
 let DATA = null;

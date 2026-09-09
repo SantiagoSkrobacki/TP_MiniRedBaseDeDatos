@@ -91,6 +91,29 @@ app.get("/api/dashboard", async (req, res) => {
 `sp_PortalDashboard` ya devuelve el JSON serializado en una única columna
 `datos`, así que no hace falta re-serializar nada.
 
+### Backend en otro origen (por ejemplo, portal en GitHub Pages)
+
+Poner en `API_BASE` la URL completa del backend:
+
+```js
+const API_BASE = "https://minired-api.example.com/api";
+```
+
+Con una API absoluta el portal la consulta siempre, incluso desde Pages. Del
+lado del backend hacen falta dos cosas:
+
+1. **CORS.** El navegador bloquea la respuesta si el backend no declara que
+   acepta pedidos desde el origen de la página:
+   `Access-Control-Allow-Origin: https://<usuario>.github.io`
+2. **HTTPS.** Pages sirve por HTTPS y una página HTTPS no puede consultar un
+   backend HTTP: el navegador lo bloquea como contenido mixto, sin importar
+   qué diga el backend.
+
+Y el backend tiene que **poder llegar a SQL Server**. Un servidor en la nube no
+alcanza una base que corre en una notebook: o la base también está publicada, o
+se expone el backend local con un túnel (ngrok, Cloudflare Tunnel), que además
+resuelve el HTTPS.
+
 ## Regenerar los datos
 
 ```
