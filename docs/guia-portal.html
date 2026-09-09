@@ -128,6 +128,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:10px;max-width:66ch}
 ol.steps{list-style:none;counter-reset:s;padding:0;margin:20px 0 0;max-width:66ch;display:flex;flex-direction:column;gap:16px}
 ol.steps li{counter-increment:s;display:grid;grid-template-columns:26px 1fr;gap:14px;margin:0}
 ol.steps li::before{content:counter(s);font-family:var(--mono);font-size:11px;font-weight:600;color:var(--accent);background:var(--accent-soft);border-radius:3px;width:26px;height:22px;display:grid;place-items:center;margin-top:2px}
+ol.steps li > div{min-width:0}
 ol.steps b{color:var(--ink);display:block;margin-bottom:2px}
 
 /* ---------- notas ---------- */
@@ -322,10 +323,10 @@ footer code{font-size:12px}
   </figure>
 
   <ol class="steps">
-    <li><b>La base de datos guarda el detalle</b> Cada línea de ticket y cada día de stock de cada producto en cada sucursal. Son 315.969 líneas de venta y 153.510 fotos diarias de góndola, sobre dos años completos.</li>
-    <li><b>SQL Server resume</b> Un procedimiento agrupa esos registros y calcula los totales: cuántos días hubo faltante en cada mes, en cada zona, para cada categoría. De casi medio millón de filas quedan 783.</li>
-    <li><b>El resumen viaja como archivo</b> Esas 783 filas son 113 KB, menos que una foto de celular. Por eso la página abre al instante.</li>
-    <li><b>El navegador arma la pantalla</b> Toma el resumen, dibuja los gráficos, y cuando alguien cambia un filtro vuelve a sumar sólo las filas que corresponden. No le pregunta nada a la base de datos.</li>
+    <li><div><b>La base de datos guarda el detalle</b> Cada línea de ticket y cada día de stock de cada producto en cada sucursal. Son 315.969 líneas de venta y 153.510 fotos diarias de góndola, sobre dos años completos.</div></li>
+    <li><div><b>SQL Server resume</b> Un procedimiento agrupa esos registros y calcula los totales: cuántos días hubo faltante en cada mes, en cada zona, para cada categoría. De casi medio millón de filas quedan 783.</div></li>
+    <li><div><b>El resumen viaja como archivo</b> Esas 783 filas son 113 KB, menos que una foto de celular. Por eso la página abre al instante.</div></li>
+    <li><div><b>El navegador arma la pantalla</b> Toma el resumen, dibuja los gráficos, y cuando alguien cambia un filtro vuelve a sumar sólo las filas que corresponden. No le pregunta nada a la base de datos.</div></li>
   </ol>
 </section>
 
