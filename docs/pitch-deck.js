@@ -89,33 +89,36 @@ function pie(slide, texto) {
 
   s.addShape(pres.ShapeType.rect, { x: 0, y: 0, w: 4.6, h: H, fill: { color: GRAFITO2 } });
 
-  etiqueta(s, M, 1.5, "Consultora analítica");
-  s.addText("MiniRed S.A.", {
-    x: M, y: 1.95, w: 3.3, h: 0.6, isTextBox: true, margin: 0,
-    fontFace: TITULO, fontSize: 30, bold: true, color: BLANCO
+  etiqueta(s, M, 1.5, "Trabajo práctico · Unidad 3");
+  s.addText("Minería de Datos,\nKDD y Modelado\nDimensional", {
+    x: M, y: 1.95, w: 3.4, h: 1.4, isTextBox: true, margin: 0,
+    fontFace: TITULO, fontSize: 21, bold: true, color: BLANCO, lineSpacing: 27
   });
   s.addText([
-    { text: "Cadena de minimercados", options: { breakLine: true } },
-    { text: "6 sucursales + depósito Central", options: { breakLine: true } },
-    { text: "2024 – 2025", options: {} }
+    // ↓ nombres de los integrantes: editar acá
+    { text: "Integrantes", options: { breakLine: true, bold: true, color: BLANCO } },
+    { text: "Santiago Skrobacki", options: { breakLine: true } },
+    { text: "Nombre del compañero", options: { breakLine: true } },
+    { text: "Caso: MiniRed S.A.", options: { breakLine: true } },
+    { text: "6 sucursales · 2024 – 2025", options: {} }
   ], {
-    x: M, y: 2.62, w: 3.3, h: 1.1, isTextBox: true, margin: 0,
-    fontFace: CUERPO, fontSize: 13, color: SLATE_CLARO, lineSpacing: 20
+    x: M, y: 3.55, w: 3.4, h: 1.6, isTextBox: true, margin: 0,
+    fontFace: CUERPO, fontSize: 12.5, color: SLATE_CLARO, lineSpacing: 19
   });
 
   s.addText("Dónde nos quedamos sin stock,\ny dónde tenemos plata dormida", {
     x: 5.5, y: 1.95, w: 7.2, h: 2.35, isTextBox: true, margin: 0,
     fontFace: TITULO, fontSize: 36, bold: true, color: BLANCO, lineSpacing: 44
   });
-  s.addText("Análisis de quiebres de stock y rotación sobre el data warehouse MiniRed_DW", {
-    x: 5.5, y: 4.5, w: 6.8, h: 0.8, isTextBox: true, margin: 0,
-    fontFace: CUERPO, fontSize: 15, color: AMBAR, lineSpacing: 22
+  s.addText("El trabajo plantea el caso de una cadena de minimercados y pide resolver un desafío de abastecimiento sobre su data warehouse.", {
+    x: 5.5, y: 4.5, w: 6.9, h: 1.0, isTextBox: true, margin: 0,
+    fontFace: CUERPO, fontSize: 14, color: AMBAR, lineSpacing: 21
   });
-  s.addText("Perspectiva B · Logística e Inventario   |   Minería de Datos, KDD y Modelado Dimensional — Unidad 3", {
+  s.addText("Perspectiva elegida: Opción B · Logística e Inventario", {
     x: 5.5, y: 6.3, w: 7.1, h: 0.4, isTextBox: true, margin: 0,
     fontFace: CUERPO, fontSize: 11, color: SLATE_CLARO
   });
-  s.addNotes("Somos la consultora. En 10 minutos: qué encontramos, cómo lo validamos, y qué haría MiniRed con esto. Arranco por el problema, no por la tecnología.");
+  s.addNotes("Presentarse por nombre. En 10 minutos: qué encontramos, cómo lo validamos y qué recomienda el análisis. Arrancar por el problema, no por la tecnología.");
 }
 
 /* ==================================================================
@@ -597,7 +600,7 @@ function pie(slide, texto) {
     s.addText(it[2], { x: x + 0.75, y: 5.32, w: 2.9, h: 0.32, isTextBox: true, margin: 0, fontFace: CUERPO, fontSize: 11, color: SLATE_CLARO, valign: "middle" });
   });
 
-  s.addText("Portal, código y documentación:  github.com/SantiagoSkrobacki/TP_MiniRedBaseDeDatos", {
+  s.addText("Portal, código y documentación:  github.com/SantiagoSkrobacki/TP_MiniRedBaseDeDatos   ·   Gracias.", {
     x: M, y: 6.45, w: 11.4, h: 0.35, isTextBox: true, margin: 0,
     fontFace: CUERPO, fontSize: 12, color: SLATE_CLARO
   });

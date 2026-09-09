@@ -1,9 +1,13 @@
 # Guion del pitch — 10 minutos, dos presentadores
 
-Acompaña a `MiniRed_Pitch.pptx`. El reparto no es arbitrario: **A** lleva la voz
-del negocio (abre, plantea el problema, cierra) y **B** la voz técnica (el modelo,
-las reglas, la validación y la demo). Así el jurado escucha dos registros
-distintos y ninguno de los dos habla más de dos minutos seguidos.
+Acompaña a `MiniRed_Pitch.pptx`. Lo exponen dos alumnos. El reparto no es
+arbitrario: **A** lleva el hilo del problema y de las conclusiones, y **B** la
+parte técnica (el modelo, las reglas, la validación y la demo). Así se escuchan
+dos registros distintos y ninguno habla más de dos minutos seguidos.
+
+El caso plantea que el equipo actúe como una consultora analítica. Eso se
+menciona una vez, como parte del enunciado, y de ahí en más se habla en primera
+persona como lo que somos: dos alumnos mostrando lo que hicieron.
 
 Los tiempos son de referencia. Lo escrito es para ensayar, no para leer: una vez
 que lo tengan por la idea, contarlo con sus palabras suena mucho mejor.
@@ -16,19 +20,24 @@ que lo tengan por la idea, contarlo con sus palabras suena mucho mejor.
 - [ ] SQL Server levantado, por si piden ver una consulta
 - [ ] La presentación en modo presentador, para leer las notas de cada lámina
 - [ ] Alguien cronometrando: a los 8 minutos hay que estar en la demo
+- [ ] Acordar quién dice cada nombre en la presentación inicial
 
 ---
 
 ## 1 · Portada — **A** — 0:00 a 0:30
 
-> Buenas tardes. Somos la consultora que MiniRed contrató para revisar su
-> abastecimiento.
+>  Buenas tardes. Somos [nombre] y [nombre], y venimos a presentar el trabajo
+> práctico de la Unidad 3.
 >
-> MiniRed es una cadena de seis minimercados con un depósito central. Nos dieron
-> dos años de datos y una pregunta: **dónde estamos perdiendo plata con el stock**.
+> El caso es MiniRed, una cadena de seis minimercados con un depósito central. El
+> enunciado nos pide ponernos en el lugar de una consultora y resolver un desafío
+> de abastecimiento sobre dos años de datos.
+>
+> Elegimos la perspectiva de logística e inventario, así que la pregunta que
+> tratamos de responder fue: **dónde está perdiendo plata MiniRed con el stock**.
 >
 > En los próximos diez minutos les contamos qué encontramos, cómo nos aseguramos
-> de que fuera cierto, y qué haríamos con eso.
+> de que fuera cierto, y a qué decisiones lleva.
 
 **Transición:** *"Arranquemos por el problema, que tiene dos caras."*
 
@@ -39,6 +48,8 @@ que lo tengan por la idea, contarlo con sus palabras suena mucho mejor.
 > Cuando uno piensa en un problema de stock, piensa en la góndola vacía. El
 > cliente va a buscar el producto, no lo encuentra, y se va. Eso es venta
 > perdida, y encima se lleva al cliente al competidor de la esquina.
+>
+> Es el primero de los dos problemas que fuimos a buscar.
 >
 > En MiniRed eso pasa el **5,22%** de las veces. De cada cien días que un producto
 > estuvo a la venta, en cinco no estaba.
@@ -57,8 +68,8 @@ que lo tengan por la idea, contarlo con sus palabras suena mucho mejor.
 
 ## 3 · Punto de partida — **A** — 1:20 a 2:00
 
-> Un detalle de método, porque lo van a preguntar: la cátedra define el diseño
-> del caso, pero no entrega la base. La construimos nosotros.
+> Un detalle de método, porque seguramente lo van a preguntar: la cátedra define
+> el diseño del caso, pero no entrega la base cargada. La construimos nosotros.
 >
 > Son dos años completos: **315.969 líneas de ticket** y **153.510 fotos diarias
 > de góndola**, sobre treinta productos en seis sucursales.
@@ -296,8 +307,9 @@ que lo tengan por la idea, contarlo con sus palabras suena mucho mejor.
 
 > Para cerrar, una sola idea.
 >
-> Nos pidieron encontrar dónde se quedaban sin stock. Y encontramos que el
-> problema no era reponer poco: era **reponer con el parámetro equivocado**.
+> Salimos a buscar dónde MiniRed se quedaba sin stock. Y lo que encontramos es
+> que el problema no era reponer poco: era **reponer con el parámetro
+> equivocado**.
 >
 > MiniRed calcula cuánto reponer usando el promedio de los días hábiles. Los tres
 > patrones de faltante y el de sobrestock salen todos de ese mismo supuesto.
@@ -305,7 +317,7 @@ que lo tengan por la idea, contarlo con sus palabras suena mucho mejor.
 > Cuatro reglas validadas, tres acciones concretas, y una correlación espuria que
 > descartamos a tiempo.
 >
-> Quedamos a disposición para las preguntas.
+> Con eso cerramos. Quedamos para las preguntas que quieran hacernos.
 
 ---
 
@@ -331,5 +343,6 @@ falta nada porque le sobra todo. Es capital inmovilizado.
 reproducible: dos ejecuciones dan exactamente los mismos números, porque el ruido
 se calcula de forma determinística sobre las claves.
 
-**Si preguntan algo que no saben:** decirlo y ofrecer mostrarlo en los datos. El
-repositorio está publicado y las consultas son reproducibles.
+**Si preguntan algo que no saben:** decirlo sin rodeos y ofrecer mostrarlo en los
+datos. Es mucho mejor que improvisar: el repositorio está publicado y las
+consultas son reproducibles, así que siempre se puede verificar en el momento.
