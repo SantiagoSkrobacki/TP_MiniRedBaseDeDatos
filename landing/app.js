@@ -153,15 +153,36 @@ function svgRoot(cont, w, h) {
   const s = el("svg", { viewBox: `0 0 ${w} ${h}`, role: "img" }, cont);
   return s;
 }
-/** Escalones "lindos" para el eje: 1, 2, 2.5, 5, 10 × 10^n */
+/** Escalones "lindos" para el eje: 1, 2, 2.5, 5, 10 × 10^n.
+ *  El último escalón SIEMPRE queda >= max: si no, las barras se salen del área
+ *  de dibujo y las etiquetas se montan sobre el texto de arriba. */
 function ticksLindos(max, n = 4) {
-  if (max <= 0) return [0];
+  if (max <= 0) return [0, 1];
   const crudo = max / n;
   const mag = Math.pow(10, Math.floor(Math.log10(crudo)));
   const norm = crudo / mag;
   const paso = (norm <= 1 ? 1 : norm <= 2 ? 2 : norm <= 2.5 ? 2.5 : norm <= 5 ? 5 : 10) * mag;
+  const tope = Math.ceil(max / paso - 1e-9) * paso;
   const out = [];
-  for (let v = 0; v <= max + paso * 0.001; v += paso) out.push(+v.toFixed(10));
+  for (let i = 0; i * paso <= tope + paso * 1e-9; i++) out.push(+(i * paso).toFixed(10));
+  return out;
+}
+
+/** Escalones sobre el RANGO de los datos, sin forzar el cero.
+ *  Para una tasa el cero significa algo ("ningún quiebre") y conviene anclarlo;
+ *  para un volumen que oscila entre 53k y 62k, anclar en cero aplasta la serie
+ *  contra el techo y esconde la estacionalidad. En una línea el cero no es
+ *  obligatorio como sí lo es en una barra. */
+function ticksRango(min, max, n = 3) {
+  if (!(max > min)) return ticksLindos(max, n);
+  const crudo = (max - min) / n;
+  const mag = Math.pow(10, Math.floor(Math.log10(crudo)));
+  const norm = crudo / mag;
+  const paso = (norm <= 1 ? 1 : norm <= 2 ? 2 : norm <= 2.5 ? 2.5 : norm <= 5 ? 5 : 10) * mag;
+  const lo = Math.floor(min / paso + 1e-9) * paso;
+  const hi = Math.ceil(max / paso - 1e-9) * paso;
+  const out = [];
+  for (let i = 0; lo + i * paso <= hi + paso * 1e-9; i++) out.push(+(lo + i * paso).toFixed(10));
   return out;
 }
 
@@ -370,8 +391,8 @@ function renderDias() {
   const ticks = ticksLindos(max);
   const tope = ticks[ticks.length - 1];
 
-  const padL = 40, padR = 12, padT = 12, padB = 34;
-  const w = 470, h = 260;
+  const padL = 40, padR = 12, padT = 20, padB = 34;
+  const w = 470, h = 268;
   const pw = w - padL - padR, ph = h - padT - padB;
   const svg = svgRoot($("#p-dias"), w, h);
   svg.setAttribute("aria-label", "Tasa de quiebre por día de la semana");
@@ -400,10 +421,10 @@ function renderDias() {
     const lb = el("text", { x: x + bwid / 2, y: padT + ph + 15, "text-anchor": "middle", class: "tick" }, svg);
     lb.textContent = lindo(d.dia).slice(0, 3);
 
-    if (esPico || d.tasa === 0) {
+    if (esPico) {
       const v = el("text", {
-        x: x + bwid / 2, y: padT + ph - bh - 6, "text-anchor": "middle", class: "datalabel",
-        fill: esPico ? "var(--s1)" : "var(--muted)"
+        x: x + bwid / 2, y: padT + ph - bh - 6, "text-anchor": "middle",
+        class: "datalabel", fill: "var(--s1)"
       }, svg);
       v.textContent = nf1.format(d.tasa) + "%";
     }
@@ -440,8 +461,8 @@ function renderSerie() {
   const d = Array.from(m.values()).sort((a, b) => a.anio - b.anio || a.mes - b.mes);
   if (!d.length) return;
 
-  const w = 1180, padL = 52, padR = 16, gapY = 34;
-  const hTop = 132, hBot = 96, padT = 14, padB = 30;
+  const w = 1180, padL = 52, padR = 16, gapY = 46;
+  const hTop = 132, hBot = 96, padT = 26, padB = 30;
   const h = padT + hTop + gapY + hBot + padB;
   const pw = w - padL - padR;
   const svg = svgRoot($("#p-serie"), w, h);
@@ -449,13 +470,14 @@ function renderSerie() {
 
   const X = i => padL + (d.length === 1 ? pw / 2 : (i * pw) / (d.length - 1));
 
-  function panel(y0, alto, valores, color, fmt, titulo) {
+  function panel(y0, alto, valores, color, fmt, titulo, desdeCero = true) {
     const max = Math.max(...valores, 0.01);
-    const ticks = ticksLindos(max, 3);
-    const tope = ticks[ticks.length - 1];
-    const Y = v => y0 + alto - (v / tope) * alto;
+    const min = Math.min(...valores);
+    const ticks = desdeCero ? ticksLindos(max, 3) : ticksRango(min, max, 3);
+    const lo = ticks[0], hi = ticks[ticks.length - 1];
+    const Y = v => y0 + alto - ((v - lo) / (hi - lo || 1)) * alto;
 
-    const tt = el("text", { x: padL, y: y0 - 5, class: "axistitle" }, svg);
+    const tt = el("text", { x: padL, y: y0 - 12, class: "axistitle" }, svg);
     tt.textContent = titulo;
 
     ticks.forEach(t => {
@@ -485,7 +507,7 @@ function renderSerie() {
   const tasas = d.map(x => x.tasa);
   const unis  = d.map(x => x.uni || 0);
   panel(padT, hTop, tasas, "var(--s1)", v => nf0.format(v) + "%", "Tasa de quiebre");
-  panel(padT + hTop + gapY, hBot, unis, "var(--s2)", v => nf0.format(v / 1000) + "k", "Unidades vendidas");
+  panel(padT + hTop + gapY, hBot, unis, "var(--s2)", v => nf0.format(v / 1000) + "k", "Unidades vendidas", false);
 
   d.forEach((x, i) => {
     if (i % 2 === 0 || d.length <= 14) {
