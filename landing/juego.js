@@ -9,6 +9,25 @@ let DATA;
 let missions = [];
 let game = loadGame();
 
+const QUESTION_HELP = {
+  valor: "Los tipos analíticos describen qué representa un dato, no cómo se almacena en SQL. Una medición monetaria puede contener decimales y admite operaciones como suma, promedio y comparación.",
+  zona: "Una variable categórica identifica grupos. Es nominal cuando sus valores no tienen un orden natural: Centro no es mayor ni menor que Norte, Oeste o Sur.",
+  quiebre: "Una variable binaria tiene sólo dos estados. En Fact_Stock, EsQuiebre vale 1 cuando no hay stock disponible y 0 cuando sí lo hay.",
+  cantidad: "Una variable discreta representa conteos separados, normalmente enteros. Podemos vender 8 o 9 unidades; en este modelo no se registra una fracción de unidad.",
+  fecha: "Una variable temporal ubica cada hecho en el tiempo. En el cubo permite navegar la jerarquía Año → Trimestre → Mes → Fecha y comparar períodos.",
+  dimensions: "Una dimensión responde desde qué perspectiva se analiza un hecho: tiempo, territorio, producto o sucursal. Una medida es el valor numérico observado, como unidades, quiebres o inventario.",
+  formula: "Cada fila de Fact_Stock es una observación: un día, una sucursal y un producto. Quiebres cuenta cuántas de esas observaciones tuvieron stock cero. Si un grupo tiene 20/100 y otro 90/900, juntos son 110/1000 = 11 %, no el promedio 15 %.",
+  hotspot: "Para comparar zona y categoría, el cubo agrupa sus registros. Dentro de cada combinación suma las observaciones y los quiebres, y recién después calcula Quiebres ÷ Observaciones × 100.",
+  stock: "Agregar significa resumir varios registros con una operación como SUM, COUNT o AVG. El stock es un estado capturado cada día: sumar 20 del lunes, 15 del martes y 12 del miércoles daría 47, aunque al cierre sólo quedan 12.",
+  lift: "El lift compara la confianza de una regla con la frecuencia normal del resultado. Lift = 1 indica que el antecedente no cambia la probabilidad; cuanto más supera 1, mayor es la asociación relativa.",
+  holdout: "El hold-out separa períodos: se descubre el patrón con 2024 y se comprueba con 2025. Una diferencia pequeña entre ambas confianzas sugiere que la regla es estable y no memorizó un único período.",
+  confounder: "Una variable de confusión puede hacer que atribuyamos el problema al proveedor cuando en realidad está concentrado en una zona. Por eso se recalcula la tasa excluyendo Oeste y se compara cuánto cambia.",
+  confidence: "La confianza es P(resultado | antecedente): la proporción de casos con antecedente que también presentan el resultado. No demuestra causalidad ni garantiza qué ocurrirá en cada caso futuro.",
+  close: "Un total por zona es un punto de partida, no una causa. El drill-down del cubo permite abrir el dato por categoría, sucursal, producto y fecha antes de recomendar una acción costosa.",
+  "historic-stock": "El stock es semi-aditivo: puede sumarse entre productos y sucursales en una misma fecha, pero no entre fechas. Para un período se usa el último snapshot con datos, llamado LastNonEmpty.",
+  action: "El aprendizaje inductivo convierte observaciones particulares en una regla general y luego en una acción. La recomendación debe responder al patrón concreto y conservar su alcance temporal, territorial y de producto."
+};
+
 function loadGame() {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
@@ -239,6 +258,10 @@ function renderMission() {
     const feedback = result ? `<p class="answer-feedback"><strong>${correct ? "✓ Correcto." : "✕ Revisá este concepto."}</strong> ${esc(question.explanation)}</p>` : "";
     return `<fieldset class="question">
       <legend><span class="question-index">${String(index + 1).padStart(2, "0")}</span>${esc(question.prompt)}</legend>
+      <details class="concept-help">
+        <summary>Ver ayuda conceptual</summary>
+        <p>${esc(QUESTION_HELP[question.id] || question.explanation)}</p>
+      </details>
       <div class="answer-list">${options}</div>${feedback}
     </fieldset>`;
   }).join("");

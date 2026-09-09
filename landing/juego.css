@@ -68,6 +68,17 @@
 }
 .question legend { padding: 0 7px 0 0; font-weight: 600; font-size: 14px; max-width: 90%; }
 .question-index { color: var(--s1); font: 600 10.5px var(--mono); margin-right: 6px; }
+.concept-help {
+  margin-top: 11px; padding: 9px 11px; background: var(--surface-2);
+  border-left: 3px solid var(--s1); border-radius: var(--r); color: var(--ink-2);
+}
+.concept-help summary {
+  width: max-content; max-width: 100%; color: var(--s1); cursor: pointer;
+  font: 600 11px var(--mono); letter-spacing: .02em;
+}
+.concept-help summary:hover { color: var(--ink); }
+.concept-help summary:focus-visible { outline: 2px solid var(--s1); outline-offset: 3px; }
+.concept-help p { margin: 8px 0 1px; max-width: 88ch; font-size: 12.5px; line-height: 1.55; }
 .answer-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
 .answer-option {
   display: flex; align-items: flex-start; gap: 9px; padding: 10px 11px;

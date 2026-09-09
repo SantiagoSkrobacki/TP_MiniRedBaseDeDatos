@@ -29,7 +29,9 @@ cuatro misiones de la consigna: Data Audit (100 XP), Cube Master (200 XP),
 Pattern Hunter (300 XP) y Director MiniRed (400 XP). Las preguntas analíticas
 se construyen con `portal.json` y usan `seed-data.js` al abrir mediante
 `file://`; no requieren backend. El avance se guarda únicamente en
-`localStorage` y puede reiniciarse desde el pie de la pantalla.
+`localStorage` y puede reiniciarse desde el pie de la pantalla. Cada desafío
+incluye una ayuda conceptual desplegable, cerrada inicialmente, para explicar
+el término y su aplicación en MiniRed sin interrumpir el recorrido principal.
 
 ## Cómo abrirlo
 
