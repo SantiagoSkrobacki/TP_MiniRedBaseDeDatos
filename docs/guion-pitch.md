@@ -1,24 +1,20 @@
 # Guion del pitch — 10 minutos, dos presentadores
 
-Acompaña a `MiniRed_Pitch.pptx`. Lo exponen dos alumnos, con **cinco minutos
-exactos cada uno**.
+Acompaña a `MiniRed_Pitch.pptx`. Lo exponen dos alumnos, **uno después del
+otro**: no hay intercalado y hay un solo traspaso, al terminar la diapositiva 7.
 
-El reparto no es arbitrario: el **Participante 1** lleva el hilo del problema y
-de las conclusiones, y el **Participante 2** la parte técnica —el modelo, las
-reglas, la validación y la demo—. Así se escuchan dos registros distintos y
-ninguno habla más de dos minutos y medio seguidos.
+El **Participante 1** arma el terreno —el problema, los datos y el modelo— y el
+**Participante 2** cuenta lo que se encontró adentro y cierra. Cada uno habla
+unos cinco minutos seguidos.
 
 | | Participante 1 | Participante 2 |
 |---|---|---|
-| **Diapositivas** | 1, 2, 3, 6, 7, 8, 12, 14 | 4, 5, 9, 10, 11, 13 |
-| **Tramos** | 0:00–2:00 · 3:40–5:30 · 7:50–8:30 · 9:30–10:00 | 2:00–3:40 · 5:30–7:50 · 8:30–9:30 |
-| **Total** | 5:00 | 5:00 |
-| **Le toca** | Abrir, el problema, el marco teórico, el impacto y el cierre | El modelo, las reglas, la validación y la demo en vivo |
+| **Diapositivas** | 1 a 7 | 8 a 14 |
+| **Habla** | 0:00 a 4:50, de corrido | 4:50 a 10:00, de corrido |
+| **Le toca** | El problema, los datos, el modelo y la semi-aditividad | El proceso, las reglas, el impacto, la demo y el cierre |
 
-El documento está **agrupado por participante**: primero todo lo que dice el 1,
-después todo lo que dice el 2. Así cada uno ensaya lo suyo de corrido y puede
-imprimir sólo su parte. Los números de diapositiva y los minutos indican en qué
-momento real de la exposición va cada una.
+El documento sigue el orden real de la exposición, que ahora coincide con el
+orden por persona: primero todo lo del 1, después todo lo del 2.
 
 El caso plantea que el equipo actúe como una consultora analítica. Eso se
 menciona una vez, como parte del enunciado, y de ahí en más se habla en primera
@@ -27,26 +23,24 @@ persona como lo que somos: dos alumnos mostrando lo que hicieron.
 Los tiempos son de referencia. Lo escrito es para ensayar, no para leer: una vez
 que lo tengan por la idea, contarlo con sus palabras suena mucho mejor.
 
----
-## Antes de empezar
+---## Antes de empezar
 
 - [ ] El portal **abierto en otra ventana**, ya filtrado en "Todas las zonas"
 - [ ] SQL Server levantado, por si piden ver una consulta
 - [ ] La presentación en modo presentador, para leer las notas de cada lámina
 - [ ] Alguien cronometrando: a los 8 minutos hay que estar en la demo
 - [ ] Acordar quién dice cada nombre en la presentación inicial
-- [ ] Cada uno con su hoja de ruta (las dos últimas páginas)
+- [ ] Cada uno con su sección impresa: páginas 2 a 9 el primero, 10 a 17 el segundo
 
 ---
 
-## Participante 1 — sus 8 diapositivas
+## Participante 1 — diapositivas 1 a 7
 
-Abre la presentación, plantea el problema, da el marco teórico, cierra con el
-impacto y las conclusiones. **Cinco minutos en total**, repartidos en cuatro
-tramos.
+Abre la presentación y arma el terreno: el problema de negocio, cómo se
+construyó la base, el modelo dimensional y la medida semi-aditiva.
 
-El orden real de la exposición es intercalado: el minuto de cada lámina te dice
-cuándo entrás. Entre tus tramos, presenta tu compañero.
+Hablás **de corrido de 0:00 a 4:50** y después le pasás la palabra a tu
+compañero. No volvés a intervenir hasta las preguntas.
 
 ---
 
@@ -109,7 +103,55 @@ cuándo entrás. Entre tus tramos, presenta tu compañero.
 > Ahora bien, eso mismo nos obliga a ser más rigurosos con la validación. Y ese
 > rigor es justamente uno de los puntos teóricos que vamos a mostrar.
 
-**Transición:** *"Te paso la palabra para el modelo."* → **Participante 2**
+**Transición:** *"Para poder responderlas hubo que armar el modelo."*
+
+---
+
+## 4 · El modelo dimensional — **P1** — 2:00 a 2:50
+
+> Vender y reponer parecen lo mismo, pero son dos procesos distintos.
+>
+> Una venta es un evento: pasó a las tres de la tarde. El stock es una foto: al
+> cierre del día había tantas unidades. Tienen distinto **grano**, así que van en
+> dos tablas de hechos separadas.
+>
+> Lo que las une son tres dimensiones que comparten: tiempo, sucursal y producto.
+> A eso se le llama **dimensiones conformadas**, y son las que permiten preguntar
+> "cuánto vendimos contra cuánto ingresamos" en una sola consulta.
+>
+> Dos estrellas unidas por dimensiones compartidas es una **constelación**.
+>
+> Y fíjense en la asimetría: cajero y medio de pago están sólo del lado de las
+> ventas. El ingreso de mercadería no pasa por caja. Esa asimetría es la prueba
+> de que el stock es un proceso separado, y no una columna más en la tabla de
+> ventas.
+
+**Transición:** *"Hay una medida en este modelo que decide si todo funciona o no."*
+
+---
+
+## 5 · Semi-aditividad — **P1** — 2:50 a 3:40
+
+> Esta es la lámina más importante del trabajo.
+>
+> Si hay diez botellas el lunes y diez el martes, **no hay veinte botellas**. Son
+> las mismas diez, fotografiadas dos veces.
+>
+> Las unidades vendidas sí se suman: vendiste diez y diez, vendiste veinte. Pero
+> el stock no se suma en el tiempo. A eso se le dice **medida semi-aditiva**: se
+> suma por sucursal y por producto, nunca por fecha.
+>
+> ¿Cuánto importa esto? Si uno suma mal los 731 días, le da **seis millones
+> ciento cincuenta y nueve mil** unidades. El stock real en góndola es **ocho mil
+> ciento sesenta y uno**.
+>
+> Tres órdenes de magnitud. Y el asistente de Analysis Services, si uno le da
+> "siguiente" cuatro veces, lo deja mal por defecto. Hay que ir a la propiedad y
+> cambiarla a mano.
+
+*(Pausa acá. Es el número que se recuerda.)*
+
+**Transición:** *"Con el modelo en pie, dos aclaraciones conceptuales."*
 
 ---
 
@@ -145,10 +187,26 @@ cuándo entrás. Entre tus tramos, presenta tu compañero.
 >
 > Nuestra variable objetivo es una categórica binaria: hubo quiebre o no hubo. Y
 > por eso el análisis se evalúa con confianza y lift, y no con un error promedio.
+>
+> Hasta acá el marco: el problema, los datos y el modelo. Te dejo con lo que
+> encontramos adentro.
+
+**Transición:** *"Te dejo con los hallazgos."* → **Participante 2**
 
 ---
 
-## 8 · Proceso KDD — **P1** — 4:50 a 5:30
+## Participante 2 — diapositivas 8 a 14
+
+Toma la palabra en el minuto 4:50 y cierra la presentación: el proceso KDD, las
+cuatro reglas, cómo se validaron, el impacto en pesos, la demo en vivo y las
+conclusiones.
+
+Hablás **de corrido de 4:50 a 10:00**. Arrancás justo después de que tu
+compañero termine con los tipos de variables.
+
+---
+
+## 8 · Proceso KDD — **P2** — 4:50 a 5:30
 
 > Las cinco fases del proceso, en una lámina.
 >
@@ -168,103 +226,7 @@ cuándo entrás. Entre tus tramos, presenta tu compañero.
 >
 > Las dos últimas son las que tienen contenido propio, así que ahí nos detenemos.
 
-**Transición:** *"Contales qué encontramos."* → **Participante 2**
-
----
-
-## 12 · Impacto — **P1** — 7:50 a 8:30
-
-> Tres números y tres decisiones.
->
-> La venta perdida por faltantes, en doce meses, la estimamos en **75 millones de
-> pesos**. Asumiendo un día de demanda perdida por cada día de góndola vacía.
->
-> En San Justo hay cerca de **un millón** que se podría liberar, simplemente
-> calibrando su reposición a lo que realmente vende: hoy tiene diez días de
-> cobertura contra cuatro del resto de la cadena.
->
-> Y las tres acciones: nivel objetivo diferenciado para el fin de semana en las
-> bebidas del Oeste; renegociar el ciclo con Arcor o compensarlo; y recalibrar
-> San Justo.
-
-**Transición:** *"Y esto no queda en un informe. Mostrales."* → **Participante 2**
-
----
-
-## 14 · Cierre — **P1** — 9:30 a 10:00
-
-> Para cerrar, una sola idea.
->
-> Salimos a buscar dónde MiniRed se quedaba sin stock. Y lo que encontramos es
-> que el problema no era reponer poco: era **reponer con el parámetro
-> equivocado**.
->
-> MiniRed calcula cuánto reponer usando el promedio de los días hábiles. Los tres
-> patrones de faltante y el de sobrestock salen todos de ese mismo supuesto.
->
-> Cuatro reglas validadas, tres acciones concretas, y una correlación espuria que
-> descartamos a tiempo.
->
-> Con eso cerramos. Quedamos para las preguntas que quieran hacernos.
-
----
-
-## Participante 2 — sus 6 diapositivas
-
-Lleva la parte técnica: el modelo dimensional, las reglas encontradas, cómo se
-validaron, y la demostración en vivo del portal. **Cinco minutos en total**,
-repartidos en tres tramos.
-
-El orden real de la exposición es intercalado: el minuto de cada lámina te dice
-cuándo entrás. Entre tus tramos, presenta tu compañero.
-
----
-
-## 4 · El modelo dimensional — **P2** — 2:00 a 2:50
-
-> Vender y reponer parecen lo mismo, pero son dos procesos distintos.
->
-> Una venta es un evento: pasó a las tres de la tarde. El stock es una foto: al
-> cierre del día había tantas unidades. Tienen distinto **grano**, así que van en
-> dos tablas de hechos separadas.
->
-> Lo que las une son tres dimensiones que comparten: tiempo, sucursal y producto.
-> A eso se le llama **dimensiones conformadas**, y son las que permiten preguntar
-> "cuánto vendimos contra cuánto ingresamos" en una sola consulta.
->
-> Dos estrellas unidas por dimensiones compartidas es una **constelación**.
->
-> Y fíjense en la asimetría: cajero y medio de pago están sólo del lado de las
-> ventas. El ingreso de mercadería no pasa por caja. Esa asimetría es la prueba
-> de que el stock es un proceso separado, y no una columna más en la tabla de
-> ventas.
-
-**Transición:** *"Hay una medida en este modelo que decide si todo funciona o no."*
-
----
-
-## 5 · Semi-aditividad — **P2** — 2:50 a 3:40
-
-> Esta es la lámina más importante del trabajo.
->
-> Si hay diez botellas el lunes y diez el martes, **no hay veinte botellas**. Son
-> las mismas diez, fotografiadas dos veces.
->
-> Las unidades vendidas sí se suman: vendiste diez y diez, vendiste veinte. Pero
-> el stock no se suma en el tiempo. A eso se le dice **medida semi-aditiva**: se
-> suma por sucursal y por producto, nunca por fecha.
->
-> ¿Cuánto importa esto? Si uno suma mal los 731 días, le da **seis millones
-> ciento cincuenta y nueve mil** unidades. El stock real en góndola es **ocho mil
-> ciento sesenta y uno**.
->
-> Tres órdenes de magnitud. Y el asistente de Analysis Services, si uno le da
-> "siguiente" cuatro veces, lo deja mal por defecto. Hay que ir a la propiedad y
-> cambiarla a mano.
-
-*(Pausa acá. Es el número que se recuerda.)*
-
-**Transición:** *"Te devuelvo para la parte conceptual."* → **Participante 1**
+**Transición:** *"Y con eso llegamos a lo que encontramos."*
 
 ---
 
@@ -328,7 +290,26 @@ cuándo entrás. Entre tus tramos, presenta tu compañero.
 > Si hubiéramos presentado sólo la primera columna, MiniRed habría ido a
 > renegociar el contrato equivocado.
 
-**Transición:** *"¿Cuánto vale todo esto en pesos?"* → **Participante 1**
+**Transición:** *"¿Cuánto vale todo esto en pesos?"*
+
+---
+
+## 12 · Impacto — **P2** — 7:50 a 8:30
+
+> Tres números y tres decisiones.
+>
+> La venta perdida por faltantes, en doce meses, la estimamos en **75 millones de
+> pesos**. Asumiendo un día de demanda perdida por cada día de góndola vacía.
+>
+> En San Justo hay cerca de **un millón** que se podría liberar, simplemente
+> calibrando su reposición a lo que realmente vende: hoy tiene diez días de
+> cobertura contra cuatro del resto de la cadena.
+>
+> Y las tres acciones: nivel objetivo diferenciado para el fin de semana en las
+> bebidas del Oeste; renegociar el ciclo con Arcor o compensarlo; y recalibrar
+> San Justo.
+
+**Transición:** *"Y esto no queda en un informe: se puede usar."*
 
 ---
 
@@ -354,7 +335,25 @@ cuándo entrás. Entre tus tramos, presenta tu compañero.
 
 *(Volver a la presentación.)*
 
-**Transición:** *"Cerrá vos."* → **Participante 1**
+**Transición:** *"Volvemos a la presentación para cerrar."*
+
+---
+
+## 14 · Cierre — **P2** — 9:30 a 10:00
+
+> Para cerrar, una sola idea.
+>
+> Salimos a buscar dónde MiniRed se quedaba sin stock. Y lo que encontramos es
+> que el problema no era reponer poco: era **reponer con el parámetro
+> equivocado**.
+>
+> MiniRed calcula cuánto reponer usando el promedio de los días hábiles. Los tres
+> patrones de faltante y el de sobrestock salen todos de ese mismo supuesto.
+>
+> Cuatro reglas validadas, tres acciones concretas, y una correlación espuria que
+> descartamos a tiempo.
+>
+> Con eso cerramos. Quedamos para las preguntas que quieran hacernos.
 
 ---
 

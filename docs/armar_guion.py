@@ -156,6 +156,8 @@ h1 { font-family: Cambria, Georgia, serif; font-size: 25pt; margin:0 0 6pt;
 .trans { margin-top:9pt; padding-top:7pt; border-top:1px solid #E0E0DA;
          font-size:10pt; color:#5C6270; }
 .trans b { color:#22252B; }
+.trans.traspaso { border-top:2pt solid #B03A2E; color:#B03A2E; font-size:11pt; }
+.trans.traspaso b { color:#B03A2E; }
 
 .libre h2 { font-family: Cambria, serif; font-size:16pt; margin:0 0 9pt; }
 .libre p { margin:0 0 7pt; }
@@ -226,7 +228,12 @@ for p in partes:
         if p["hablado"]:
             html.append("<div class='dice'>" + "".join(f"<p>{h}</p>" for h in p["hablado"]) + "</div>")
         if p["transicion"]:
-            html.append(f"<p class='trans'><b>Pasa a:</b> {p['transicion']}</p>")
+            # el único traspaso del pitch se destaca; el resto son enlaces de contenido
+            if "Participante" in p["transicion"]:
+                html.append("<p class='trans traspaso'><b>Traspaso — acá termina tu parte:</b> "
+                            f"{p['transicion']}</p>")
+            else:
+                html.append(f"<p class='trans'><b>Enlazás con:</b> {p['transicion']}</p>")
         html.append("</section>")
     elif p["titulo"].startswith("Participante"):
         # portadilla de sección: quién es, su texto, y su hoja de ruta
