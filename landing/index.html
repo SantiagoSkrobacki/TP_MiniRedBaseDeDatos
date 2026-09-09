@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MiniRed · Portal de Abastecimiento</title>
+<meta name="description" content="Portal de operaciones y logística de MiniRed S.A. — quiebres de stock, cobertura y rotación por sucursal.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">MR</div>
+      <div>
+        <div class="brand-name">MiniRed S.A.</div>
+        <div class="brand-sub">Portal de Abastecimiento</div>
+      </div>
+    </div>
+    <div class="topbar-meta">
+      <span class="period" id="periodo">—</span>
+      <span class="srcbadge" id="fuente" data-src="seed" title="Origen de los datos que está mostrando el portal">
+        <span class="dot" aria-hidden="true"></span><span id="fuente-txt">cargando</span>
+      </span>
+      <button class="iconbtn" id="tema" type="button" aria-label="Cambiar entre tema claro y oscuro" title="Cambiar tema">◐</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ filtros: una sola fila, gobierna todo el panel operativo ============ -->
+  <div class="filters" role="group" aria-label="Filtros del panel operativo">
+    <div class="field">
+      <label for="f-zona">Zona</label>
+      <select id="f-zona"><option value="*">Todas las zonas</option></select>
+    </div>
+    <div class="field">
+      <label for="f-cat">Categoría</label>
+      <select id="f-cat"><option value="*">Todas las categorías</option></select>
+    </div>
+    <div class="field">
+      <label for="f-reset" class="sr-only">Restablecer</label>
+      <button class="btn-reset" id="f-reset" type="button">Restablecer</button>
+    </div>
+    <p class="filter-scope" id="scope-txt">
+      Los filtros recalculan todo el panel operativo a partir de los conteos, no de promedios de tasas.
+    </p>
+  </div>
+
+  <!-- ============ KPIs ============ -->
+  <section aria-labelledby="h-kpi">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Estado actual</p>
+        <h2 id="h-kpi">Indicadores de abastecimiento</h2>
+      </div>
+      <p id="kpi-scope">—</p>
+    </div>
+    <div class="kpis" id="kpis"></div>
+  </section>
+
+  <!-- ============ alertas ============ -->
+  <section aria-labelledby="h-alertas">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Requiere acción</p>
+        <h2 id="h-alertas">Alertas operativas</h2>
+      </div>
+      <p>Ordenadas por severidad. Cada una nombra el punto de intervención.</p>
+    </div>
+    <div class="alerts" id="alertas"></div>
+  </section>
+
+  <!-- ============ mapa de calor + día de la semana ============ -->
+  <div class="grid wide-left">
+
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h3>Tasa de quiebre por zona y categoría</h3>
+          <p class="card-note">Porcentaje de días-producto con la góndola en cero. Más oscuro, peor.</p>
+        </div>
+        <div class="card-tools">
+          <button class="toggle" data-view="heatmap" aria-pressed="false" type="button">Tabla</button>
+        </div>
+      </div>
+      <div class="plot scroll-x" id="p-heatmap"></div>
+      <div id="t-heatmap" hidden></div>
+      <div class="scale" id="s-heatmap"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h3>Quiebre por día de la semana</h3>
+          <p class="card-note" id="dia-note">El pico de consumo del fin de semana vacía la góndola y el faltante aparece después.</p>
+        </div>
+        <div class="card-tools">
+          <button class="toggle" data-view="dias" aria-pressed="false" type="button">Tabla</button>
+        </div>
+      </div>
+      <div class="plot" id="p-dias"></div>
+      <div id="t-dias" hidden></div>
+    </div>
+
+  </div>
+
+  <!-- ============ serie mensual ============ -->
+  <div class="card" style="margin-top:14px">
+    <div class="card-head">
+      <div>
+        <h3>Evolución mensual</h3>
+        <p class="card-note">Dos escalas distintas, dos gráficos. Superponerlas en un solo eje inventaría una correlación que los datos no tienen.</p>
+      </div>
+      <div class="card-tools">
+        <button class="toggle" data-view="serie" aria-pressed="false" type="button">Tabla</button>
+      </div>
+    </div>
+    <div class="plot scroll-x" id="p-serie"></div>
+    <div id="t-serie" hidden></div>
+  </div>
+
+  <!-- ============ SKU + sucursales ============ -->
+  <div class="grid two">
+
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h3>Productos con mayor quiebre</h3>
+          <p class="card-note" id="sku-note">Los doce con más días sin stock en el período.</p>
+        </div>
+        <div class="card-tools">
+          <button class="toggle" data-view="sku" aria-pressed="false" type="button">Tabla</button>
+        </div>
+      </div>
+      <div class="plot" id="p-sku"></div>
+      <div id="t-sku" hidden></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h3>Sucursales</h3>
+          <p class="card-note">Dos fallas opuestas: quiebre alto es venta perdida; cobertura alta es capital inmovilizado.</p>
+        </div>
+      </div>
+      <div class="tablewrap" id="t-suc"></div>
+    </div>
+
+  </div>
+
+  <!-- ============ hallazgos (no filtrable, período completo) ============ -->
+  <section aria-labelledby="h-reglas">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Análisis del período completo · no responde a los filtros</p>
+        <h2 id="h-reglas">Reglas de negocio descubiertas</h2>
+      </div>
+      <p>Inducidas sobre 2024 y verificadas contra 2025.</p>
+    </div>
+    <div class="rules" id="reglas"></div>
+  </section>
+
+  <div class="card" style="margin-top:14px">
+    <div class="card-head">
+      <div>
+        <h3>Control de correlación espuria: ¿es el proveedor o es la zona?</h3>
+        <p class="card-note">Tasa de quiebre de cada proveedor, antes y después de excluir la zona Oeste del cálculo.</p>
+      </div>
+      <div class="card-tools">
+        <button class="toggle" data-view="prov" aria-pressed="false" type="button">Tabla</button>
+      </div>
+    </div>
+    <div class="plot scroll-x" id="p-prov"></div>
+    <div id="t-prov" hidden></div>
+    <div class="legend" id="l-prov"></div>
+  </div>
+
+  <div class="note">
+    <h3>Cómo leer este control</h3>
+    <p id="prov-lectura">—</p>
+    <p>Presentar sólo la primera columna llevaría a renegociar el contrato equivocado. El driver real es la zona: en el Oeste las bebidas se venden mucho más los fines de semana y el nivel objetivo de reposición se fijó sobre días hábiles.</p>
+  </div>
+
+  <footer class="foot">
+    <div>
+      <strong>MiniRed_DW</strong> · perspectiva Logística e Inventario · datos simulados con patrones documentados en <code>sql/01_MiniRed_DW_crear_y_poblar.sql</code>
+    </div>
+    <div id="foot-meta">—</div>
+  </footer>
+
+</main>
+
+<div class="tip" id="tip" role="status" aria-live="polite"></div>
+
+<script src="seed-data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
