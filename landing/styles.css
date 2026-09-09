@@ -196,6 +196,14 @@ body {
 .game-link:hover { filter: brightness(.92); }
 .game-link:focus-visible { outline: 2px solid var(--s1); outline-offset: 2px; }
 
+.cube-link {
+  font: 600 11px var(--sans); color: var(--ink-2); background: var(--surface-2);
+  border: 1px solid var(--rule); border-radius: 999px; padding: 5px 10px;
+  text-decoration: none; white-space: nowrap;
+}
+.cube-link:hover { color: var(--s1); border-color: var(--s1); }
+.cube-link:focus-visible { outline: 2px solid var(--s1); outline-offset: 2px; }
+
 .iconbtn {
   width: 32px; height: 32px; flex: none;
   display: grid; place-items: center;

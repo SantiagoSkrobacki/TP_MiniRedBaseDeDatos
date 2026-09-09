@@ -13,6 +13,9 @@ landing/
   juego.html         acceso al modo Data Detective
   juego.css          presentación de misiones y respuestas
   juego.js           preguntas, puntaje y progreso local
+  cubo.html          diagrama y laboratorio OLAP
+  cubo.css           presentación del explorador del cubo
+  cubo.js            modelo interactivo y agregaciones del laboratorio
   data/portal.json   datos que consume el portal (generado)
   seed-data.js       copia embebida de esos datos (generado, no editar)
   build-seed.py      regenera seed-data.js desde data/portal.json
@@ -32,6 +35,15 @@ se construyen con `portal.json` y usan `seed-data.js` al abrir mediante
 `localStorage` y puede reiniciarse desde el pie de la pantalla. Cada desafío
 incluye una ayuda conceptual desplegable, cerrada inicialmente, para explicar
 el término y su aplicación en MiniRed sin interrumpir el recorrido principal.
+
+## Explorador del cubo
+
+El botón **Explorar cubo** abre `cubo.html`. La pantalla documenta visualmente
+la constelación de hechos y dimensiones, permite inspeccionar el grano, las
+jerarquías y las medidas de cada objeto, e incluye un laboratorio OLAP. El
+laboratorio reagrega los conteos de `portal.json` por zona, categoría,
+sucursal, producto o mes; también ilustra `slice`, `dice`, `drill-down` y
+`roll-up`. Funciona en GitHub Pages y mediante `file://`, sin conectarse a SSAS.
 
 ## Cómo abrirlo
 

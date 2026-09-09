@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Explorador del Cubo · MiniRed</title>
+  <meta name="description" content="Visualización interactiva del cubo multidimensional MiniRed Logística y laboratorio OLAP.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="cubo.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-in">
+      <a class="cube-brand" href="index.html" aria-label="Volver al Portal de Abastecimiento">
+        <span class="brand-mark" aria-hidden="true">MR</span>
+        <span><span class="brand-name">MiniRed S.A.</span><span class="brand-sub">Explorador del Cubo</span></span>
+      </a>
+      <div class="topbar-meta">
+        <span class="srcbadge" data-src="json"><span class="dot" aria-hidden="true"></span><span id="data-source">cargando datos</span></span>
+        <a class="game-link" href="juego.html">Data Detective</a>
+        <a class="cube-link" href="index.html">Volver al tablero</a>
+        <button class="iconbtn" id="tema" type="button" aria-label="Cambiar entre tema claro y oscuro" title="Cambiar tema">◐</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="cube-wrap">
+    <section class="cube-hero" aria-labelledby="cube-title">
+      <div>
+        <p class="eyebrow">SSAS Multidimensional · modelo en constelación</p>
+        <h1 id="cube-title">MiniRed Logística</h1>
+        <p>Explorá cómo se conectan las tablas, qué puede medirse y cómo el cubo resume los datos desde distintas perspectivas.</p>
+      </div>
+      <div class="cube-facts" aria-label="Resumen del modelo">
+        <div><strong>2</strong><span>grupos de medidas</span></div>
+        <div><strong>5</strong><span>dimensiones</span></div>
+        <div><strong>3</strong><span>conformadas</span></div>
+      </div>
+    </section>
+
+    <section aria-labelledby="model-title">
+      <div class="section-head cube-section-head">
+        <div><p class="eyebrow">01 · Arquitectura</p><h2 id="model-title">Modelo dimensional interactivo</h2></div>
+        <p>Seleccioná una tabla para conocer su función dentro del cubo.</p>
+      </div>
+
+      <div class="model-layout">
+        <div class="model-canvas" id="model-canvas">
+          <svg class="model-lines" viewBox="0 0 1000 570" role="img" aria-label="Relaciones entre dimensiones y tablas de hechos">
+            <g class="shared-lines">
+              <line x1="500" y1="92" x2="410" y2="255"/><line x1="500" y1="92" x2="590" y2="365"/>
+              <line x1="150" y1="280" x2="410" y2="255"/><line x1="150" y1="280" x2="590" y2="365"/>
+              <line x1="850" y1="280" x2="410" y2="255"/><line x1="850" y1="280" x2="590" y2="365"/>
+            </g>
+            <g class="sales-lines"><line x1="315" y1="510" x2="590" y2="365"/><line x1="790" y1="510" x2="590" y2="365"/></g>
+          </svg>
+          <button class="model-node dimension dim-time" data-entity="tiempo" type="button"><small>Dimensión conformada</small><strong>Tiempo</strong><span>Año → Fecha</span></button>
+          <button class="model-node dimension dim-branch" data-entity="sucursal" type="button"><small>Dimensión conformada</small><strong>Sucursal</strong><span>Zona → Sucursal</span></button>
+          <button class="model-node dimension dim-product" data-entity="producto" type="button"><small>Dimensión conformada</small><strong>Producto</strong><span>Categoría → Producto</span></button>
+          <button class="model-node fact fact-stock" data-entity="stock" type="button"><small>Grupo de medidas</small><strong>Stock</strong><span>Fact_Stock</span></button>
+          <button class="model-node fact fact-sales" data-entity="ventas" type="button"><small>Grupo de medidas</small><strong>Ventas</strong><span>Fact_Ventas</span></button>
+          <button class="model-node dimension dim-cashier" data-entity="cajero" type="button"><small>Sólo Ventas</small><strong>Cajero</strong><span>Turno → Cajero</span></button>
+          <button class="model-node dimension dim-payment" data-entity="pago" type="button"><small>Sólo Ventas</small><strong>Medio de pago</strong><span>Tipo → Campaña</span></button>
+        </div>
+
+        <aside class="entity-panel" id="entity-panel" aria-live="polite"></aside>
+      </div>
+      <div class="model-legend" aria-label="Leyenda del modelo">
+        <span><i class="legend-dimension"></i>Dimensión</span><span><i class="legend-fact"></i>Grupo de medidas</span><span><i class="legend-shared"></i>Relación conformada</span>
+      </div>
+    </section>
+
+    <section aria-labelledby="lab-title">
+      <div class="section-head cube-section-head">
+        <div><p class="eyebrow">02 · Consulta</p><h2 id="lab-title">Laboratorio OLAP</h2></div>
+        <p>Construí una vista multidimensional sin escribir MDX.</p>
+      </div>
+
+      <div class="olap-shell">
+        <form class="olap-controls" id="olap-form">
+          <div class="control-field">
+            <label for="analysis">Vista</label>
+            <select id="analysis">
+              <option value="zoneCategory">Zona × Categoría</option>
+              <option value="branchCategory">Sucursal × Categoría</option>
+              <option value="monthZone">Mes × Zona</option>
+              <option value="productZone">Producto × Zona</option>
+            </select>
+          </div>
+          <div class="control-field">
+            <label for="measure">Medida</label>
+            <select id="measure"></select>
+          </div>
+          <div class="control-field">
+            <label for="filter-zone">Slice: zona</label>
+            <select id="filter-zone"><option value="*">Todas</option></select>
+          </div>
+          <div class="control-field">
+            <label for="filter-category">Slice: categoría</label>
+            <select id="filter-category"><option value="*">Todas</option></select>
+          </div>
+          <div class="control-field" id="year-field">
+            <label for="filter-year">Slice: año</label>
+            <select id="filter-year"><option value="*">2024–2025</option><option value="2024">2024</option><option value="2025">2025</option></select>
+          </div>
+          <button class="reset-view" id="reset-view" type="button">Restablecer</button>
+        </form>
+
+        <div class="query-strip" id="query-strip" aria-live="polite"></div>
+        <div class="matrix-summary" id="matrix-summary"></div>
+        <div class="olap-result" id="olap-result"></div>
+      </div>
+
+      <div class="operation-grid">
+        <article><strong>Slice</strong><p>Fija un valor, por ejemplo sólo la zona Oeste.</p></article>
+        <article><strong>Dice</strong><p>Combina varios filtros para obtener un subconjunto.</p></article>
+        <article><strong>Drill-down</strong><p>Baja al detalle: de zona a sucursal o de categoría a producto.</p></article>
+        <article><strong>Roll-up</strong><p>Sube a un resumen: de mes a año o de sucursal a zona.</p></article>
+      </div>
+    </section>
+
+    <section aria-labelledby="catalog-title">
+      <div class="section-head cube-section-head">
+        <div><p class="eyebrow">03 · Semántica</p><h2 id="catalog-title">Catálogo de medidas</h2></div>
+        <p>La agregación determina cómo se resume cada medida.</p>
+      </div>
+      <div class="measure-catalog">
+        <table>
+          <thead><tr><th>Medida</th><th>Grupo</th><th>Agregación</th><th>Interpretación</th></tr></thead>
+          <tbody>
+            <tr><td class="name">Cantidad Vendida</td><td>Ventas / Stock</td><td><code>Sum</code></td><td>Unidades acumuladas en el período.</td></tr>
+            <tr><td class="name">Tickets</td><td>Ventas</td><td><code>DistinctCount</code></td><td>Cuenta cada ticket una sola vez aunque tenga varias líneas.</td></tr>
+            <tr><td class="name">Stock Disponible</td><td>Stock</td><td><code>LastNonEmpty</code></td><td>Último snapshot existente; no suma fechas.</td></tr>
+            <tr><td class="name">Valor Inventario</td><td>Stock</td><td><code>LastNonEmpty</code></td><td>Valor monetario del inventario al cierre.</td></tr>
+            <tr><td class="name">Observaciones</td><td>Stock</td><td><code>Count</code></td><td>Días-producto-sucursal registrados.</td></tr>
+            <tr><td class="name">Tasa de Quiebre</td><td>Calculada</td><td><code>Quiebres / Observaciones</code></td><td>Proporción de observaciones con stock cero.</td></tr>
+            <tr><td class="name">Días de Cobertura</td><td>Calculada</td><td><code>Stock técnico / Vendido</code></td><td>Días estimados que cubre el inventario.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="semi-note">
+        <strong>¿Por qué LastNonEmpty?</strong>
+        <p>El stock es semi-aditivo: se suma entre productos o sucursales de una misma fecha, pero no entre fechas. Si había 20 unidades el lunes y 15 el martes, el stock al cierre es 15; no 35.</p>
+      </div>
+    </section>
+
+    <footer class="cube-footer"><span>Visualización educativa basada en el proyecto SSAS <strong>MiniRed Logística</strong>.</span><a href="index.html">Volver al Portal de Abastecimiento</a></footer>
+  </main>
+
+  <div class="cube-notice" id="cube-notice" role="alert" hidden></div>
+  <script src="seed-data.js"></script>
+  <script src="cubo.js"></script>
+</body>
+</html>

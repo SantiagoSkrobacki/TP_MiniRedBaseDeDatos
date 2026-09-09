@@ -41,6 +41,7 @@ Las dos preguntas que responde el trabajo:
 | 11 | **Landing page terminada** | `landing/` — portal de operaciones para gerentes de abastecimiento, con filtros que reagregan, gráficos propios y vista de tabla en cada uno. Sin dependencias ni build. |
 | 12 | **Backend local terminado** | API mínima .NET 8 + ADOMD.NET en `127.0.0.1:5050`; consulta exclusivamente SSAS y conserva el documento generado en memoria. |
 | 13 | **Gamificación interactiva** | Modo Data Detective con las cuatro misiones de la consigna, 1000 XP y preguntas derivadas del dataset real. |
+| 14 | **Explorador visual del cubo** | Diagrama interactivo de la constelación, catálogo de medidas y laboratorio OLAP alimentado por el JSON de la landing. |
 
 ### Cubo en SSAS — avance por fase
 
@@ -194,6 +195,7 @@ data/
 landing/                              Portal de abastecimiento (ver su README)
   index.html  styles.css  app.js       Tablero operativo
   juego.html  juego.css  juego.js      Modo Data Detective
+  cubo.html   cubo.css   cubo.js       Explorador visual y laboratorio OLAP
   data/portal.json                    Datos del portal (generado)
   seed-data.js                        Copia embebida (generado)
 Cubo_MiniRed_Logistica/               Proyecto de Analysis Services
