@@ -18,6 +18,10 @@
 
 const API_BASE = "/api";
 
+/* En GitHub Pages no hay backend: se saltea el intento contra la API para no
+   dejar un 404 en consola durante la demo. En cualquier otro origen se prueba. */
+const API_HABILITADA = !/\.github\.io$/i.test(location.hostname);
+
 const state = { zona: "*", cat: "*", orden: { col: "tasa", dir: -1 }, tablas: {} };
 let DATA = null;
 
@@ -773,7 +777,7 @@ function marcarFuente(src) {
 
 async function cargar() {
   // 1. backend
-  try {
+  if (API_HABILITADA) try {
     const r = await fetch(`${API_BASE}/dashboard`, { headers: { Accept: "application/json" } });
     if (r.ok) {
       const j = await r.json();

@@ -38,6 +38,7 @@ Las dos preguntas que responde el trabajo:
 | 9 | **Datos exportados para la landing** | `data/datos_landing.json` con KPIs, heatmap, serie mensual, SKU críticos y semáforo por sucursal. |
 
 | 10 | **Proyecto SSAS iniciado** | `Cubo_MiniRed_Logistica/` — origen de datos, vista del origen y las cinco dimensiones con sus jerarquías, versionado en este repo. |
+| 11 | **Landing page terminada** | `landing/` — portal de operaciones para gerentes de abastecimiento, con filtros que reagregan, gráficos propios y vista de tabla en cada uno. Sin dependencias ni build. |
 
 ### Cubo en SSAS — avance por fase
 
@@ -69,9 +70,27 @@ aviso ⚠ de las jerarquías.
 ### Pendiente
 
 - [ ] Terminar el cubo en SSAS — fases 6 a 10
-- [ ] Landing page — portal de operaciones para gerentes de abastecimiento
+- [ ] Backend que sirva `GET /api/dashboard` desde la base (el frontend ya lo consume)
 - [ ] Redacción de los 6 puntos teóricos del informe
 - [ ] Pitch ejecutivo de 10 minutos
+
+---
+
+## Portal de abastecimiento (landing page)
+
+**En vivo:** <https://santiagoskrobacki.github.io/TP_MiniRedBaseDeDatos/landing/>
+
+Para verlo local, doble clic en `landing/index.html` — funciona sin servidor.
+Documentación del módulo y contrato de la API en [`landing/README.md`](landing/README.md).
+
+Es un módulo **autocontenido**: no modifica `sql/01`, `sql/02` ni
+`data/datos_landing.json`. Su API vive en `sql/03_portal_api.sql`, que sólo
+agrega el procedimiento `sp_PortalDashboard`; el `sp_LandingDataJson` original
+sigue intacto.
+
+El frontend pide los datos en cascada — API del backend, JSON servido, copia
+embebida — con el mismo contrato en los tres casos. Conectar el backend es
+cambiar `API_BASE` en `landing/app.js`.
 
 ---
 
@@ -114,9 +133,15 @@ Para deshacer todo: `DROP DATABASE MiniRed_DW;`
 ```
 sql/
   01_MiniRed_DW_crear_y_poblar.sql    DDL + carga de datos + verificación de patrones
-  02_MiniRed_consultas_analiticas.sql Las tres misiones + export para la landing
+  02_MiniRed_consultas_analiticas.sql Las tres misiones analíticas
+  03_portal_api.sql                   sp_PortalDashboard: API del portal
 data/
-  datos_landing.json                  Datasets que consume la landing page
+  datos_landing.json                  Export de la sección 4 de sql/02
+landing/                              Portal de abastecimiento (ver su README)
+  index.html  styles.css  app.js
+  data/portal.json                    Datos del portal (generado)
+  seed-data.js                        Copia embebida (generado)
+Cubo_MiniRed_Logistica/               Proyecto de Analysis Services
 docs/
   guia-cubo-ssas.html                 Guía de 10 fases para construir el cubo
 ```
